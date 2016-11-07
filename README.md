@@ -1,7 +1,4 @@
-#<hr>openEasySIS
-
 [About openEasySIS](#about-openEasySIS)
-
 
 #<a name="about-openEasySIS"></a>About openEasySIS
 openEasySIS was created in order as a project to provide a local school system with a Student Information System (SIS)
