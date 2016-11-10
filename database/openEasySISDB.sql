@@ -87,15 +87,10 @@ CREATE  TABLE IF NOT EXISTS `openEasySIS`.`studentProfile` (
   `studentID` INT NOT NULL ,
   `studentFirstName` VARCHAR(45) NOT NULL ,
   `studentLastName` VARCHAR(45) NOT NULL ,
-  `studentAddress` VARCHAR(256) NOT NULL ,
-  `studentCity` VARCHAR(45) NOT NULL ,
-  `studentState` VARCHAR(2) NOT NULL ,
-  `studentZip` VARCHAR(5) NOT NULL ,
   `studentBirthdate` DATETIME NOT NULL ,
-  `studentEmergencyNumber` VARCHAR(11) NOT NULL ,
   `studentGuardianIDs` VARCHAR(2048) NOT NULL ,
   `studentGender` VARCHAR(1) NOT NULL ,
-  `studentGradYear` DATETIME NOT NULL ,
+  `studentGradYear` YEAR NOT NULL ,
   `studentGPA` FLOAT NOT NULL ,
   `studentGradeLevel` TINYINT NOT NULL ,
   `studentClassIDs` VARCHAR(2048) NOT NULL ,
@@ -118,7 +113,12 @@ CREATE  TABLE IF NOT EXISTS `openEasySIS`.`teacherProfile` (
   `teacherFirstName` VARCHAR(45) NOT NULL ,
   `teacherLastName` VARCHAR(45) NOT NULL ,
   `teacherEmail` VARCHAR(45) NOT NULL ,
-  PRIMARY KEY (`teacherID`) )
+  PRIMARY KEY (`teacherID`) ,
+  CONSTRAINT `teacherID`
+    FOREIGN KEY (`teacherID` )
+    REFERENCES `openEasySIS`.`users` (`userID` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -134,8 +134,8 @@ CREATE  TABLE IF NOT EXISTS `openEasySIS`.`classes` (
   `classStudentNumber` INT NULL ,
   `classTeacherID` INT NOT NULL ,
   PRIMARY KEY (`classID`) ,
-  INDEX `teacherID_idx` (`classTeacherID` ASC) ,
-  CONSTRAINT `teacherID`
+  INDEX `classTeacherID_idx` (`classTeacherID` ASC) ,
+  CONSTRAINT `classTeacherID`
     FOREIGN KEY (`classTeacherID` )
     REFERENCES `openEasySIS`.`teacherProfile` (`teacherID` )
     ON DELETE NO ACTION
@@ -194,24 +194,45 @@ CREATE  TABLE IF NOT EXISTS `openEasySIS`.`grades` (
   `gradeStudentID` INT NOT NULL ,
   `gradeClassID` INT NOT NULL ,
   `gradeMaterialID` INT NOT NULL ,
-  `gradeMaterialPointsScored` INT NULL ,
-  `gradeComments` VARCHAR(512) NULL ,
-  PRIMARY KEY (`gradeStudentID`) ,
+  `gradeMaterialPointsScored` INT NULL DEFAULT 0 ,
+  `gradeComments` VARCHAR(512) NULL DEFAULT '' ,
+  `gradeRefID` INT NOT NULL AUTO_INCREMENT ,
   INDEX `classID_idx` (`gradeClassID` ASC) ,
   INDEX `materialID_idx` (`gradeMaterialID` ASC) ,
+  PRIMARY KEY (`gradeRefID`) ,
   CONSTRAINT `gradeClassID`
     FOREIGN KEY (`gradeClassID` )
     REFERENCES `openEasySIS`.`classes` (`classID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `gradeStudentID`
-    FOREIGN KEY (`gradeStudentID` )
-    REFERENCES `openEasySIS`.`studentProfile` (`studentID` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `gradeMaterialID`
     FOREIGN KEY (`gradeMaterialID` )
     REFERENCES `openEasySIS`.`materialType` (`materialTypeID` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `openEasySIS`.`guardianProfile`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `openEasySIS`.`guardianProfile` ;
+
+CREATE  TABLE IF NOT EXISTS `openEasySIS`.`guardianProfile` (
+  `guardianID` INT NOT NULL ,
+  `guardianFirstName` VARCHAR(45) NOT NULL ,
+  `guardianLastName` VARCHAR(45) NOT NULL ,
+  `guardianEmail` VARCHAR(45) NOT NULL ,
+  `guardianPhoneNumber` VARCHAR(1) NOT NULL ,
+  `guardianAltEmail` VARCHAR(45) NULL ,
+  `guardianAddress` VARCHAR(100) NOT NULL ,
+  `guardianCity` VARCHAR(45) NOT NULL ,
+  `guardianState` VARCHAR(2) NOT NULL ,
+  `guardianZip` VARCHAR(5) NOT NULL ,
+  PRIMARY KEY (`guardianID`) ,
+  CONSTRAINT `guardianID`
+    FOREIGN KEY (`guardianID` )
+    REFERENCES `openEasySIS`.`users` (`userID` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -279,7 +300,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `openEasySIS`;
-INSERT INTO `openEasySIS`.`studentProfile` (`studentID`, `studentFirstName`, `studentLastName`, `studentAddress`, `studentCity`, `studentState`, `studentZip`, `studentBirthdate`, `studentEmergencyNumber`, `studentGuardianIDs`, `studentGender`, `studentGradYear`, `studentGPA`, `studentGradeLevel`, `studentClassIDs`) VALUES (5, 'Test', 'Student', '11111 West Student Road', 'stuCity', 'MI', '49783', '1995-11-06', '9062485555', '3', 'M', '2018', 3.68, 11, '1');
+INSERT INTO `openEasySIS`.`studentProfile` (`studentID`, `studentFirstName`, `studentLastName`, `studentBirthdate`, `studentGuardianIDs`, `studentGender`, `studentGradYear`, `studentGPA`, `studentGradeLevel`, `studentClassIDs`) VALUES (5, 'Test', 'Student', '1995-11-06', '3', 'M', 2018, 3.68, 11, '1');
 
 COMMIT;
 
@@ -326,6 +347,15 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `openEasySIS`;
-INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeComments`) VALUES (5, 1, 1, 400, NULL);
+INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeComments`, `gradeRefID`) VALUES (5, 1, 1, 400, NULL, 1);
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `openEasySIS`.`guardianProfile`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `openEasySIS`;
+INSERT INTO `openEasySIS`.`guardianProfile` (`guardianID`, `guardianFirstName`, `guardianLastName`, `guardianEmail`, `guardianPhoneNumber`, `guardianAltEmail`, `guardianAddress`, `guardianCity`, `guardianState`, `guardianZip`) VALUES (4, 'Test', 'Parent', 'parent@localhost.com', '9062485555', 'altParent@localhost.com', '11444 West Test Road', 'Sault Ste Marie', 'MI', '49783');
 
 COMMIT;
