@@ -10,7 +10,7 @@ sudo yum -y update
 
 yum install -y epel-release
 
-yum install git vim htop policycoreutils-python wget httpd php mod_ssl openssh-server mariadb mariadb-server
+yum install git vim htop policycoreutils-python wget httpd php mod_ssl openssh-server mariadb mariadb-server php-mysqli
 
 ########################################
 # Install OpenSSH Server and Configure #
