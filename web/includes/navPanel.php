@@ -21,6 +21,7 @@ echo '
             </div>
             <!-- /.navbar-header -->
 <ul class="nav navbar-top-links navbar-right">
+				<a href="index"> ' . htmlentities($_SESSION['userEmail']) . '</a>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
@@ -37,21 +38,14 @@ echo '
                 <!-- /.dropdown -->
             </ul>
             <!-- /.navbar-top-links -->
-
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
-                        <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                            </div>
-                            <!-- /input-group -->
-                        </li>
+';
+
+if (roleID_check($mysqli) == 1)
+{
+echo '
                         <li>
                             <a href="index"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
@@ -133,13 +127,56 @@ echo '
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+';
+}
+else if (roleID_check($mysqli) == 2)
+{
+echo '
+                        <li>
+                            <a href="index"><i class="fa fa-dashboard fa-fw"></i> School Administrator</a>
+                        </li>
+';
+}
+else if (roleID_check($mysqli) == 3)
+{
+echo '
+                        <li>
+                            <a href="index"><i class="fa fa-dashboard fa-fw"></i> Teacher</a>
+                        </li>
+';
+}
+else if (roleID_check($mysqli) == 4)
+{
+echo '
+                        <li>
+                            <a href="index"><i class="fa fa-dashboard fa-fw"></i> Parent</a>
+                        </li>
+';
+}
+else if (roleID_check($mysqli) == 5)
+{
+echo '
+                        <li>
+                            <a href="index"><i class="fa fa-dashboard fa-fw"></i> Student</a>
+                        </li>
+';
+}
+else
+{
+	//TODO: Redirect to error page or some sort of logging
+	echo "Invalid Role ID";
+	echo "<br>";
+}
+
+	echo '
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
             </div>
             <!-- /.navbar-static-side -->
         </nav>
-';
+	';
+
     else:
    	$url = "login"; 
 	header("Location:$url");

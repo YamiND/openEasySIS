@@ -50,16 +50,17 @@ function login($userEmail, $password, $mysqli)
         // hash the password with the unique salt.
         $password = hash('sha512', $password . $userSalt);
 	
-	if (DEBUG):
-                echo "User ID: " . $userID . "\n";
-                echo "DB Password: " . $dbPassword . "\n";
-		echo "Salt: " . $userSalt . "\n";
-                echo "Entered Password: " . $tempPassword . "\n";
-                echo "Hashed Entered Password: " . $password . "\n";
+		if (DEBUG):
+        	echo "User ID: " . $userID . "<br>";
+			echo "Role ID: " . $roleID . "<br>";
+            echo "DB Password: " . $dbPassword . "<br>";
+			echo "Salt: " . $userSalt . "<br>";
+            echo "Entered Password: " . $tempPassword . "<br>";
+            echo "Hashed Entered Password: " . $password . "<br>";
         endif;
 
         if ($stmt->num_rows == 1) 
-	{
+		{
             // If the user exists we check if the account is locked
             // from too many login attempts 
 
@@ -81,12 +82,15 @@ function login($userEmail, $password, $mysqli)
                     // XSS protection as we might print this value
                     $userID = preg_replace("/[^0-9]+/", "", $userID);
                     $_SESSION['userID'] = $userID;
+					
+                    $roleID = preg_replace("/[^0-9]+/", "", $roleID);
+                    $_SESSION['roleID'] = $roleID;
                     // XSS protection as we might print this value
                     //$username = preg_replace("/[^a-zA-Z0-9_\-]+/", 
                                                                 //"", 
                                                                 //$username);
                     //$_SESSION['username'] = $username;
-		    $_SESSION['userEmail'] = $userEmail;
+		    		$_SESSION['userEmail'] = $userEmail;
                     $_SESSION['login_string'] = hash('sha512', 
                               $dbPassword . $user_browser);
 		
@@ -143,48 +147,49 @@ function login($userEmail, $password, $mysqli)
 function login_check($mysqli) 
 {
     // Check if all session variables are set 
-    if (isset($_SESSION['userID'], $_SESSION['userEmail'], $_SESSION['login_string'])) 
+    if (isset($_SESSION['userID'], $_SESSION['userEmail'], $_SESSION['roleID'], $_SESSION['login_string'])) 
     {
         $userID = $_SESSION['userID'];
         $login_string = $_SESSION['login_string'];
-	$userEmail = $_SESSION['userEmail'];
+		$userEmail = $_SESSION['userEmail'];
+		$roleID = $_SESSION['roleID'];
  
         // Get the user-agent string of the user.
         $user_browser = $_SERVER['HTTP_USER_AGENT'];
- 
-        if ($stmt = $mysqli->prepare("SELECT userPassword FROM users WHERE userID = ? LIMIT 1")) 
-	{
+
+        if ($stmt = $mysqli->prepare("SELECT userPassword, roleID FROM users WHERE userID = ? LIMIT 1")) 
+		{
             // Bind "$user_id" to parameter. 
             $stmt->bind_param('i', $userID);
             $stmt->execute();   // Execute the prepared query.
             $stmt->store_result();
  
             if ($stmt->num_rows == 1) 
-	    {
+	    	{
                 // If the user exists get variables from result.
-                $stmt->bind_result($password);
+                $stmt->bind_result($password, $roleID);
                 $stmt->fetch();
                 $login_check = hash('sha512', $password . $user_browser);
 		
                 if ($login_check == $login_string) 
-		{
+				{
                     // Logged In!!!! 
                     return true;
                 } 
-		else
-		{
-                    // Not logged in 
-                    return false;
-                }
+				else
+				{
+                	// Not logged in 
+            		return false;
+            	}
             } 
-	    else 
-	    {
-		// Not logged in 
+	    	else 
+	    	{
+				// Not logged in 
                 return false;
-       	    }
+       		}
         } 
-	else 
-	{
+		else 
+		{
             // Not logged in 
             return false;
         }
@@ -196,6 +201,48 @@ function login_check($mysqli)
     }
 }
 
+function roleID_check($mysqli) 
+{
+	if (isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail']))
+	{
+		$userID = $_SESSION['userID'];
+		$roleID = $_SESSION['roleID'];
+		if ($stmt = $mysqli->prepare("SELECT roleID FROM users where userID = ? LIMIT 1"))
+		{
+			$stmt->bind_param('i', $userID);
+			$stmt->execute();
+			$stmt->store_result();
+				
+			if ($stmt->num_rows == 1)
+			{
+				$stmt->bind_result($dbRoleID);
+				$stmt->fetch();
+
+
+				if ($roleID == $dbRoleID)
+				{	
+					return $roleID;
+				}
+				else
+				{
+					return -1;
+				}
+			}	
+			else
+			{
+				return -1;
+			}
+		}
+		else 
+		{
+			return -1;
+		}
+	}
+	else
+	{
+		return -1;
+	}
+}
 
 function changePassword($email, $oldPassword, $newPassword, $mysqli) 
 {
