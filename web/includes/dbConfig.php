@@ -3,7 +3,7 @@
  * These are the database login details
  */  
 define("HOST", "localhost");     // The host you want to connect to.
-define("USER", "USERNAME");    // The database username. 
+define("USER", "dbSISAccessor");    // The database username. 
 define("PASSWORD", "PASSWORD");    // The database password. 
 define("DATABASE", "openEasySIS");    // The database name.
 
