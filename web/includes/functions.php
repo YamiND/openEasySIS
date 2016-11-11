@@ -201,6 +201,30 @@ function login_check($mysqli)
     }
 }
 
+function getTotalFromProfile($mysqli, $profile)
+{
+	// This function gets the number of users depending on what string paramter is passed to it
+		if ($stmt = $mysqli->prepare("SELECT * FROM $profile"))
+		{
+			$stmt->execute();
+			$stmt->store_result();
+				
+			if ($stmt->num_rows > 0)
+			{
+				return $stmt->num_rows;
+			}	
+			else
+			{
+				return 0;
+			}
+		}
+		else 
+		{
+			return 0;
+		}
+}
+
+
 function roleID_check($mysqli) 
 {
 	if (isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail']))

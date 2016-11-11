@@ -47,7 +47,7 @@ if (roleID_check($mysqli) == 1)
 {
 echo '
                         <li>
-                            <a href="index"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href="adminDashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
@@ -139,19 +139,19 @@ echo '
 }
 else if (roleID_check($mysqli) == 3)
 {
-echo '
+	echo '
                         <li>
                             <a href="index"><i class="fa fa-dashboard fa-fw"></i> Teacher</a>
                         </li>
-';
+	';
 }
 else if (roleID_check($mysqli) == 4)
 {
-echo '
+	echo '
                         <li>
                             <a href="index"><i class="fa fa-dashboard fa-fw"></i> Parent</a>
                         </li>
-';
+	';
 }
 else if (roleID_check($mysqli) == 5)
 {
