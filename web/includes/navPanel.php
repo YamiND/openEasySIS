@@ -133,7 +133,7 @@ else if (roleID_check($mysqli) == 2)
 {
 echo '
                         <li>
-                            <a href="index"><i class="fa fa-dashboard fa-fw"></i> School Administrator</a>
+                            <a href="schoolAdminDashboard"><i class="fa fa-dashboard fa-fw"></i> School Administrator</a>
                         </li>
 ';
 }
@@ -141,7 +141,7 @@ else if (roleID_check($mysqli) == 3)
 {
 	echo '
                         <li>
-                            <a href="index"><i class="fa fa-dashboard fa-fw"></i> Teacher</a>
+                            <a href="teacherDashboard"><i class="fa fa-dashboard fa-fw"></i> Teacher</a>
                         </li>
 	';
 }
@@ -149,7 +149,7 @@ else if (roleID_check($mysqli) == 4)
 {
 	echo '
                         <li>
-                            <a href="index"><i class="fa fa-dashboard fa-fw"></i> Parent</a>
+                            <a href="guardianDashboard"><i class="fa fa-dashboard fa-fw"></i> Parent/Guardian</a>
                         </li>
 	';
 }
@@ -157,7 +157,7 @@ else if (roleID_check($mysqli) == 5)
 {
 echo '
                         <li>
-                            <a href="index"><i class="fa fa-dashboard fa-fw"></i> Student</a>
+                            <a href="studentDashboard"><i class="fa fa-dashboard fa-fw"></i>Student</a>
                         </li>
 ';
 }

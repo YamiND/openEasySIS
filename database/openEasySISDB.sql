@@ -238,6 +238,44 @@ CREATE  TABLE IF NOT EXISTS `openEasySIS`.`guardianProfile` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `openEasySIS`.`adminProfile`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `openEasySIS`.`adminProfile` ;
+
+CREATE  TABLE IF NOT EXISTS `openEasySIS`.`adminProfile` (
+  `adminID` INT NOT NULL ,
+  `adminFirstName` VARCHAR(45) NULL ,
+  `adminLastName` VARCHAR(45) NULL ,
+  `adminEmail` VARCHAR(45) NULL ,
+  PRIMARY KEY (`adminID`) ,
+  CONSTRAINT `adminID`
+    FOREIGN KEY (`adminID` )
+    REFERENCES `openEasySIS`.`users` (`userID` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `openEasySIS`.`schoolAdminProfile`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `openEasySIS`.`schoolAdminProfile` ;
+
+CREATE  TABLE IF NOT EXISTS `openEasySIS`.`schoolAdminProfile` (
+  `schoolAdminID` INT NOT NULL ,
+  `schoolAdminFirstName` VARCHAR(45) NULL ,
+  `schoolAdminLastName` VARCHAR(45) NULL ,
+  `schoolAdminEmail` VARCHAR(45) NULL ,
+  PRIMARY KEY (`schoolAdminID`) ,
+  CONSTRAINT `schoolAdminID`
+    FOREIGN KEY (`schoolAdminID` )
+    REFERENCES `openEasySIS`.`users` (`userID` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
 USE `openEasySIS` ;
 
 SET SQL_MODE = '';
@@ -358,5 +396,23 @@ COMMIT;
 START TRANSACTION;
 USE `openEasySIS`;
 INSERT INTO `openEasySIS`.`guardianProfile` (`guardianID`, `guardianFirstName`, `guardianLastName`, `guardianEmail`, `guardianPhoneNumber`, `guardianAltEmail`, `guardianAddress`, `guardianCity`, `guardianState`, `guardianZip`) VALUES (4, 'Test', 'Parent', 'parent@localhost.com', '9062485555', 'altParent@localhost.com', '11444 West Test Road', 'Sault Ste Marie', 'MI', '49783');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `openEasySIS`.`adminProfile`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `openEasySIS`;
+INSERT INTO `openEasySIS`.`adminProfile` (`adminID`, `adminFirstName`, `adminLastName`, `adminEmail`) VALUES (1, 'Administrator', 'Administrator', 'admin@localhost.com');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `openEasySIS`.`schoolAdminProfile`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `openEasySIS`;
+INSERT INTO `openEasySIS`.`schoolAdminProfile` (`schoolAdminID`, `schoolAdminFirstName`, `schoolAdminLastName`, `schoolAdminEmail`) VALUES (2, 'School', 'Administrator', 'schoolAdmin@localhost.com');
 
 COMMIT;
