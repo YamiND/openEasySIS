@@ -49,9 +49,9 @@ DROP TABLE IF EXISTS `openEasySIS`.`announcements` ;
 
 CREATE  TABLE IF NOT EXISTS `openEasySIS`.`announcements` (
   `announcementID` INT NOT NULL AUTO_INCREMENT ,
-  `annoucementTitle` VARCHAR(256) NOT NULL ,
+  `announcementTitle` VARCHAR(256) NOT NULL ,
   `announcementDescription` VARCHAR(2048) NOT NULL ,
-  `annoucementDate` DATE NOT NULL ,
+  `announcementDate` DATE NOT NULL ,
   PRIMARY KEY (`announcementID`) )
 ENGINE = InnoDB;
 
@@ -321,7 +321,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `openEasySIS`;
-INSERT INTO `openEasySIS`.`announcements` (`announcementID`, `annoucementTitle`, `announcementDescription`, `annoucementDate`) VALUES (1, 'Announcement Test', 'This is a test of an announcement made and be displayed', '2016-11-06');
+INSERT INTO `openEasySIS`.`announcements` (`announcementID`, `announcementTitle`, `announcementDescription`, `announcementDate`) VALUES (1, 'Announcement Test', 'This is a test of an announcement made and be displayed', '2016-11-06');
 
 COMMIT;
 

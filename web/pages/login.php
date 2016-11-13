@@ -1,4 +1,13 @@
 <!DOCTYPE html>
+
+<?php
+include_once '../includes/dbConnect.php';
+include_once '../includes/functions.php';
+
+sec_session_start();
+if (!isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail'])):
+
+?>
 <html lang="en">
 
 <head>
@@ -51,3 +60,13 @@
 </body>
 
 </html>
+
+<?php
+
+else:
+//TODO: Update this with a better page
+$url = "index";
+header("Location:$url");
+return;
+endif;
+?>

@@ -6,6 +6,8 @@ sec_session_start();
 
 if (login_check($mysqli) == true):
 
+//TODO: Update the openEasySIS link to something more appropriate
+//TODO: Update the email link to something more appropriate
 echo '
 
  <!-- Navigation -->
@@ -47,7 +49,14 @@ if (roleID_check($mysqli) == 1)
 {
 echo '
                         <li>
-                            <a href="adminDashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard <span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a href="adminDashboard">Overview</a>
+								<li>
+									<a href="viewUserTables">View Users</a>
+								</li>
+							</ul>	
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>

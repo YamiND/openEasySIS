@@ -33,7 +33,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">
+                        <div class="panel-heading" id="Administrators"> 
                             Administrators
                         </div>
                         <!-- /.panel-heading -->
@@ -84,7 +84,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">
+                        <div class="panel-heading" id="schoolAdministrators">
                            School Administrators 
                         </div>
                         <!-- /.panel-heading -->
@@ -135,7 +135,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">
+                        <div class="panel-heading" id="teachers">
                            Teachers 
                         </div>
                         <!-- /.panel-heading -->
@@ -187,7 +187,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">
+                        <div class="panel-heading" id="guardians">
                            Parents/Guardians
                         </div>
                         <!-- /.panel-heading -->
@@ -241,7 +241,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">
+                        <div class="panel-heading" id="students">
                            Students
                         </div>
                         <!-- /.panel-heading -->
