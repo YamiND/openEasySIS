@@ -244,41 +244,6 @@ function roleID_check($mysqli)
 	}
 }
 
-function adminChangePassword($userEmail, $hashedPassword, $randomSalt, $mysqli)
-{
-	
-    $stmt = $mysqli->prepare("UPDATE users SET userPassword = ?, userSalt = ? WHERE userEmail = ?");
-    
-    $stmt->bind_param('sss', $hashedPassword, $randomSalt, $userEmail);  // Bind "$email" to parameter.
-    $stmt->execute();    // Execute the prepared query.
-}
-
-function adminPasswordResetForm()
-{
-	// Form for password reset via email. Used by admin
-echo '	<!-- /.col-lg-4 -->
-        <div class="col-lg-4">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-						<p>Reset User Password</p>
-                        </div>
-                        <div class="panel-body">
-            <form action="../includes/adminPasswordReset" method="post" name="login_form" role="form">
-                            <fieldset>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="Enter User Email" name="userEmail" type="text" autofocus>
-                                </div>
-                                <!-- Change this to a button or input when using this as a form -->                 
-                                <input type="submit" class="btn btn-lg btn-success btn-block"                       
-                                                   value="Reset Password"/>
-                            </fieldset>
-                        </form> 
-                        </div>
-                    </div>  
-                </div>  
-                <!-- /.col-lg-4 -->';
-}
-
 function esc_url($url) 
 {
     if ('' == $url) 
