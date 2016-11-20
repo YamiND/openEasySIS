@@ -23,7 +23,7 @@ echo '
             </div>
             <!-- /.navbar-header -->
 <ul class="nav navbar-top-links navbar-right">
-				<a href="index"> ' . htmlentities($_SESSION['userEmail']) . '</a>
+				<a href="settings"> ' . htmlentities($_SESSION['userEmail']) . '</a>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
