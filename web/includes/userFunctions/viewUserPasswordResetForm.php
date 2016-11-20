@@ -6,7 +6,22 @@ function viewUserPasswordResetForm($mysqli)
                 <div class="col-lg-4">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                        Reset Password
+						';  
+                        if (isset($_SESSION['invalidReset']))
+                        {   
+                            echo $_SESSION['invalidReset'];
+                            unset($_SESSION['invalidReset']);
+                        }   
+                        else if (isset($_SESSION['resetSuccess']))
+						{
+                            echo $_SESSION['resetSuccess'];
+                            unset($_SESSION['resetSuccess']);
+						}
+                        else
+                        {   
+                        	echo 'Reset Password';
+                        }   
+	echo '  
                         </div>
                         <div class="panel-body">
             <form action="../includes/userFunctions/userPasswordReset" method="post" name="login_form" role="form">
@@ -38,5 +53,4 @@ function viewUserPasswordResetForm($mysqli)
                 </div>
                 <!-- /.col-lg-4 -->';
 }
-
 ?>

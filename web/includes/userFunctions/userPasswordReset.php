@@ -8,9 +8,9 @@ if (isset($_POST['userEmail'], $_POST['oldPassword'], $_POST['newPassword'], $_P
 {
     $userEmail = $_POST['userEmail'];
     
-    $oldPassword = $_POST['oldPassword']; // The hashed old password.
-    $newPassword = $_POST['newPassword']; // The hashed new password.
-    $repeatPassword = $_POST['repeatPassword']; // The hashed new repeattd password.
+    $oldPassword = $_POST['oldPassword']; // The old password.
+    $newPassword = $_POST['newPassword']; // The  new password.
+    $repeatPassword = $_POST['repeatPassword']; // The repeat password.
 
     if (login($userEmail, $oldPassword, $mysqli) == true)
     {
@@ -20,55 +20,67 @@ if (isset($_POST['userEmail'], $_POST['oldPassword'], $_POST['newPassword'], $_P
 
 			if ($stmt = $mysqli->prepare("SELECT userSalt FROM users WHERE userEmail = ? LIMIT 1"))
 			{
+				// Get the user's salt so that we can hash the passwords
 				$stmt->bind_param('s', $userEmail);
 				$stmt->execute();
 				$stmt->store_result();
 
 				$stmt->bind_result($userSalt);
 				$stmt->fetch();
-
 				
 				$oldPassword = hash('sha512', $oldPassword . $userSalt);	
 
 				// I don't see an issue with using the same salt
 				$newPassword = hash('sha512', $newPassword . $userSalt);
 				
-				echo "Before changePassword function <br>";
 				changeUserPassword($userEmail, $oldPassword, $newPassword, $mysqli);
 			}
+			else
+			{	
+				$_SESSION['invalidReset'] = 'Password Reset Failed';
+    			header('Location: ../../pages/settings');
+			}
 		}	
+		else
+		{
+			// Passwords do not match, output error
+			$_SESSION['invalidReset'] = 'Password Reset Failed';
+    		header('Location: ../../pages/settings');
+		}
     }
     else
     {
-        // Login failed
-        #header('Location: ../pages/login?error=1');
+        // Login failed, output error
+		$_SESSION['invalidReset'] = 'Password Reset Failed';
+    	header('Location: ../../pages/settings');
     }
 }
 else
 {
     // The correct POST variables were not sent to this page.
-    echo 'Invalid Request';
+	$_SESSION['invalidReset'] = 'Password Reset Failed';
+    header('Location: ../../pages/settings');
 }
 
 function changeUserPassword($userEmail, $oldPassword, $newPassword, $mysqli)
 {
-	if (DEBUG):
-		echo "Email: $userEmail <br>";
-		echo "Old Password: $oldPassword <br>";
-		echo "New Password: $newPassword <br>";
-	endif;
-	
-
     // Using prepared statements means that SQL injection is not possible. 
-    $stmt = $mysqli->prepare("UPDATE users SET userPassword = ? WHERE userEmail = ? AND userPassword = ?");
+    if ($stmt = $mysqli->prepare("UPDATE users SET userPassword = ? WHERE userEmail = ? AND userPassword = ?"))
+	{
+    	$stmt->bind_param('sss', $newPassword, $userEmail, $oldPassword);  // Bind "$email" to parameter.
+    	$stmt->execute();    // Execute the prepared query.
 
-    $stmt->bind_param('sss', $newPassword, $userEmail, $oldPassword);  // Bind "$email" to parameter.
-    $stmt->execute();    // Execute the prepared query.
+		$user_browser = $_SERVER['HTTP_USER_AGENT'];
 
-	$user_browser = $_SERVER['HTTP_USER_AGENT'];
+		$_SESSION['login_string'] = hash('sha512', $newPassword . $user_browser);
 
-	$_SESSION['login_string'] = hash('sha512', $newPassword . $user_browser);
-
-//    header('Location: settings');
+		$_SESSION['resetSuccess'] = 'Password Reset Succeeded';
+        header('Location: ../../pages/settings');
+	}
+	else
+	{
+		$_SESSION['invalidReset'] = 'Password Reset Failed';
+        header('Location: ../../pages/settings');
+	}
 }
 
