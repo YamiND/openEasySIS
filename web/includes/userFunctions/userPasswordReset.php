@@ -1,6 +1,6 @@
 <?php
-include_once 'dbConnect.php';
-include_once 'functions.php';
+include_once '../dbConnect.php';
+include_once '../functions.php';
 
 sec_session_start(); // Our custom secure way of starting a PHP session.
 
@@ -32,9 +32,9 @@ if (isset($_POST['userEmail'], $_POST['oldPassword'], $_POST['newPassword'], $_P
 
 				// I don't see an issue with using the same salt
 				$newPassword = hash('sha512', $newPassword . $userSalt);
-
+				
 				echo "Before changePassword function <br>";
-				changePassword($userEmail, $oldPassword, $newPassword, $mysqli);
+				changeUserPassword($userEmail, $oldPassword, $newPassword, $mysqli);
 			}
 		}	
     }
@@ -49,3 +49,26 @@ else
     // The correct POST variables were not sent to this page.
     echo 'Invalid Request';
 }
+
+function changeUserPassword($userEmail, $oldPassword, $newPassword, $mysqli)
+{
+	if (DEBUG):
+		echo "Email: $userEmail <br>";
+		echo "Old Password: $oldPassword <br>";
+		echo "New Password: $newPassword <br>";
+	endif;
+	
+
+    // Using prepared statements means that SQL injection is not possible. 
+    $stmt = $mysqli->prepare("UPDATE users SET userPassword = ? WHERE userEmail = ? AND userPassword = ?");
+
+    $stmt->bind_param('sss', $newPassword, $userEmail, $oldPassword);  // Bind "$email" to parameter.
+    $stmt->execute();    // Execute the prepared query.
+
+	$user_browser = $_SERVER['HTTP_USER_AGENT'];
+
+	$_SESSION['login_string'] = hash('sha512', $newPassword . $user_browser);
+
+//    header('Location: settings');
+}
+
