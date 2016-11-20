@@ -46,9 +46,11 @@ if (!isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail'])):
                                 </div>-->
                                 <!-- Change this to a button or input when using this as a form -->
 <!--                                <a href="index.html" class="btn btn-lg btn-success btn-block">Login</a> -->
-				<input type="button" class="btn btn-lg btn-success btn-block" 
+				<input type="Submit" class="btn btn-lg btn-success btn-block" 
+                                                   value="Sign in" />
+			<!--	<input type="button" class="btn btn-lg btn-success btn-block" 
                                                    value="Sign in" 
-                                                   onclick="formhash(this.form, this.form.password);" />
+                                                   onclick="formhash(this.form, this.form.password);" />-->
                             </fieldset>
                         </form>
                     </div>
