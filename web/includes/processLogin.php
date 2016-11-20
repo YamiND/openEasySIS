@@ -6,13 +6,15 @@ sec_session_start(); // Our custom secure way of starting a PHP session.
 
 if (isset($_POST['userEmail'], $_POST['password'])) 
 {
+	// User-supplied email
     $userEmail = $_POST['userEmail'];
-    $password = $_POST['password']; // The hashed password.
+	
+	// User-supplied password, not hased until it hits the login function
+    $password = $_POST['password']; 
 
     if (login($userEmail, $password, $mysqli) == true)
     {
-        // Login success
-
+        // Login success, check role ID to determine page to land at
 		if (roleID_check($mysqli) == 1)
 		{
 			// Display Admin Dashboard
@@ -38,17 +40,18 @@ if (isset($_POST['userEmail'], $_POST['password']))
 			// Display Student Dashboard
         	header('Location: ../pages/studentDashboard');
 		}
-		
     }
     else
     {
-	//TODO: Add an error message for a failed login
-        // Login failed
-//        header('Location: ../pages/login?error=1');
+        // Login failed, output a message via a $_SESSION variable
+		$_SESSION['invalidLogin'] = 'Username/Password Incorrect';
+		header('Location: ../pages/login');
     }
 }
 else
 {
     // The correct POST variables were not sent to this page.
-    echo 'Invalid Request';
+    // Login failed, output a message via a $_SESSION variable
+	$_SESSION['invalidLogin'] = 'Username/Password Incorrect';
+	header('Location: ../pages/login');
 }

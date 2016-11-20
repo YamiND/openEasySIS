@@ -26,7 +26,17 @@ if (!isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail'])):
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Sign in to openEasySIS</h3>
+					<?php
+						if (isset($_SESSION['invalidLogin']))
+						{
+    						echo '<h3 class="panel-title">' . $_SESSION['invalidLogin'] . '</h3>';
+    						unset($_SESSION['invalidLogin']);
+						}
+						else
+						{
+                        	echo '<h3 class="panel-title">Sign in to openEasySIS</h3>';
+						}
+					?>
                     </div>
                     <div class="panel-body">
                         <!--<form role="form">-->
