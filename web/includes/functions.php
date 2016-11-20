@@ -201,52 +201,6 @@ function login_check($mysqli)
     }
 }
 
-function getTotalFromProfile($mysqli, $profile)
-{
-	// This function gets the number of users depending on what string paramter is passed to it
-		if ($stmt = $mysqli->prepare("SELECT * FROM $profile"))
-		{
-			$stmt->execute();
-			$stmt->store_result();
-				
-			if ($stmt->num_rows > 0)
-			{
-				return $stmt->num_rows;
-			}	
-			else
-			{
-				return 0;
-			}
-		}
-		else 
-		{
-			return 0;
-		}
-}
-
-function getTotalClasses($mysqli)
-{
-	// This function gets the number of classes
-		if ($stmt = $mysqli->prepare("SELECT * FROM classes"))
-		{
-			$stmt->execute();
-			$stmt->store_result();
-				
-			if ($stmt->num_rows > 0)
-			{
-				return $stmt->num_rows;
-			}	
-			else
-			{
-				return 0;
-			}
-		}
-		else 
-		{
-			return 0;
-		}
-}
-
 function roleID_check($mysqli) 
 {
 	if (isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail']))
@@ -290,69 +244,110 @@ function roleID_check($mysqli)
 	}
 }
 
-function viewAnnouncements($mysqli)
+function adminChangePassword($userEmail, $hashedPassword, $randomSalt, $mysqli)
 {
-	echo '
-            <!-- col-lg-12 -->
-			<div class="col-lg-12">
-            	<div class="panel panel-default">
-                	<div class="panel-heading">
-                    	Announcements
-                    </div>
-                    <!-- /.panel-heading -->
-                    <div class="panel-body">
-                    	<div class="table-responsive">
-                        	<table class="table">
-                            	<thead>
-                                	<tr>
-                                    	<th>Date Posted</th>
-                                        <th>Announcement Title</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                              	<tbody>';
-                                	if ($stmt = $mysqli->prepare("SELECT announcementDate, announcementTitle, announcementDescription FROM announcements"))
-                                    {   
-                                    	$stmt->execute();
-                                        $stmt->bind_result($announcementDate, $announcementTitle, $announcementDescription);
-                                        $stmt->store_result();
-
-                                        while($stmt->fetch())
-                                        {   
-                                            echo "<tr>";
-                                            echo "<td>" . $announcementDate . "</td>";
-                                            echo "<td>" . $announcementTitle . "</td>";
-                                            echo "<td>" . $announcementDescription . "</td>";
-                                            echo "</tr>";
-                                        }   
-                                    }   
-                                    else
-                                    {   
-                                        return;
-                                    }   
-		echo '
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.table-responsive -->
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-                <!-- /.col-lg-12 -->
-			';
+	
+    $stmt = $mysqli->prepare("UPDATE users SET userPassword = ?, userSalt = ? WHERE userEmail = ?");
+    
+    $stmt->bind_param('sss', $hashedPassword, $randomSalt, $userEmail);  // Bind "$email" to parameter.
+    $stmt->execute();    // Execute the prepared query.
 }
 
-
-
-function changePassword($email, $oldPassword, $newPassword, $mysqli) 
+function changePassword($userEmail, $oldPassword, $newPassword, $mysqli) 
 {
+
+	echo "In change password function <br>";
     // Using prepared statements means that SQL injection is not possible. 
     $stmt = $mysqli->prepare("UPDATE users SET userPassword = ? WHERE userEmail = ? AND userPassword = ?");
     
-    $stmt->bind_param('sss', $newPassword, $email, $oldPassword);  // Bind "$email" to parameter.
+    $stmt->bind_param('sss', $newPassword, $userEmail, $oldPassword);  // Bind "$email" to parameter.
     $stmt->execute();    // Execute the prepared query.
+
+	// Unset all session values 
+	$_SESSION = array();
+ 
+	// get session parameters 
+	$params = session_get_cookie_params();
+ 
+	// Delete the actual cookie. 
+	setcookie(session_name(),
+        '', time() - 42000, 
+        $params["path"], 
+        $params["domain"], 
+        $params["secure"], 
+        $params["httponly"]);
+ 
+	// Destroy session 
+	session_destroy();
+	
+	// Login again to reset session
+	login($email, $newPassword, $mysqli);
+}
+
+function userPasswordResetForm()
+{
+	echo ' <!-- /.col-lg-4 -->
+                <div class="col-lg-4">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+						<p>Reset Password</p>
+                        </div>
+                        <div class="panel-body">
+            <form action="../includes/passwordReset" method="post" name="login_form" role="form">
+            <input type="hidden" name="userEmail" value="' . $_SESSION["userEmail"] . '">
+                            <fieldset>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Enter old Password" name="oldPassword" type="password" autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Enter new Password" name="newPassword" type="password" value="">
+                                </div>
+                <div class="form-group">
+                                    <input class="form-control" placeholder="Repeat new Password" name="repeatPassword" type="password" value="">
+                                </div>
+
+                                <!-- I may implement a remember me feature in the future -->
+                              <!--  <div class="checkbox">
+                                    <label>
+                                        <input name="remember" type="checkbox" value="Remember Me">Remember Me                                    </label>
+                                </div>-->
+                                <!-- Change this to a button or input when using this as a form -->
+<!--                                <a href="index.html" class="btn btn-lg btn-success btn-block">Login</a> -->
+                                <input type="Submit" class="btn btn-lg btn-success btn-block" 
+                                                   value="Reset Password" />
+                            </fieldset>
+                        </form> 
+                        </div>
+                    </div>
+                </div>
+                <!-- /.col-lg-4 -->';
+}
+
+
+function adminPasswordResetForm()
+{
+	// Form for password reset via email. Used by admin
+echo '	<!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+						<p>Reset User Password</p>
+                        </div>
+                        <div class="panel-body">
+            <form action="../includes/adminPasswordReset" method="post" name="login_form" role="form">
+                            <fieldset>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Enter User Email" name="userEmail" type="text" autofocus>
+                                </div>
+                                <!-- Change this to a button or input when using this as a form -->                 
+                                <input type="submit" class="btn btn-lg btn-success btn-block"                       
+                                                   value="Reset Password"/>
+                            </fieldset>
+                        </form> 
+                        </div>
+                    </div>  
+                </div>  
+                <!-- /.col-lg-4 -->';
 }
 
 function esc_url($url) 
