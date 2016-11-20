@@ -46,6 +46,10 @@ if (!isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail'])):
                                 <div class="form-group">
                                     <input class="form-control" placeholder="Password" name="password" type="password" value="">
                                 </div>
+				
+				<div class="form-group">
+				    <a href="forgotPassword">Forgot your password?</a>
+				</div>
 				<!-- I may implement a remember me feature in the future -->
                               <!--  <div class="checkbox">
                                     <label>
