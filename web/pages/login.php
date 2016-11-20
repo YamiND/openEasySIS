@@ -15,8 +15,6 @@ if (!isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail'])):
 
     <!-- Header Information, CSS, and JS -->
     <?php include("../includes/header.php"); ?>
-    <!--<script type="text/JavaScript" src="../js/sha512.js"></script> 
-    <script type="text/JavaScript" src="../js/forms.js"></script> -->
 </head>
 
 <body>
