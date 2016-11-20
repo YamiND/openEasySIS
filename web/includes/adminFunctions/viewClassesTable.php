@@ -17,7 +17,7 @@ function generateClassesTable($mysqli)
                                     <tr>
                                         <th>Class Name</th>
                                         <th>Grade Level</th>
-                                        <th>Teache Email</th>
+                                        <th>Teacher Email</th>
                                     </tr>
                                 </thead>
                                 <tbody>';
