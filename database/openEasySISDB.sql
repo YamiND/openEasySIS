@@ -95,6 +95,7 @@ CREATE  TABLE IF NOT EXISTS `openEasySIS`.`studentProfile` (
   `studentGPA` FLOAT NOT NULL ,
   `studentGradeLevel` TINYINT NOT NULL ,
   `studentClassIDs` VARCHAR(2048) NOT NULL ,
+  `studentEmail` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`studentID`) ,
   CONSTRAINT `studentID`
     FOREIGN KEY (`studentID` )
@@ -308,11 +309,11 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `openEasySIS`;
-INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `roleID`, `modProfile`, `modClassList`, `viewAllGrades`, `userSalt`) VALUES (1, 'admin@localhost.com', '7fb543627c22b84597ca27d748e5598a0806ac124b762cee25643cdede10add7e85ae57615a2647efc50c3aa54d54e6bafc57f5b8d2ac6fb43f280ae2b89b02d', 1, 1, 1, 1, '46d5eb8476b910c3501188f91f4fedfd593d8a7b13c27e25c34fd683297f43fd79f4f79cd87c9eaccdee8ed636adef49a461f1591013c7face1081191f5deb38');
-INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `roleID`, `modProfile`, `modClassList`, `viewAllGrades`, `userSalt`) VALUES (2, 'schoolAdmin@localhost.com', 'b1aae2b74de38745e25b9f232b761dd9560d95ce05af9faf71a6da8edd6fd80db00abefe2a03fd93b594182b07ac60db8dd3b80ff0cce5fbf3fc87351810d1f2', 2, 1, 0, 1, '8aab3f6290cc4a3d5ce6dce0f4a1ab75340424e58e645dc0c26c4815f82b17ff13d5cf599b225f9102f7f0db0903163f2ad7273863f26d916d2ea7381fbe1821');
-INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `roleID`, `modProfile`, `modClassList`, `viewAllGrades`, `userSalt`) VALUES (3, 'teacher@localhost.com', '88335388382d6a9f2ee9e7848804097ac544970a5c1df4c99d1c6d4eb3c34c6a585e155351bb71cd9fa793225c2245a1c11ef3b90117a1711f16b7b0689d68b5', 3, 0, 1, 0, '49e907b72ecf7469a56eb1daa6e1ed55a4a936eb4780ecc3fab0f6e7510fcc7f652fc4e23cbc5b4bb42e237833e99f4fd9209853644921c470bfaaa0d847a1fe');
-INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `roleID`, `modProfile`, `modClassList`, `viewAllGrades`, `userSalt`) VALUES (4, 'parent@localhost.com', '307ab73a0f7286afe1a5b610334ebb8913002828c836b27938d98181e597f4c373790e8001c3843b46513b43131659d383f3f7aaedbc321f0e7ae06ba8550939', 4, 0, 0, 0, '780f4ac261a1243a693dcf7ad9142b42d745e2ce36d102284b0b9e12b13b03e96e36b347620fad9b9fa4a019919653532b2e1c3e1dd9cc524f99080a34efa119');
-INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `roleID`, `modProfile`, `modClassList`, `viewAllGrades`, `userSalt`) VALUES (5, 'student@localhost.com', '0f27d1bacc6964f6b5318de2ef18bce5e1af16720f0a74fd761f0e7bf5adcae853b6ae1dff71dce79f341137cfda542dad917d6e98786210ae6c0202905085a9', 5, 0, 0, 0, 'b56067c035fc029daf6b13734df79666d418f35c4e94d8e112a65b1ae07161d30514a1457d17c9a5dbecf346479f31ab13bbdc04b42b88057de2c41050f1e574');
+INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `roleID`, `modProfile`, `modClassList`, `viewAllGrades`, `userSalt`) VALUES (1, 'admin@localhost.com', '506beb3bb6a2c033392158f6451e85d5862b9997c999a3438cd3c4e93d65e7bf5b205f5cd132724f1db7ef9bd94088a72f9b9417c829cf081fffc3c2c599496f', 1, 1, 1, 1, '46d5eb8476b910c3501188f91f4fedfd593d8a7b13c27e25c34fd683297f43fd79f4f79cd87c9eaccdee8ed636adef49a461f1591013c7face1081191f5deb38');
+INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `roleID`, `modProfile`, `modClassList`, `viewAllGrades`, `userSalt`) VALUES (2, 'schoolAdmin@localhost.com', '19145a6a9e87e75ad550622552e088ec786b869e8b2c7a203a502171bba59b1cb9284af2f1b63bbf625e0597e85775ffb1f97b6a54f11fed408b8b45d5991a5b', 2, 1, 0, 1, '8aab3f6290cc4a3d5ce6dce0f4a1ab75340424e58e645dc0c26c4815f82b17ff13d5cf599b225f9102f7f0db0903163f2ad7273863f26d916d2ea7381fbe1821');
+INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `roleID`, `modProfile`, `modClassList`, `viewAllGrades`, `userSalt`) VALUES (3, 'teacher@localhost.com', '0cbb9145e706c497d95aebcea57c6e8763a9596623ec749c3ca0015028db6b24681a4f1c38254c57674ee161a9c4ccf14dd1024129590d656809eb5df9408935', 3, 0, 1, 0, '49e907b72ecf7469a56eb1daa6e1ed55a4a936eb4780ecc3fab0f6e7510fcc7f652fc4e23cbc5b4bb42e237833e99f4fd9209853644921c470bfaaa0d847a1fe');
+INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `roleID`, `modProfile`, `modClassList`, `viewAllGrades`, `userSalt`) VALUES (4, 'parent@localhost.com', '477347c3a479ec04220f375ce4d6ba2c86f6132d7292688d11d36ac28fdc7300d7c4584f298463fc08d5461cb9262144bff2e48d63a8eec8277fb26c7a0125f4', 4, 0, 0, 0, '780f4ac261a1243a693dcf7ad9142b42d745e2ce36d102284b0b9e12b13b03e96e36b347620fad9b9fa4a019919653532b2e1c3e1dd9cc524f99080a34efa119');
+INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `roleID`, `modProfile`, `modClassList`, `viewAllGrades`, `userSalt`) VALUES (5, 'student@localhost.com', '3a3115a8cf336b5906667636ecf5d712b4575b55807efdb036b168735255bb1b49b5066c1813c74bbb7685aa5aec20b3f293fa4078267e40e7b92a6bb928c62c', 5, 0, 0, 0, 'b56067c035fc029daf6b13734df79666d418f35c4e94d8e112a65b1ae07161d30514a1457d17c9a5dbecf346479f31ab13bbdc04b42b88057de2c41050f1e574');
 
 COMMIT;
 
@@ -339,7 +340,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `openEasySIS`;
-INSERT INTO `openEasySIS`.`studentProfile` (`studentID`, `studentFirstName`, `studentLastName`, `studentBirthdate`, `studentGuardianIDs`, `studentGender`, `studentGradYear`, `studentGPA`, `studentGradeLevel`, `studentClassIDs`) VALUES (5, 'Test', 'Student', '1995-11-06', '3', 'M', 2018, 3.68, 11, '1');
+INSERT INTO `openEasySIS`.`studentProfile` (`studentID`, `studentFirstName`, `studentLastName`, `studentBirthdate`, `studentGuardianIDs`, `studentGender`, `studentGradYear`, `studentGPA`, `studentGradeLevel`, `studentClassIDs`, `studentEmail`) VALUES (5, 'Test', 'Student', '1995-11-06', '3', 'M', 2018, 3.68, 11, '1', 'student@localhost.com');
 
 COMMIT;
 
