@@ -96,3 +96,11 @@ sudo sed -i '/expose_php/c\expose_php = off' /etc/php.ini
 # Allow HTTPD to access mariadb #
 setsebool -P httpd_can_network_connect 1
 
+# Allow apache to sendmail
+setsebool -P httpd_can_sendmail 1
+
+# Install sendmail
+yum install sendmail*
+
+# Install dovecot
+yum install dovecot

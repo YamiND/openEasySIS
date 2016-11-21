@@ -3,7 +3,6 @@
 <?php
 include_once '../includes/dbConnect.php';
 include_once '../includes/functions.php';
-include_once '../includes/userFunctions/forgotPassword.php';
 
 sec_session_start();
 ?>
@@ -24,10 +23,15 @@ sec_session_start();
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
 					<?php
-						if (isset($_SESSION['invalidLogin']))
+						if (isset($_SESSION['invalidEmail']))
 						{
     						echo '<h3 class="panel-title">' . $_SESSION['invalidEmail'] . '</h3>';
     						unset($_SESSION['invalidEmail']);
+						}
+						else if (isset($_SESSION['validEmail']))
+						{
+    						echo '<h3 class="panel-title">' . $_SESSION['validEmail'] . '</h3>';
+    						unset($_SESSION['validEmail']);
 						}
 						else
 						{
@@ -37,7 +41,7 @@ sec_session_start();
                     </div>
                     <div class="panel-body">
                         <!--<form role="form">-->
-			<form action="../includes/userFunctions/forgotPassword" method="post" name="login_form" role="form">
+			<form action="../includes/userFunctions/userForgotPassword" method="post" name="login_form" role="form">
                             <fieldset>
                                 <div class="form-group">
                                     <input class="form-control" placeholder="E-mail" name="userEmail" type="email" autofocus>
