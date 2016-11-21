@@ -55,6 +55,9 @@ echo '
 									<a href="adminDashboard">Overview</a>
 								</li>
 								<li>
+									<a href="createUserAccount">Create User</a>
+								</li>
+								<li>
 									<a href="adminPasswordReset">Reset User Password</a>
 								</li>
 								<li>
