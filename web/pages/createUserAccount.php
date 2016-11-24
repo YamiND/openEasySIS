@@ -1,3 +1,5 @@
+<?php include("../includes/customizations.php");?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,6 +29,7 @@
 			
 		<?php 
 			viewCreateUserForm($mysqli); 
+			viewCreateUserFormTest($mysqli)
 		?>
 
         </div>

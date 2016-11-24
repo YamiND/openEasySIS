@@ -1,3 +1,5 @@
+<?php include("../includes/customizations.php");?>
+
 <!DOCTYPE html>
 <html lang="en">
 

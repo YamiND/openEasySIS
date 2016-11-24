@@ -1,9 +1,11 @@
+<?php include("../includes/customizations.php");?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-    <title>User Tables</title>
+    <title><?php aliasOpenEasySIS?> - Classes Table</title>
     <!-- Header Information, CSS, and JS -->
     <?php include("../includes/header.php"); ?>
 
