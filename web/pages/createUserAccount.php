@@ -29,7 +29,6 @@
 			
 		<?php 
 			viewCreateUserForm($mysqli); 
-			viewCreateUserFormTest($mysqli)
 		?>
 
         </div>
