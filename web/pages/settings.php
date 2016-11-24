@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>openEasySIS - Settings</title>
+    <title><?php echo aliasOpenEasySIS; ?> - Settings</title>
     <!-- Header Information, CSS, and JS -->
     <?php include("../includes/header.php"); ?>
    <!-- <script type="text/JavaScript" src="../js/sha512.js"></script> 

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="refresh" content="0;url=pages/index">
-<title>openEasySIS</title>
+<title><?php echo aliasOpenEasySIS; ?></title>
 <script language="javascript">
     window.location.href = "pages/index"
 </script>

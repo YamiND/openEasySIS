@@ -4,7 +4,7 @@
 <!--TODO: Add user lookup? -->
 
 <head>
-    <title>openEasySIS - Reset User's Password</title>
+    <title><?php echo aliasOpenEasySIS; ?> - Reset User's Password</title>
     <!-- Header Information, CSS, and JS -->
     <?php include("../includes/header.php"); ?>
 </head>

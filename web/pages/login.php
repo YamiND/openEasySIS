@@ -11,7 +11,7 @@ if (!isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail'])):
 <html lang="en">
 
 <head>
-    <title>openEasySIS - Login</title>
+    <title><?php echo aliasOpenEasySIS; ?> - Login</title>
 
     <!-- Header Information, CSS, and JS -->
     <?php include("../includes/header.php"); ?>
@@ -32,7 +32,7 @@ if (!isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail'])):
 						}
 						else
 						{
-                        	echo '<h3 class="panel-title">Sign in to openEasySIS</h3>';
+                        	echo '<h3 class="panel-title">Sign in to ' . aliasOpenEasySIS . '</h3>';
 						}
 					?>
                     </div>

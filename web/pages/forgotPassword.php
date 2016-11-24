@@ -9,7 +9,7 @@ sec_session_start();
 <html lang="en">
 
 <head>
-    <title>openEasySIS - Forgot Password?</title>
+    <title><?php echo aliasOpenEasySIS; ?> - Forgot Password?</title>
 
     <!-- Header Information, CSS, and JS -->
     <?php include("../includes/header.php"); ?>

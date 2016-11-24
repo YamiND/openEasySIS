@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>openEasySIS - Overview</title>
+    <title><?php echo aliasOpenEasySIS; ?> - Overview</title>
     <!-- Header Information, CSS, and JS -->
     <?php include("../includes/header.php"); ?>
 </head>

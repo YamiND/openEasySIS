@@ -6,7 +6,7 @@ sec_session_start();
 
 if (login_check($mysqli) == true):
 
-//TODO: Update the openEasySIS link to something more appropriate
+//TODO: Update the aliasOpenEasySIS link to something more appropriate
 //TODO: Update the email link to something more appropriate
 echo '
 
@@ -19,7 +19,7 @@ echo '
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">openEasySIS</a>
+                <a class="navbar-brand" href="#">' . aliasOpenEasySIS . '</a>
             </div>
             <!-- /.navbar-header -->
 <ul class="nav navbar-top-links navbar-right">

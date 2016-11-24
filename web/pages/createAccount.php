@@ -9,7 +9,7 @@ sec_session_start();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>openEasySIS - Create Account</title>
+    <title><?php echo aliasOpenEasySIS; ?> - Create Account</title>
 
     <!-- Header Information, CSS, and JS -->
     <?php include("../includes/header.php"); ?>
@@ -24,7 +24,7 @@ sec_session_start();
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Sign in to openEasySIS</h3>
+                        <h3 class="panel-title">Sign in to <?php echo aliasOpenEasySIS; ?></h3>
                     </div>
                     <div class="panel-body">
                         <!--<form role="form">-->

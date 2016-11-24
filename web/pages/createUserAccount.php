@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>openEasySIS - Create User Account</title>
+    <title><?php echo aliasOpenEasySIS; ?> - Create User Account</title>
     <!-- Header Information, CSS, and JS -->
     <?php include("../includes/header.php"); ?>
 
