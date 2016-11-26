@@ -1,6 +1,7 @@
 <?php
 include_once '../dbConnect.php';
 
+date_default_timezone_set('America/New_York');
 
 function viewAnnouncements($mysqli)
 {
@@ -23,19 +24,23 @@ function viewAnnouncements($mysqli)
                                     </tr>
                                 </thead>
                                 <tbody>';
-                                    if ($stmt = $mysqli->prepare("SELECT announcementDate, announcementTitle, announcementDescription FROM announcements"))
+                                    if ($stmt = $mysqli->prepare("SELECT announcementPostDate, announcementEndDate, announcementTitle, announcementDescription FROM announcements"))
                                     {   
                                         $stmt->execute();
-                                        $stmt->bind_result($announcementDate, $announcementTitle, $announcementDescription);
+                                        $stmt->bind_result($announcementPostDate, $announcementEndDate, $announcementTitle, $announcementDescription);
                                         $stmt->store_result();
 
                                         while($stmt->fetch())
-                                        {   
-                                            echo "<tr>";
-                                            echo "<td>" . $announcementDate . "</td>";
-                                            echo "<td>" . $announcementTitle . "</td>";
-                                            echo "<td>" . $announcementDescription . "</td>";
-                                            echo "</tr>";
+                                        {  
+
+											if ((($announcementEndDate >= date('Y-m-d')) || ($announcementEndDate === NULL)) && $announcementPostDate <= date('Y-m-d'))
+											{
+                                            	echo "<tr>";
+                                            	echo "<td>" . $announcementPostDate . "</td>";
+                                            	echo "<td>" . $announcementTitle . "</td>";
+                                            	echo "<td>" . $announcementDescription . "</td>";
+                                            	echo "</tr>";
+											}
                                         }   
                                     }   
                                     else

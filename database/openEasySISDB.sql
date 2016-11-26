@@ -51,7 +51,8 @@ CREATE  TABLE IF NOT EXISTS `openEasySIS`.`announcements` (
   `announcementID` INT NOT NULL AUTO_INCREMENT ,
   `announcementTitle` VARCHAR(256) NOT NULL ,
   `announcementDescription` VARCHAR(2048) NOT NULL ,
-  `announcementDate` DATE NOT NULL ,
+  `announcementPostDate` DATE NOT NULL ,
+  `announcementEndDate` DATE NULL ,
   PRIMARY KEY (`announcementID`) )
 ENGINE = InnoDB;
 
@@ -322,7 +323,9 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `openEasySIS`;
-INSERT INTO `openEasySIS`.`announcements` (`announcementID`, `announcementTitle`, `announcementDescription`, `announcementDate`) VALUES (1, 'Announcement Test', 'This is a test of an announcement made and be displayed', '2016-11-06');
+INSERT INTO `openEasySIS`.`announcements` (`announcementID`, `announcementTitle`, `announcementDescription`, `announcementPostDate`, `announcementEndDate`) VALUES (1, 'Expired Announcement Test', 'This is a test of an expired announcement made and be displayed', '2016-11-06', '2016-10-10');
+INSERT INTO `openEasySIS`.`announcements` (`announcementID`, `announcementTitle`, `announcementDescription`, `announcementPostDate`, `announcementEndDate`) VALUES (2, 'Non-expired Announcement Test', 'This is a test of an announcement made and be displayed', '2016-11-25', '2017-10-10');
+INSERT INTO `openEasySIS`.`announcements` (`announcementID`, `announcementTitle`, `announcementDescription`, `announcementPostDate`, `announcementEndDate`) VALUES (3, 'non-expired NULL test', 'Test of NULL end', '2016-11-25', NULL);
 
 COMMIT;
 
