@@ -69,24 +69,4 @@ echo '
 
 }
 
-
-function getUserRoles($mysqli)
-{
-    // This function gets the number of classes
-        if ($stmt = $mysqli->prepare("SELECT roleName FROM roles"))
-        {
-            $stmt->execute();
-			$stmt->bind_result($roleName);
-            $stmt->store_result();
-			
-			while($stmt->fetch())
-			{
-				echo "<option>$roleName</option>";
-			}
-        }
-        else
-        {
-            return 0;
-        }
-}
 ?>

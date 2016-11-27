@@ -58,6 +58,9 @@ echo '
 									<a href="createAnnouncement">Create Announcement</a>
 								</li>
 								<li>
+									<a href="editAnnouncement">Edit Announcement</a>
+								</li>
+								<li>
 									<a href="deleteAnnouncement">Delete Announcement</a>
 								</li>
 								<li>
