@@ -55,15 +55,6 @@ echo '
 									<a href="adminDashboard">Overview</a>
 								</li>
 								<li>
-									<a href="createAnnouncement">Create Announcement</a>
-								</li>
-								<li>
-									<a href="editAnnouncement">Edit Announcement</a>
-								</li>
-								<li>
-									<a href="deleteAnnouncement">Delete Announcement</a>
-								</li>
-								<li>
 									<a href="createUserAccount">Create User</a>
 								</li>
 								<li>
@@ -74,6 +65,23 @@ echo '
 								</li>
 								<li>
 									<a href="viewClassesTable">View Classes</a>
+								</li>
+							</ul>	
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bullhorn fa-fw"></i> Announcements <span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a href="createAnnouncement">Create Announcement</a>
+								</li>
+								<li>
+									<a href="editAnnouncement">Edit Announcement</a>
+								</li>
+								<li>
+									<a href="deleteAnnouncement">Delete Announcement</a>
+								</li>
+								<li>
+									<a href="viewAllAnnouncements">View All Announcements</a>
 								</li>
 							</ul>	
                         </li>
