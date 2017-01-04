@@ -1,143 +1,75 @@
 <?php
 
+if (isset($_POST['announcementID']))
+{
+	// After the user selects an announcement, set it as a $_SESSION variable
+    $_SESSION['announcementID'] = $_POST['announcementID'];
+}
+
+if (isset($_POST['changeAnnouncement']))
+{
+	// User wants to change announcements, unset the announcementID
+    unset($_SESSION['announcementID']);
+}
+
+// We have to set the correct Date for the date() function otherwise it uses UTC
 date_default_timezone_set('America/New_York');
 
 function viewEditAnnouncementForm($mysqli)
 {
-	//This is required otherwise it defaults to UTC I think
-	date_default_timezone_set('America/New_York');
 	echo '
             <div class="row">
                 <div class="col-lg-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-	';
-						if (isset($_SESSION['invalidUpdate']))
+       	';
+						if (isset($_SESSION['fail']))
                         {
-                        	echo $_SESSION['invalidUpdate'];
-                            unset($_SESSION['invalidUpdate']);
+                        	// Echo fail message and Unset Variable
+                        	echo $_SESSION['fail'];
+                            unset($_SESSION['fail']);
                         }
-						else if (isset($_SESSION['invalidSelect']))
+						else if (isset($_SESSION['success']))
 						{
-							echo $_SESSION['invalidSelect'];
-							unset($_SESSION['invalidSelect']);
-						}
-						else if (isset($_SESSION['announcementSelected']))
-						{
-							echo $_SESSION['announcementSelected'];
-						}
-						else if (isset($_SESSION['updateSuccess']))
-						{
-                        	echo $_SESSION['updateSuccess'];
-                            unset($_SESSION['updateSuccess']);
+							// Echo success message and Unset Variable
+                        	echo $_SESSION['success'];
+                            unset($_SESSION['success']);
 						}
                         else
                         {
-                        	echo 'Update Announcement';
+                        	// Echo default message
+                        	echo 'Edit Announcement';
                         }
-echo '
+	echo '
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs">
-                                <li class="active"><a href="#updateAnnoucement" data-toggle="tab">Update Announcement</a>
+                                <li class="active"><a href="#editAnnoucement" data-toggle="tab">Edit Announcement</a>
                                 </li>
                             </ul>
 
                             <!-- Tab panes -->
                             <div class="tab-content">
-                            	<h4>Select Announcement</h4>
-                                <div class="tab-pane fade in active" id="updateAnnouncement">
+                                <div class="tab-pane fade in active" id="editAnnouncement">
+                                <br>
+                  	';
 
-                                    <form action="../includes/adminFunctions/selectAnnouncement" method="post" role="form">';
+                                	if (!isset($_SESSION['announcementID']))
+                                	{
+                                		// Call form to set announcement ID
+                                		getAnnouncementsForm($mysqli);
+                                	}
+                                	else
+                                	{
+                                		// We have announcementID, bring up form to modify announcement
+                                		modifyAnnouncementForm($_SESSION['announcementID'], $mysqli);
 
-										if (isset($_SESSION['announcementSelected'], $_SESSION['announcementID'], $_SESSION['announcementTitle'], $_SESSION['announcementPostDate']))
-										{
-											$announcementID = $_SESSION['announcementID'];
-											$announcementTitle = $_SESSION['announcementTitle'];
-											$announcementPostDate = $_SESSION['announcementPostDate'];
-										
-											echo '<fieldset disabled>
-													<div class="form-group">
-														<select class="form-control" name="announcementID">
-															<option value="' . $announcementID . '">' . $announcementTitle . ', ' . $announcementPostDate . '</option>
-														</select>
-													</div>
-													<button type="submit" class="btn btn-default">Select Announcement</button>
-													</fieldset>';
-
-										}
-										else
-										{
-											echo ' 
-                                        			<div class="form-group">
-			                                        	<select class="form-control" name="announcementID">';
-															getAnnouncements($mysqli);
-				echo '									</select> 
-           				                             </div>
-                        			                <button type="submit" class="btn btn-default">Select Announcement</button>';
-										}
-
-echo '
-                                    </form>
-								
-									<br>
-	
-                                    <form action="../includes/adminFunctions/updateAnnouncement" method="post" role="form">';
-				
-											if (isset($_SESSION['announcementID'], $_SESSION['announcementTitle'], $_SESSION['announcementPostDate'], $_SESSION['announcementSelected'], $_SESSION['announcementDescription']))
-											
-                        					{
-					                        	echo '
-														<input type="hidden" name="announcementID" value="'.$announcementID.'">
-														<div class="form-group">
-															<input class="form-control" name="announcementTitle" value="' . $_SESSION['announcementTitle'] . '">
-														</div>
-														<div class="form-group">
-															<label>Announcement Post Date</label>
-															<input class="form-control" type="date" name="announcementPostDate" value="' . $_SESSION['announcementPostDate'] . '">
-														</div>
-														<div class="form-group">
-															<label>Announcement End Date</label>
-															<input class="form-control" type="date" name="announcementEndDate" value="' . $_SESSION['announcementEndDate'] . '">
-														</div>
-														<div class="form-group">
-															<label>Announcement Description</label>
-															<textarea class="form-control" name="announcementDescription" rows="5">' . $_SESSION['announcementDescription'] . '</textarea>
-														</div>
-														<button type="submit" class="btn btn-default">Update Announcement</button>
-													';
-
-												unset($_SESSION['announcementSelected']);
-												unset($_SESSION['announcementID']);
-												unset($_SESSION['announcementTitle']);
-												unset($_SESSION['announcementPostDate']);
-                        					}
-											else
-											{
-												echo '
-												<fieldset disabled>
-													<div class="form-group">
-														<input class="form-control" name="announcementTitle" placeholder="Announcement Title">
-													</div>
-													<div class="form-group">
-														<label>Announcement Post Date</label>
-														<input class="form-control" type="date" name="announcementPostDate" value="' . date('Y-m-d') . '" min="' . date('Y-m-d') . '">
-													</div>
-													<div class="form-group">
-														<label>Announcement End Date</label>
-														<input class="form-control" type="date" name="announcementEndDate" min="' . date('Y-m-d') . '">
-													</div>
-													<div class="form-group">
-														<label>Announcement Description</label>
-														<textarea class="form-control" name="announcementDescription" rows="5"></textarea>
-													</div>
-													<button type="submit" class="btn btn-default">Update Announcement</button>
-												</fieldset>';
-											}
-	echo '
-                                    </form>
+                                		// Allows us to change Announcements
+                                		changeAnnouncementButton();
+                                	}
+				echo '
                                 </div>
                             </div>
                         </div>
@@ -146,31 +78,89 @@ echo '
                     <!-- /.panel -->
                 </div>
 			</div>
-';
+	';
 
 }
 
-function getAnnouncements($mysqli)
+function changeAnnouncementButton()
 {
+	// Form to allow user to change announcement selected
+	echo '
+			<br>
+			<form action="" method="post" role="form">
+				<button type="submit" class="btn btn-default" name="changeAnnouncement">Change Announcement</button> 
+			</form>
+	   	';
+}
 
-	if ($stmt = $mysqli->prepare("SELECT announcementID, announcementPostDate, announcementEndDate, announcementTitle FROM announcements"))
+function modifyAnnouncementForm($announcementID, $mysqli)
+{
+	if ($stmt = $mysqli->prepare("SELECT announcementName, announcementDescription, announcementPostDate, announcementEndDate FROM announcements WHERE announcementID = ?"))
     {   
+    	// Query database for announcement details to be modified
+    	$stmt->bind_param('i', $announcementID);
+
     	$stmt->execute();
-        $stmt->bind_result($announcementID, $announcementPostDate, $announcementEndDate, $announcementTitle);
+        $stmt->bind_result($announcementName, $announcementDescription, $announcementPostDate, $announcementEndDate);
+        $stmt->store_result();
+        $stmt->fetch();
+
+        // Output form that contains the DB variables
+        echo '
+		<form action="../includes/adminFunctions/updateAnnouncement" method="post" role="form">
+				<input type="hidden" name="announcementID" value="'.$announcementID.'">
+				<div class="form-group">
+					<input class="form-control" name="announcementName" value="' . $announcementName . '">
+				</div>
+				<div class="form-group">
+					<label>Announcement Post Date</label>
+					<input class="form-control" type="date" name="announcementPostDate" value="' . $announcementPostDate . '">
+				</div>
+				<div class="form-group">
+					<label>Announcement End Date</label>
+					<input class="form-control" type="date" name="announcementEndDate" value="' . $announcementEndDate . '">
+				</div>
+				<div class="form-group">
+					<label>Announcement Description</label>
+					<textarea class="form-control" name="announcementDescription" rows="5">' . $announcementDescription . '</textarea>
+				</div>
+				<button type="submit" class="btn btn-default">Edit Announcement</button>
+		</form>
+			';
+    }  
+}
+
+function getAnnouncementsForm($mysqli)
+{
+	// Form to select the announcement and send the announcementID
+	echo '
+		<form action="" method="post" role="form">
+			<div class="form-group">
+				<select class="form-control" name="announcementID">';								
+	if ($stmt = $mysqli->prepare("SELECT announcementID, announcementPostDate, announcementName FROM announcements WHERE announcementEndDate >= curdate()"))
+    {   
+    	// Query and Display all available announcements
+    	$stmt->execute();
+        $stmt->bind_result($announcementID, $announcementPostDate, $announcementTitle);
         $stmt->store_result();
 
         while($stmt->fetch())
         { 
-			if ((($announcementEndDate >= date('Y-m-d')) || ($announcementEndDate === NULL) || ($announcementEndDate == '0000-00-00')) && ($announcementPostDate <= date('Y-m-d')))
-			{
-				echo "<option value='" . $announcementID . "'>$announcementTitle, $announcementPostDate</option>";
-			}
-        }   
+			echo "<option value='" . $announcementID . "'>$announcementTitle, $announcementPostDate</option>";
+        }  
     }   
     else
     {   
-    	return;
-    }   
+    	// There are no active announcements that can be modified
+    	echo "<option disabled'>No Active Announcements Available to Modify</option>";
+    }
+
+    echo '
+			</select> 
+			     </div>
+			<button type="submit" class="btn btn-default">Select Announcement</button>
+			</form>
+		'; 
 }
 
 ?>

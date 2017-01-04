@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-    <title><?php echo aliasOpenEasySIS; ?> - Overview</title>
+    <title><?php echo aliasOpenEasySIS; ?> - View all School Years</title>
     <!-- Header Information, CSS, and JS -->
     <?php include("../includes/header.php"); ?>
 </head>
@@ -13,23 +13,23 @@
     <div id="wrapper">
 	<!-- Navigation Menu -->
         <?php include('../includes/navPanel.php'); ?>
-		<?php include('../includes/userFunctions/viewAnnouncements.php'); ?>
+		<?php include('../includes/adminFunctions/viewAllSchoolYearsForm.php'); ?>
 
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Dashboard</h1>
+                    <h1 class="page-header">View all School Years</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
             <div class="row">
 	<?php 
-		if (roleID_check($mysqli) == 3):
+		if (roleID_check($mysqli) == 1):
 	?>
 
 			<?php
-				viewAnnouncements($mysqli);
+				viewAllSchoolYears($mysqli);
 			?>
             </div>
             <!-- /.row -->

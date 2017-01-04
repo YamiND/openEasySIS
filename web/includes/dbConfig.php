@@ -4,7 +4,7 @@
  */  
 define("HOST", "localhost");     // The host you want to connect to.
 define("USER", "dbSISAccessor");    // The database username. 
-define("PASSWORD", "PASSWORD");    // The database password. 
+define("PASSWORD", "dbSISAccessor");    // The database password. 
 define("DATABASE", "openEasySIS");    // The database name.
 
 //define("HOST_BASE", "http://35.58.0.103/"); 

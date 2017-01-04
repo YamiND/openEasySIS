@@ -1,5 +1,8 @@
 <?php
 
+
+
+
 function viewCreateAnnouncementForm($mysqli)
 {
 
@@ -11,20 +14,7 @@ function viewCreateAnnouncementForm($mysqli)
                     <div class="panel panel-default">
                         <div class="panel-heading">
 	';
-						if (isset($_SESSION['invalidCreate']))
-                        {
-                        	echo $_SESSION['invalidCreate'];
-                            unset($_SESSION['invalidCreate']);
-                        }
-						else if (isset($_SESSION['createSuccess']))
-						{
-                        	echo $_SESSION['createSuccess'];
-                            unset($_SESSION['createSuccess']);
-						}
-                        else
-                        {
-                        	echo 'Create Announcement';
-                        }
+						displayPanelHeading("Create Announcement");
 echo '
                         </div>
                         <!-- /.panel-heading -->

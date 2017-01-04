@@ -2,15 +2,17 @@
 include_once '../dbConnect.php';
 include_once '../functions.php';
 
-sec_session_start(); // Our custom secure way of starting a PHP session.
+sec_session_start();
 
 if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
 {
+	// If permissions are in check, call the main function
 	updateAnnouncement($mysqli);
 }
 else
 {
-   	$_SESSION['invalidUpdate'] = 'Announcement could not be updated, not correct permissions';
+	// Return generic error message
+   	$_SESSION['fail'] = 'Announcement could not be updated, not correct permissions';
    	header('Location: ../../pages/editAnnouncement');
 
 	return;
@@ -18,41 +20,39 @@ else
 
 function updateAnnouncement($mysqli)
 {
-//	if (isset($_POST['announcementTitle'], $_POST['announcementID'], $_POST['announcementPostDate'], $_POST['announcementDescription'])) 
-	if(true)
+	// Check to see if the POST data was sent correctly
+	if (isset($_POST['announcementName'], $_POST['announcementID'], $_POST['announcementPostDate'], $_POST['announcementDescription'], $_POST['announcementEndDate'])) 
+
 	{
+		// Assign our POST data to variables
 		$announcementID = $_POST['announcementID'];
-    	$announcementTitle = $_POST['announcementTitle'];
+    	$announcementName = $_POST['announcementName'];
 		$announcementDescription = $_POST['announcementDescription'];
     	$announcementPostDate = $_POST['announcementPostDate'];
+    	$announcementEndDate = $_POST['announcementEndDate'];
 
-		if (!empty($_POST['announcementEndDate']))
+    	if ($stmt = $mysqli->prepare("UPDATE announcements SET announcementName = ?, announcementDescription = ?, announcementPostDate = ?, announcementEndDate = ? WHERE announcementID = ?"))
 		{
-			$announcementEndDate = $_POST['announcementEndDate'];
-		}
-		else
-		{
-			$announcementEndDate = NULL;
-		}
+			// Call our update statement and pass in the new data
+    		$stmt->bind_param('ssssi', $announcementName, $announcementDescription, $announcementPostDate, $announcementEndDate, $announcementID); 
+	    	$stmt->execute();
 
-    	if ($stmt = $mysqli->prepare("UPDATE announcements SET announcementTitle = ?, announcementDescription = ?, announcementPostDate = ?, announcementEndDate = ? WHERE announcementID = ?"))
-		{
-    		$stmt->bind_param('ssssi', $announcementTitle, $announcementDescription, $announcementPostDate, $announcementEndDate, $announcementID); 
-	    	$stmt->execute();    // Execute the prepared query.
-			$_SESSION['updateSuccess'] = "Announcement Updated";
+	    	// Return to page and give $_SESSION message
+			$_SESSION['success'] = "Announcement Edited";
    	   		header('Location: ../../pages/editAnnouncement');
 		}
 		else
 		{
-    		// The correct POST variables were not sent to this page.
-    		$_SESSION['invalidUpdate'] = 'Announcement could not be updated, database update failed';
+			// Database Update failed, this should never happen
+    		// Return to page and give $_SESSION message
+    		$_SESSION['fail'] = 'Announcement could not be edited, database update failed';
    	   		header('Location: ../../pages/editAnnouncement');
 		}
     }
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['invalidUpdate'] = 'Announcement could not be updated, variables not sent';
+    	$_SESSION['fail'] = 'Announcement could not be edited, data not sent';
    	   	header('Location: ../../pages/editAnnouncement');
 	}
 }
