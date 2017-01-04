@@ -1,6 +1,7 @@
 <?php
 include_once '../includes/dbConnect.php';
 include_once '../includes/functions.php';
+include_once '../includes/panelSessionMessages.php';
 
 sec_session_start();
 
@@ -48,126 +49,163 @@ echo '
 if (roleID_check($mysqli) == 1)
 {
 echo '
+        <li>
+            <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard <span class="fa arrow"></span></a>
+			<ul class="nav nav-second-level">
+				<li>
+					<a href="adminDashboard">Overview</a>
+				</li>
+			</ul>	
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-bullhorn fa-fw"></i> Announcements <span class="fa arrow"></span></a>
+			<ul class="nav nav-second-level">
+				<li>
+					<a href="createAnnouncement">Create Announcement</a>
+				</li>
+				<li>
+					<a href="editAnnouncement">Edit Announcement</a>
+				</li>
+				<li>
+					<a href="deleteAnnouncement">Delete Announcement</a>
+				</li>
+				<li>
+					<a href="viewAllAnnouncements">View All Announcements</a>
+				</li>
+			</ul>	
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-users fa-fw"></i> TODO: Users <span class="fa arrow"></span></a>
+			<ul class="nav nav-second-level">
+				<li>
+					<a href="createUserAccount">Create User</a>
+				</li>
+				<li>
+					<a href="adminPasswordReset">Reset User Password</a>
+				</li>
+				<li>
+					<a href="viewUserTables">View Users</a>
+				</li>
+			</ul>	
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Classes <span class="fa arrow"></span></a>
+			<ul class="nav nav-second-level">
+				<li>
+					<a href="addClass">Add a Class</a>
+				</li>
+                <li>
+                    <a href="assignStudent">Assign Student to Class</a>
+                </li>
+				<li>
+					<a href="modifyClass">Modify a Class</a>
+				</li>
+				<li>
+					<a href="deleteClass">Delete a Class</a>
+				</li>
+				<li>
+					<a href="viewClassesTable">View All Classes</a>
+				</li>
+			</ul>	
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-wrench fa-fw"></i> School Configuration <span class="fa arrow"></span></a>
+			<ul class="nav nav-second-level">
+				<li>
+					<a href="addSchoolYear">Add School Year</a>
+				</li>
+				<li>
+					<a href="modifySchoolYear">Modify School Year</a>
+				</li>
+				<li>
+					<a href="viewAllSchoolYears">View all School Years</a>
+				</li>
+			</ul>	
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="flot">Flot Charts</a>
+                </li>
+            </ul>
+            <!-- /.nav-second-level -->
+        </li>
+        <li>
+            <a href="tables"><i class="fa fa-table fa-fw"></i> Tables</a>
+        </li>
+        <li>
+            <a href="forms"><i class="fa fa-edit fa-fw"></i> Forms</a>
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="panels-wells">Panels and Wells</a>
+                </li>
+                <li>
+                    <a href="buttons">Buttons</a>
+                </li>
+                <li>
+                    <a href="typography">Typography</a>
+                </li>
+                <li>
+                    <a href="icons"> Icons</a>
+                </li>
+                <li>
+                    <a href="grid">Grid</a>
+                </li>
+            </ul>
+            <!-- /.nav-second-level -->
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="#">Second Level Item</a>
+                </li>
+                <li>
+                    <a href="#">Second Level Item</a>
+                </li>
+                <li>
+                    <a href="#">Third Level <span class="fa arrow"></span></a>
+                    <ul class="nav nav-third-level">
                         <li>
-                            <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard <span class="fa arrow"></span></a>
-							<ul class="nav nav-second-level">
-								<li>
-									<a href="adminDashboard">Overview</a>
-								</li>
-								<li>
-									<a href="createUserAccount">Create User</a>
-								</li>
-								<li>
-									<a href="adminPasswordReset">Reset User Password</a>
-								</li>
-								<li>
-									<a href="viewUserTables">View Users</a>
-								</li>
-								<li>
-									<a href="viewClassesTable">View Classes</a>
-								</li>
-							</ul>	
+                            <a href="#">Third Level Item</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-bullhorn fa-fw"></i> Announcements <span class="fa arrow"></span></a>
-							<ul class="nav nav-second-level">
-								<li>
-									<a href="createAnnouncement">Create Announcement</a>
-								</li>
-								<li>
-									<a href="editAnnouncement">Edit Announcement</a>
-								</li>
-								<li>
-									<a href="deleteAnnouncement">Delete Announcement</a>
-								</li>
-								<li>
-									<a href="viewAllAnnouncements">View All Announcements</a>
-								</li>
-							</ul>	
+                            <a href="#">Third Level Item</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="flot">Flot Charts</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
+                            <a href="#">Third Level Item</a>
                         </li>
                         <li>
-                            <a href="tables"><i class="fa fa-table fa-fw"></i> Tables</a>
+                            <a href="#">Third Level Item</a>
                         </li>
-                        <li>
-                            <a href="forms"><i class="fa fa-edit fa-fw"></i> Forms</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="panels-wells">Panels and Wells</a>
-                                </li>
-                                <li>
-                                    <a href="buttons">Buttons</a>
-                                </li>
-                                <li>
-                                    <a href="typography">Typography</a>
-                                </li>
-                                <li>
-                                    <a href="icons"> Icons</a>
-                                </li>
-                                <li>
-                                    <a href="grid">Grid</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#">Second Level Item</a>
-                                </li>
-                                <li>
-                                    <a href="#">Second Level Item</a>
-                                </li>
-                                <li>
-                                    <a href="#">Third Level <span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="#">Third Level Item</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Third Level Item</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Third Level Item</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Third Level Item</a>
-                                        </li>
-                                    </ul>
-                                    <!-- /.nav-third-level -->
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="blank">Blank Page</a>
-                                </li>
-                                <li>
-                                    <a href="login">Login Page</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
+                    </ul>
+                    <!-- /.nav-third-level -->
+                </li>
+            </ul>
+            <!-- /.nav-second-level -->
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="blank">Blank Page</a>
+                </li>
+                <li>
+                    <a href="login">Login Page</a>
+                </li>
+            </ul>
+            <!-- /.nav-second-level -->
+        </li>
 ';
 }
 else if (roleID_check($mysqli) == 2)
 {
 echo '
+                    
                         <li>
                             <a href="schoolAdminDashboard"><i class="fa fa-dashboard fa-fw"></i> School Administrator</a>
                         </li>
@@ -176,9 +214,53 @@ echo '
 else if (roleID_check($mysqli) == 3)
 {
 	echo '
-                        <li>
-                            <a href="teacherDashboard"><i class="fa fa-dashboard fa-fw"></i> Teacher</a>
-                        </li>
+        <li>
+            <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard <span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="teacherDashboard">Overview</a>
+                </li>
+            </ul>   
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> My Classes <span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="viewStudentList">View Student List</a>
+                </li>
+                <li>
+                    <a href="teacherGradebook">Gradebook</a>
+                </li>
+            </ul>   
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-book fa-fw"></i> Assignments <span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="addAssignment">Add Assignment</a>
+                </li>
+                <li>
+                    <a href="modifyAssignment">Modify Assignment</a>
+                </li>
+                <li>
+                    <a href="deleteAssignment">Delete Assignment</a>
+                </li>
+            </ul>   
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-wrench fa-fw"></i> Class Configuration <span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="addMaterialType">Add Assignment Type</a>
+                </li>
+                <li>
+                    <a href="modifyMaterialType">Modify Assignment Type</a>
+                </li>
+                <li>
+                    <a href="deleteMaterialType">Delete Assignment Type</a>
+                </li>
+            </ul>   
+        </li>
 	';
 }
 else if (roleID_check($mysqli) == 4)
