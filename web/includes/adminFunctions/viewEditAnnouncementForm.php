@@ -67,7 +67,7 @@ function viewEditAnnouncementForm($mysqli)
                                 	{
                                 		// We have announcementID, bring up form to modify announcement
                                 		modifyAnnouncementForm($_SESSION['announcementID'], $mysqli);
-
+                                        echo "<br>";
                                 		// Allows us to change Announcements
                                 		changeAnnouncementButton();
                                 	}
@@ -86,13 +86,11 @@ function viewEditAnnouncementForm($mysqli)
 
 function changeAnnouncementButton()
 {
-	// Form to allow user to change announcement selected
-	echo '
-			<br>
-			<form action="" method="post" role="form">
-				<button type="submit" class="btn btn-default" name="changeAnnouncement">Change Announcement</button> 
-			</form>
-	   	';
+    // Form to allow user to change announcement selected
+    generateFormStart("", "post");  
+        generateFormHiddenInput("changeAnnouncement", "changeAnnouncement");                          
+        generateFormButton("Change Announcement");
+    generateFormEnd();
 }
 
 function modifyAnnouncementForm($announcementID, $mysqli)
@@ -107,62 +105,47 @@ function modifyAnnouncementForm($announcementID, $mysqli)
         $stmt->store_result();
         $stmt->fetch();
 
-        // Output form that contains the DB variables
-        echo '
-		<form action="../includes/adminFunctions/editAnnouncement" method="post" role="form">
-				<input type="hidden" name="announcementID" value="'.$announcementID.'">
-				<div class="form-group">
-					<input class="form-control" name="announcementName" value="' . $announcementName . '">
-				</div>
-				<div class="form-group">
-					<label>Announcement Post Date</label>
-					<input class="form-control" type="date" name="announcementPostDate" value="' . $announcementPostDate . '">
-				</div>
-				<div class="form-group">
-					<label>Announcement End Date</label>
-					<input class="form-control" type="date" name="announcementEndDate" value="' . $announcementEndDate . '">
-				</div>
-				<div class="form-group">
-					<label>Announcement Description</label>
-					<textarea class="form-control" name="announcementDescription" rows="5">' . $announcementDescription . '</textarea>
-				</div>
-				<button type="submit" class="btn btn-default">Edit Announcement</button>
-		</form>
-			';
+        generateFormStart("../includes/adminFunctions/editAnnouncement", "post"); 
+            generateFormHiddenInput("announcementID", $announcementID);
+            generateFormInputDiv("Announcement Name", "text", "announcementName", $announcementName);
+            generateFormInputDiv("Announcement Post Date", "date", "announcementPostDate", $announcementPostDate);
+            generateFormInputDiv("Announcement End Date", "date", "announcementEndDate", $announcementEndDate);
+            generateFormTextAreaDiv("Announcement Description", "announcementDescription", $rows = "5", $announcementDescription);
+            generateFormButton("Edit Announcement");
+        generateFormEnd();
     }  
 }
 
 function getAnnouncementsForm($mysqli)
-{
-	// Form to select the announcement and send the announcementID
-	echo '
-		<form action="" method="post" role="form">
-			<div class="form-group">
-				<select class="form-control" name="announcementID">';								
+{								
 	if ($stmt = $mysqli->prepare("SELECT announcementID, announcementPostDate, announcementName FROM announcements WHERE announcementEndDate >= curdate()"))
     {   
     	// Query and Display all available announcements
     	$stmt->execute();
-        $stmt->bind_result($announcementID, $announcementPostDate, $announcementTitle);
+        $stmt->bind_result($announcementID, $announcementPostDate, $announcementName);
         $stmt->store_result();
 
-        while($stmt->fetch())
-        { 
-			echo "<option value='" . $announcementID . "'>$announcementTitle, $announcementPostDate</option>";
-        }  
+            // Form to select the announcement and send the announcementID
+        generateFormStart("", "post"); 
+            generateFormStartSelectDiv(NULL, "announcementID");
+
+            if ($stmt->num_rows == 0)
+            {
+                generateFormOption(NULL, NULL, "disabled");
+            }
+            while($stmt->fetch())
+            { 
+                generateFormOption($announcementID, $announcementName);
+            }  
+            generateFormEndSelectDiv();
+            generateFormButton("Select Announcement");
+        generateFormEnd();
     }   
     else
     {   
     	// There are no active announcements that can be modified
     	echo "<option disabled'>No Active Announcements Available to Modify</option>";
     }
-
-    echo '
-			</select> 
-			     </div>
-			<button type="submit" class="btn btn-default">Select Announcement</button>
-			</form>
-		'; 
 }
 
 ?>

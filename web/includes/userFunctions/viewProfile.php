@@ -92,11 +92,9 @@ function getAdminProfile($userID, $mysqli)
         while ($stmt->fetch())
         {
             generateFormStart();
-
                 generateFormInputDiv("First Name", "text", "adminFirstName", $adminFirstName, "disabled");
                 generateFormInputDiv("Last Name", "text", "adminLastName", $adminLastName, "disabled");
                 generateFormInputDiv("Email", "email", "adminEmail", $adminEmail, "disabled");
-                
             generateFormEnd();
         }
     }

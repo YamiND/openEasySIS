@@ -12,10 +12,9 @@ function generateFormEnd()
 	echo '</form>';
 }
 
-
-function generateFormOption($value, $name)
+function generateFormOption($value, $name, $disabled = NULL)
 {
-    echo "<option value='" . $value . "'>$name</option>";
+    echo "<option" . $disabled . " value='" . $value . "'>$name</option>";
 }
 
 function generateFormStartSelectDiv($label = NULL, $name = NULL)
@@ -42,7 +41,24 @@ function generateFormEndSelectDiv()
         ';
 }
 
-function generateFormInputDiv($label = NULL, $type = "text", $name = NULL, $value = NULL, $disabled = NULL)
+function generateFormCheckboxDiv($checked = NULL, $name = NULL, $value = NULL, $field = NULL)
+{
+    echo '
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ' . $checked . ' name="' . $name .'" value="' . $value .'"> ' . $field . '
+                </label>
+            </div>
+        </div>';
+}
+
+function generateFormHiddenInput($name = NULL, $value = NULL)
+{
+    echo '<input type="hidden" name="' . $name . '" value="'. $value .'">';
+}
+
+function generateFormInputDiv($label = NULL, $type = "text", $name = NULL, $value = NULL, $disabled = NULL, $min = NULL, $max = NULL, $placeholder = NULL)
 {
     echo '
             <div class="form-group">
@@ -53,18 +69,45 @@ function generateFormInputDiv($label = NULL, $type = "text", $name = NULL, $valu
             echo '<label>' . $label .'</label>';
         }
 
-        if ($value != NULL)
+        switch($type)
         {
-           echo  '<input class="form-control" type="' . $type . '" name="' . $name . '" value="' . $value . '"' . $disabled . '>';
-        }
-        else
-        {
-            echo  '<input class="form-control" name="' . $name . '"' . $disabled . '>';
+        	case "date":
+		           echo  '<input class="form-control" type="' . $type . '" name="' . $name . '" value="' . $value . '" min="' . $min . '" max="' . $max . '" ' . $disabled . '>';
+        		break;
+
+        	default:
+        		echo  '<input class="form-control" type="' . $type . '" placeholder="' . $placeholder . '" name="' . $name . '" value="' . $value . '"' . $disabled . '>';
+        		break;
+
         }
 
     echo '
             </div>
         ';
+}
+
+function generateFormTextAreaDiv($label = NULL, $name = NULL, $rows = "5", $value = NULL, $disabled = NULL)
+{
+	echo '
+            <div class="form-group">
+        ';
+
+    if ($label != NULL)
+    {
+        echo '<label>' . $label .'</label>';
+    }
+
+    echo '<textarea class="form-control" name="' . $name . '" rows="' . $rows .'" ' . $disabled . '>'. $value .'</textarea>';
+
+    echo '
+            </div>
+        ';
+}
+function generateFormButton($name = "Generic", $type = "submit", $class = "btn btn-default")
+{
+	echo '
+			<button type="' . $type . '" class="' . $class . '">' . $name .'</button>
+		';
 }
 
 ?>
