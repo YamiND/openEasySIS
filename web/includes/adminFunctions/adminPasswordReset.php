@@ -17,7 +17,7 @@ function randomString($length = 8)
 	return $str;
 }
 
-if (login_check($mysqli) == true)
+if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
 {
 	if (isset($_POST['userEmail'])) 
 	{
@@ -32,20 +32,20 @@ if (login_check($mysqli) == true)
 		}
 		else
 		{
-    		$_SESSION['invalidReset'] = 'Password Reset Failed';
+    		$_SESSION['fail'] = 'Password Reset Failed';
         	header('Location: ../../pages/adminPasswordReset');
 		}
     }
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['invalidReset'] = 'Password Reset Failed';
+    	$_SESSION['fail'] = 'Password Reset Failed';
         header('Location: ../../pages/adminPasswordReset');
 	}
 }
 else
 {
-    $_SESSION['invalidReset'] = 'Password Reset Failed';
+    $_SESSION['fail'] = 'Password Reset Failed';
     header('Location: ../../pages/adminPasswordReset');
 
 	return;
@@ -58,7 +58,7 @@ function adminChangePassword($userEmail, $password, $hashedPassword, $randomSalt
     	$stmt->bind_param('sss', $hashedPassword, $randomSalt, $userEmail);  // Bind "$email" to parameter.
 	    $stmt->execute();    // Execute the prepared query.
 
-		$_SESSION['resetSuccess'] = "Password Reset Succeeded - Password for $userEmail is $password";
+		$_SESSION['success'] = "Password Reset Succeeded - Password for $userEmail is $password";
    		header('Location: ../../pages/adminPasswordReset');
 	}
 }

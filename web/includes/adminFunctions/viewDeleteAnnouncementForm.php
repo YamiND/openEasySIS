@@ -1,31 +1,28 @@
 <?php
-include_once '../dbConnect.php';
 
-date_default_timezone_set('America/New_York');
+function checkPermissions($mysqli)
+{
+    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
+    {
+        viewDeleteAnnouncementForm($mysqli);
+    }
+    else
+    {
+        $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+    }
+}
 
 function viewDeleteAnnouncementForm($mysqli)
 {
-echo '
+    echo '
             <div class="row">
                 <div class="col-lg-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-    ';
-                        if (isset($_SESSION['deleteFail']))
-                        {
-                            echo $_SESSION['deleteFail'];
-                            unset($_SESSION['deleteFail']);
-                        }
-                        else if (isset($_SESSION['deleteSuccess']))
-                        {
-                            echo $_SESSION['deleteSuccess'];
-                            unset($_SESSION['deleteSuccess']);
-                        }
-                        else
-                        {   
-                            echo 'Delete Announcement';
-                        }   
-echo '
+        ';
+                        // Call Session Message code and Panel Heading here
+                        displayPanelHeading("Delete Announcement");
+    echo '
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -41,7 +38,8 @@ echo '
                                     <h4>Announcement Title, Announcement Post Date</h4>
                                     <form action="../includes/adminFunctions/deleteAnnouncement" method="post" role="form">
                                         <div class="form-group">
-                                        	<select class="form-control" name="announcementID">';
+                                        	<select class="form-control" name="announcementID">
+        ';
 												getAnnouncements($mysqli);
 	echo '									</select> 
                                         </div>
@@ -55,22 +53,25 @@ echo '
                     <!-- /.panel -->
                 </div>
             </div>
-';
+        ';
 
 }
 
 function getAnnouncements($mysqli)
 {
+    // Displays a list of announcements for the user
+    // Field submits the announcementID that will be deleted
+    // In the future this may be replaced with Archived announcements (maybe TODO)
 
-	if ($stmt = $mysqli->prepare("SELECT announcementID, announcementPostDate, announcementTitle FROM announcements"))
+	if ($stmt = $mysqli->prepare("SELECT announcementID, announcementPostDate, announcementName FROM announcements"))
     {   
     	$stmt->execute();
-        $stmt->bind_result($announcementID, $announcementPostDate, $announcementTitle);
+        $stmt->bind_result($announcementID, $announcementPostDate, $announcementName);
         $stmt->store_result();
 
         while($stmt->fetch())
         {  
-			echo "<option value='" . $announcementID . "'>$announcementTitle, $announcementPostDate</option>";
+			echo "<option value='" . $announcementID . "'>$announcementName, $announcementPostDate</option>";
         }   
     }   
     else

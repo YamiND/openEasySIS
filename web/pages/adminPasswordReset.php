@@ -1,36 +1,14 @@
-<?php include("../includes/customizations.php");?>
+<?php
 
-<!DOCTYPE html>
-<html lang="en">
+// Most pages (if not all), can use this template file
+include("../includes/pageTemplate.php");
 
-<!--TODO: Add user lookup? -->
+// Function call goes like this:
+// Title (<title>), functionFile (should be in ../includes/*), functionName, pageHeader
 
-<head>
-    <title><?php echo aliasOpenEasySIS; ?> - Reset User's Password</title>
-    <!-- Header Information, CSS, and JS -->
-    <?php include("../includes/header.php"); ?>
-</head>
+// All functionNames need to have ($mysqli) in functionFile, but NOT HERE
+// if you do something like viewForm($mysqli) in this file, IT WILL NOT WORK
 
-<body>
-    <div id="wrapper">
-	<!-- Navigation Menu -->
-        <?php include('../includes/navPanel.php'); ?>
-	<?php include('../includes/adminFunctions/viewAdminPasswordResetForm.php'); ?>
-        <div id="page-wrapper">
-       	    <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Reset User's Password</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
+echo displaySite("Reset User Password", "../includes/adminFunctions/viewAdminPasswordResetForm.php", "checkPermissions", "Reset User Password");
 
-	<?php
-		viewAdminPasswordResetForm($mysqli);
-	?>
-
-        </div>
-        <!-- /#page-wrapper -->
-    </div>
-    <!-- /#wrapper -->
-</body>
-</html>
+?>

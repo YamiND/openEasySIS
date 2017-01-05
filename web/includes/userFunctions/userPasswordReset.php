@@ -17,7 +17,6 @@ if (isset($_POST['userEmail'], $_POST['oldPassword'], $_POST['newPassword'], $_P
         // Do a second check to make sure the password is right
 		if($newPassword == $repeatPassword)
 		{
-
 			if ($stmt = $mysqli->prepare("SELECT userSalt FROM users WHERE userEmail = ? LIMIT 1"))
 			{
 				// Get the user's salt so that we can hash the passwords
@@ -37,28 +36,28 @@ if (isset($_POST['userEmail'], $_POST['oldPassword'], $_POST['newPassword'], $_P
 			}
 			else
 			{	
-				$_SESSION['invalidReset'] = 'Password Reset Failed';
+				$_SESSION['fail'] = 'Password Reset Failed';
     			header('Location: ../../pages/settings');
 			}
 		}	
 		else
 		{
 			// Passwords do not match, output error
-			$_SESSION['invalidReset'] = 'Password Reset Failed';
+			$_SESSION['fail'] = 'Password Reset Failed';
     		header('Location: ../../pages/settings');
 		}
     }
     else
     {
         // Login failed, output error
-		$_SESSION['invalidReset'] = 'Password Reset Failed';
+		$_SESSION['fail'] = 'Password Reset Failed';
     	header('Location: ../../pages/settings');
     }
 }
 else
 {
     // The correct POST variables were not sent to this page.
-	$_SESSION['invalidReset'] = 'Password Reset Failed';
+	$_SESSION['fail'] = 'Password Reset Failed';
     header('Location: ../../pages/settings');
 }
 
@@ -74,12 +73,12 @@ function changeUserPassword($userEmail, $oldPassword, $newPassword, $mysqli)
 
 		$_SESSION['login_string'] = hash('sha512', $newPassword . $user_browser);
 
-		$_SESSION['resetSuccess'] = 'Password Reset Succeeded';
+		$_SESSION['success'] = 'Password Reset Succeeded';
         header('Location: ../../pages/settings');
 	}
 	else
 	{
-		$_SESSION['invalidReset'] = 'Password Reset Failed';
+		$_SESSION['fail'] = 'Password Reset Failed';
         header('Location: ../../pages/settings');
 	}
 }

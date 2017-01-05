@@ -1,5 +1,17 @@
 <?php
 
+function checkPermissions($mysqli)
+{
+    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
+    {
+        viewAddClassForm($mysqli);
+    }
+    else
+    {
+        $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+    }
+}
+
 function viewAddClassForm($mysqli)
 {
 
@@ -9,20 +21,8 @@ function viewAddClassForm($mysqli)
                     <div class="panel panel-default">
                         <div class="panel-heading">
 	';
-						if (isset($_SESSION['fail']))
-                        {
-                        	echo $_SESSION['fail'];
-                            unset($_SESSION['fail']);
-                        }
-						else if (isset($_SESSION['success']))
-						{
-                        	echo $_SESSION['success'];
-                            unset($_SESSION['success']);
-						}
-                        else
-                        {
-                        	echo 'Add a Class';
-                        }
+						// Call Session Message code and Panel Heading here
+                        displayPanelHeading("Add a Class");
 echo '
                         </div>
                         <!-- /.panel-heading -->

@@ -10,7 +10,7 @@ if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
 }
 else
 {
-   	$_SESSION['invalidCreate'] = 'Announcement could not be created';
+   	$_SESSION['fail'] = 'Announcement could not be created';
    	header('Location: ../../pages/createAnnouncement');
 
 	return;
@@ -18,31 +18,31 @@ else
 
 function createAnnouncement($mysqli)
 {
-	if (isset($_POST['announcementTitle'], $_POST['announcementPostDate'], $_POST['announcementEndDate'], $_POST['announcementDescription'])) 
+	if (isset($_POST['announcementName'], $_POST['announcementPostDate'], $_POST['announcementEndDate'], $_POST['announcementDescription'])) 
 	{
-    	$announcementTitle = $_POST['announcementTitle'];
+    	$announcementName = $_POST['announcementName'];
 		$announcementDescription = $_POST['announcementDescription'];
     	$announcementPostDate = $_POST['announcementPostDate'];
 		$announcementEndDate = $_POST['announcementEndDate'];
 
-    	if ($stmt = $mysqli->prepare("INSERT INTO announcements (announcementTitle, announcementDescription, announcementPostDate, announcementEndDate) VALUES (?, ?, ?, ?)"))
+    	if ($stmt = $mysqli->prepare("INSERT INTO announcements (announcementName, announcementDescription, announcementPostDate, announcementEndDate) VALUES (?, ?, ?, ?)"))
 		{
-    		$stmt->bind_param('ssss', $announcementTitle, $announcementDescription, $announcementPostDate, $announcementEndDate); 
+    		$stmt->bind_param('ssss', $announcementName, $announcementDescription, $announcementPostDate, $announcementEndDate); 
 	    	$stmt->execute();    // Execute the prepared query.
-			$_SESSION['createSuccess'] = "Announcement Created";
+			$_SESSION['success'] = "Announcement Created";
    	   		header('Location: ../../pages/createAnnouncement');
 		}
 		else
 		{
-    		// The correct POST variables were not sent to this page.
-    		$_SESSION['invalidCreate'] = 'Announcement could not be created';
+    		// SQL Insertion failed
+    		$_SESSION['fail'] = 'Announcement could not be created';
    	   		header('Location: ../../pages/createAnnouncement');
 		}
     }
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['invalidCreate'] = 'Announcement could not be created';
+    	$_SESSION['fail'] = 'Announcement could not be created, data not sent';
    	   	header('Location: ../../pages/createAnnouncement');
 	}
 }

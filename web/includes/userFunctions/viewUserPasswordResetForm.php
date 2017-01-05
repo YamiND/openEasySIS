@@ -7,15 +7,15 @@ function viewUserPasswordResetForm($mysqli)
                     <div class="panel panel-primary">
                         <div class="panel-heading">
 						';  
-                        if (isset($_SESSION['invalidReset']))
+                        if (isset($_SESSION['fail']))
                         {   
-                            echo $_SESSION['invalidReset'];
-                            unset($_SESSION['invalidReset']);
+                            echo $_SESSION['fail'];
+                            unset($_SESSION['fail']);
                         }   
-                        else if (isset($_SESSION['resetSuccess']))
+                        else if (isset($_SESSION['success']))
 						{
-                            echo $_SESSION['resetSuccess'];
-                            unset($_SESSION['resetSuccess']);
+                            echo $_SESSION['success'];
+                            unset($_SESSION['success']);
 						}
                         else
                         {   

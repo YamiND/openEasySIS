@@ -75,16 +75,16 @@ echo '
 			</ul>	
         </li>
         <li>
-            <a href="#"><i class="fa fa-users fa-fw"></i> TODO: Users <span class="fa arrow"></span></a>
+            <a href="#"><i class="fa fa-users fa-fw"></i> Users <span class="fa arrow"></span></a>
 			<ul class="nav nav-second-level">
 				<li>
-					<a href="createUserAccount">Create User</a>
+					<a href="createUser">Create User</a>
 				</li>
 				<li>
 					<a href="adminPasswordReset">Reset User Password</a>
 				</li>
 				<li>
-					<a href="viewUserTables">View Users</a>
+					<a href="viewUserTables">View All Users</a>
 				</li>
 			</ul>	
         </li>
@@ -103,6 +103,9 @@ echo '
 				<li>
 					<a href="deleteClass">Delete a Class</a>
 				</li>
+                <li>
+                    <a href="viewStudentListClass">View Student List by Class</a>
+                </li>
 				<li>
 					<a href="viewClassesTable">View All Classes</a>
 				</li>
@@ -118,11 +121,15 @@ echo '
 					<a href="modifySchoolYear">Modify School Year</a>
 				</li>
 				<li>
-					<a href="viewAllSchoolYears">View all School Years</a>
+					<a href="viewAllSchoolYears">View All School Years</a>
 				</li>
 			</ul>	
         </li>
+        
         <li>
+            <a href="#"><i class="fa fa-sitemap fa-fw"></i>Template Content<span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
             <ul class="nav nav-second-level">
                 <li>
@@ -159,8 +166,17 @@ echo '
             <!-- /.nav-second-level -->
         </li>
         <li>
-            <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
+            <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
             <ul class="nav nav-second-level">
+                <li>
+                    <a href="blank">Blank Page</a>
+                </li>
+                <li>
+                    <a href="login">Login Page</a>
+                </li>
+            </ul>
+            <!-- /.nav-second-level -->
+        </li>
                 <li>
                     <a href="#">Second Level Item</a>
                 </li>
@@ -188,18 +204,7 @@ echo '
             </ul>
             <!-- /.nav-second-level -->
         </li>
-        <li>
-            <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
-            <ul class="nav nav-second-level">
-                <li>
-                    <a href="blank">Blank Page</a>
-                </li>
-                <li>
-                    <a href="login">Login Page</a>
-                </li>
-            </ul>
-            <!-- /.nav-second-level -->
-        </li>
+        
 ';
 }
 else if (roleID_check($mysqli) == 2)

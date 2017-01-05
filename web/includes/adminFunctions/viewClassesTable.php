@@ -1,8 +1,30 @@
 <?php 
 
+function checkPermissions($mysqli)
+{
+    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
+    {
+        generateClassesTable($mysqli);
+    }
+    else
+    {
+        $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+    }
+}
+
 function generateClassesTable($mysqli)
 {
 	echo '
+        <!-- DataTables CSS -->
+        <link href="../vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+
+        <!-- DataTables Responsive CSS -->
+        <link href="../vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+
+        <!-- DataTables JavaScript -->
+        <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+        <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script>
 		<!-- /.row -->
             <div class="row">
                 <div class="col-lg-12">
@@ -62,7 +84,7 @@ function getClassesTableData($mysqli)
 				$stmt2->execute();
 				$stmt2->store_result();
 				
-	        		while($stmt2->fetch()) 	
+	        	while($stmt2->fetch()) 	
 				{
 					echo '<tr class="gradeA">
 	  				<td>' . $dbClassName . '</td>

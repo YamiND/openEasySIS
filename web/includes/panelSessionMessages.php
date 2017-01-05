@@ -12,10 +12,10 @@ function displayPanelHeading($message = NULL)
     	echo $_SESSION['success'];
         unset($_SESSION['success']);
 	}
-    else
+    else if ($message != NULL)
     {
     	echo "$message";
-    }
+    }   
 }
 
 ?>

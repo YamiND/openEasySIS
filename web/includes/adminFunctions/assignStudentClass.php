@@ -41,7 +41,7 @@ function assignStudentClass($mysqli)
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['invalidAdd'] = 'Student could not be added to Class';
+    	$_SESSION['fail'] = 'Student could not be added to Class';
    	   	header('Location: ../../pages/assignStudent');
 	}
 }

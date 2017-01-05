@@ -2,12 +2,7 @@
 include_once '../dbConnect.php';
 include_once '../functions.php';
 
-sec_session_start(); // Our custom secure way of starting a PHP session.
-
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+sec_session_start();
 
 if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
 {
@@ -15,7 +10,7 @@ if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
 }
 else
 {
-   	$_SESSION['fail'] = 'Class could not be updated, not correct permissions';
+   	$_SESSION['fail'] = 'Class could not be modified, not correct permissions';
    	header('Location: ../../pages/modifyClass');
 
 	return;
@@ -23,7 +18,7 @@ else
 
 function modifyClass($mysqli)
 {
-	if (isset($_POST['classID'], $_POST['className'] $_POST['classTeacherID'], $_POST['classGradeLevel'])) 
+	if (isset($_POST['classID'], $_POST['className'], $_POST['classTeacherID'], $_POST['classGradeLevel'])) 
 	{
 		$classID = $_POST['classID'];
 		$className = $_POST['className'];

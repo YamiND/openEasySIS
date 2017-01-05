@@ -18,28 +18,25 @@ function viewAnnouncements($mysqli)
                                 <thead>
                                     <tr>
                                         <th>Date Posted</th>
-                                        <th>Announcement Title</th>
+                                        <th>Announcement Name</th>
                                         <th>Description</th>
                                     </tr>
                                 </thead>
-                                <tbody>';
-                                    if ($stmt = $mysqli->prepare("SELECT announcementPostDate, announcementEndDate, announcementTitle, announcementDescription FROM announcements"))
+                                <tbody>
+        ';
+                                    if ($stmt = $mysqli->prepare("SELECT announcementPostDate, announcementEndDate, announcementName, announcementDescription FROM announcements WHERE announcementEndDate >= curdate() AND announcementPostDate <= curdate()"))
                                     {   
                                         $stmt->execute();
-                                        $stmt->bind_result($announcementPostDate, $announcementEndDate, $announcementTitle, $announcementDescription);
+                                        $stmt->bind_result($announcementPostDate, $announcementEndDate, $announcementName, $announcementDescription);
                                         $stmt->store_result();
 
                                         while($stmt->fetch())
                                         {  
-
-											if ((($announcementEndDate >= date('Y-m-d')) || ($announcementEndDate === NULL)) && $announcementPostDate <= date('Y-m-d'))
-											{
-                                            	echo "<tr>";
-                                            	echo "<td>" . $announcementPostDate . "</td>";
-                                            	echo "<td>" . $announcementTitle . "</td>";
-                                            	echo "<td>" . $announcementDescription . "</td>";
-                                            	echo "</tr>";
-											}
+                                        	echo "<tr>";
+                                        	echo "<td>" . $announcementPostDate . "</td>";
+                                        	echo "<td>" . $announcementName . "</td>";
+                                        	echo "<td>" . $announcementDescription . "</td>";
+                                        	echo "</tr>";
                                         }   
                                     }   
                                     else
@@ -59,7 +56,5 @@ function viewAnnouncements($mysqli)
                 <!-- /.col-lg-12 -->
             ';
 }
-
-
 
 ?>
