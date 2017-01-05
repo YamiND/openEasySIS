@@ -22,7 +22,7 @@ if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
 }
 else
 {
-   	$_SESSION['addSchoolYearFailed'] = 'School Year could not be added, invalid permissions';
+   	$_SESSION['fail'] = 'School Year could not be added, invalid permissions';
    	header('Location: ../../pages/addSchoolYear');
 
 	return;
@@ -58,7 +58,7 @@ function addSchoolYear($mysqli)
 					
 				if (($tempSchoolYearStart == $tempDbSchoolYearStart) || ($tempSchoolYearStart < $tempDbSchoolYearStart))
 				{
-   					$_SESSION['addSchoolYearFailed'] = 'School Year could not be added, year already exists';
+   					$_SESSION['fail'] = 'School Year could not be added, year already exists';
 				   	header('Location: ../../pages/addSchoolYear');
 				}
 
@@ -67,7 +67,7 @@ function addSchoolYear($mysqli)
 
 				if (($tempSchoolYearEnd == $tempDbSchoolYearEnd) || ($tempSchoolYearEnd < $tempDbSchoolYearEnd) || ($tempSchoolYearStart < $tempSchoolYearEnd))
 				{
-   					$_SESSION['addSchoolYearFailed'] = 'School Year could not be added, year already exists';
+   					$_SESSION['fail'] = 'School Year could not be added, year already exists';
 				   	header('Location: ../../pages/addSchoolYear');
 				}
 			}
@@ -77,13 +77,13 @@ function addSchoolYear($mysqli)
     			$stmt->bind_param('ssssssssssss', $fallSemesterStart, $fallSemesterEnd, $springSemesterStart, $springSemesterEnd, $quarterOneStart, $quarterOneEnd, $quarterTwoStart, $quarterTwoEnd, $quarterThreeStart, $quarterThreeEnd, $schoolYearStart, $schoolYearEnd); 
 	    		$stmt->execute();    // Execute the prepared query.
 
-				$_SESSION['addSchoolYearSuccess'] = "School Year Added";
+				$_SESSION['success'] = "School Year Added";
    	   			header('Location: ../../pages/addSchoolYear');
 			}
 			else
 			{
     			// The correct POST variables were not sent to this page.
-    			$_SESSION['addSchoolYearFailed'] = 'School Year could not be added to database';
+    			$_SESSION['success'] = 'School Year could not be added to database';
    	   			header('Location: ../../pages/addSchoolYear');
 			}
 		}
@@ -91,7 +91,7 @@ function addSchoolYear($mysqli)
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['addSchoolYearFailed'] = 'School Year could not be added, please fill out all fields';
+    	$_SESSION['fail'] = 'School Year could not be added, please fill out all fields';
    	   	header('Location: ../../pages/addSchoolYear');
 	}
 }

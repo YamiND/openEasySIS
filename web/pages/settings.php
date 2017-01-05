@@ -1,35 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
 
-<head>
-    <title><?php echo aliasOpenEasySIS; ?> - Settings</title>
-    <!-- Header Information, CSS, and JS -->
-    <?php include("../includes/header.php"); ?>
-   <!-- <script type="text/JavaScript" src="../js/sha512.js"></script> 
-    <script type="text/JavaScript" src="../js/passwordReset.js"></script> -->
-</head>
+// Most pages (if not all), can use this template file
+include("../includes/pageTemplate.php");
 
-<body>
-    <div id="wrapper">
-	<!-- Navigation Menu -->
-        <?php include('../includes/navPanel.php'); ?>
-		<?php include('../includes/userFunctions/viewUserPasswordResetForm.php'); ?>
-        <div id="page-wrapper">
-       	    <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Settings</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
+// Function call goes like this:
+// Title (<title>), functionFile (should be in ../includes/*), functionName, pageHeader
 
+// All functionNames need to have ($mysqli) in functionFile, but NOT HERE
+// if you do something like viewForm($mysqli) in this file, IT WILL NOT WORK
 
-	<?php
-		viewUserPasswordResetForm($mysqli);
-	?>
+echo displaySite("Settings", "../includes/userFunctions/viewUserPasswordResetForm.php", "viewUserPasswordResetForm", "Settings");
 
-        </div>
-        <!-- /#page-wrapper -->
-    </div>
-    <!-- /#wrapper -->
-</body>
-</html>
+?>

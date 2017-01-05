@@ -1,27 +1,27 @@
 <?php
 
+function checkPermissions($mysqli)
+{
+    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
+    {
+        viewCreateUserForm($mysqli);
+    }
+    else
+    {
+        $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+    }
+}
+
+
 function viewCreateUserForm($mysqli)
 {
-echo '
+    echo '
             <div class="row">
                 <div class="col-lg-8">
                     <div class="panel panel-default">
                         <div class="panel-heading">
 	';
-						if (isset($_SESSION['invalidCreate']))
-                        {
-                        	echo $_SESSION['invalidCreate'];
-                            unset($_SESSION['invalidCreate']);
-                        }
-						else if (isset($_SESSION['createSuccess']))
-						{
-                        	echo $_SESSION['createSuccess'];
-                            unset($_SESSION['createSuccess']);
-						}
-                        else
-                        {
-                        	echo 'Create User Account';
-                        }
+						displayPanelHeading("Create User");
 echo '
                         </div>
                         <!-- /.panel-heading -->
@@ -44,7 +44,7 @@ echo '
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="administrator">
                                     <h4>Create Administrator Account</h4>
-                                    <form action="../includes/adminFunctions/createUserAccount" method="post" role="form">
+                                    <form action="../includes/adminFunctions/createUser" method="post" role="form">
 										<input type="hidden" name="roleID" value="1">
                                         <div class="form-group">
                                             <input class="form-control" name="adminEmail" placeholder="Email">
@@ -77,7 +77,7 @@ echo '
                                 </div>
                                 <div class="tab-pane fade" id="schoolAdmin">
                                     <h4>School Administrator</h4>
-                                    <form action="../includes/adminFunctions/createUserAccount" method="post" role="form">
+                                    <form action="../includes/adminFunctions/createUser" method="post" role="form">
 										<input type="hidden" name="roleID" value="2">
                                         <div class="form-group">
                                             <input class="form-control" name="schoolAdminEmail" placeholder="Email">
@@ -110,7 +110,7 @@ echo '
                                 </div>
                                 <div class="tab-pane fade" id="teacher">
                                     <h4>Teacher</h4>
-                                    <form action="../includes/adminFunctions/createUserAccount" method="post" role="form">
+                                    <form action="../includes/adminFunctions/createUser" method="post" role="form">
 										<input type="hidden" name="roleID" value="3">
                                         <div class="form-group">
                                             <input class="form-control" name="teacherEmail" placeholder="Email">
@@ -143,7 +143,7 @@ echo '
                                 </div>
                                 <div class="tab-pane fade" id="guardian">
                                     <h4>Parent/Guardian</h4>
-                                    <form action="../includes/adminFunctions/createUserAccount" method="post" role="form">
+                                    <form action="../includes/adminFunctions/createUser" method="post" role="form">
 										<input type="hidden" name="roleID" value="4">
 										<input type="hidden" name="modProfile" value="0">
 										<input type="hidden" name="modClassList" value="0">
@@ -226,7 +226,7 @@ echo '
                                 </div>
                                 <div class="tab-pane fade" id="student">
                                     <h4>Student</h4>
-                                    <form action="../includes/adminFunctions/createUserAccount" method="post" role="form">
+                                    <form action="../includes/adminFunctions/createUser" method="post" role="form">
 										<input type="hidden" name="roleID" value="5">
 										<input type="hidden" name="modProfile" value="0">
 										<input type="hidden" name="modClassList" value="0">
@@ -246,9 +246,10 @@ echo '
 												<option value="F">Female</option>
 											</select>
                                         </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="studentGradeLevel" placeholder="Grade Level">
-                                        </div>
+                        ';
+                                        getGradeLevel();
+                        echo '
+                                        
                                         <button type="submit" class="btn btn-default">Create Student</button>
                                     </form>
                                 </div>
@@ -263,6 +264,22 @@ echo '
 
 }
 
+function getGradeLevel()
+{
+    echo '
+            <div class="form-group">
+                <label>Class Grade Level</label>
+                <select class="form-control" name="studentGradeLevel">
+        ';
+            for ($i = 1; $i <= 12; $i++)
+            {
+                echo "<option value='" . $i . "'>$i</option>";
+            }
+    echo '
+                </select>
+            </div>
+        ';
+}
 
 function getUserRoles($mysqli)
 {

@@ -1,5 +1,17 @@
 <?php 
 
+function checkPermissions($mysqli)
+{
+    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
+    {
+        viewAdminPasswordResetForm($mysqli);
+    }
+    else
+    {
+        $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+    }
+}
+
 function viewAdminPasswordResetForm($mysqli)
 {
     // Form for password reset via email. Used by admin
@@ -8,20 +20,8 @@ echo '  <!-- /.col-lg-4 -->
                     <div class="panel panel-primary">
                         <div class="panel-heading">
 						';
-						if (isset($_SESSION['invalidReset']))
-                        {   
-                            echo $_SESSION['invalidReset'];
-                            unset($_SESSION['invalidReset']);
-                        }   
-                        else if (isset($_SESSION['resetSuccess']))
-                        {   
-                            echo $_SESSION['resetSuccess'];
-                            unset($_SESSION['resetSuccess']);
-                        }   
-                        else
-                        {   
-                            echo 'Reset Password';
-                        }  
+						// Call Session Message code and Panel Heading here
+                        displayPanelHeading("Reset Password");
 echo '
                         </div>
                         <div class="panel-body">

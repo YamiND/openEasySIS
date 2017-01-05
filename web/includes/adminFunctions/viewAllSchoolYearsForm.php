@@ -1,5 +1,17 @@
 <?php
 
+function checkPermissions($mysqli)
+{
+    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
+    {
+        viewAllSchoolYears($mysqli);
+    }
+    else
+    {
+        $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+    }
+}
+
 function viewAllSchoolYears($mysqli)
 {
     echo '

@@ -1,5 +1,17 @@
 <?php
 
+function checkPermissions($mysqli)
+{
+    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
+    {
+        viewAddSchoolYearForm($mysqli);
+    }
+    else
+    {
+        $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+    }
+}
+
 function viewAddSchoolYearForm($mysqli)
 {
 	//This is required otherwise it defaults to UTC I think
@@ -10,20 +22,7 @@ function viewAddSchoolYearForm($mysqli)
                     <div class="panel panel-default">
                         <div class="panel-heading">
 	';
-						if (isset($_SESSION['addSchoolYearFailed']))
-                        {
-                        	echo $_SESSION['addSchoolYearFailed'];
-                            unset($_SESSION['addSchoolYearFailed']);
-                        }
-						else if (isset($_SESSION['addSchoolYearSuccess']))
-						{
-                        	echo $_SESSION['addSchoolYearSuccess'];
-                            unset($_SESSION['addSchoolYearSuccess']);
-						}
-                        else
-                        {
-                        	echo 'Add School Year';
-                        }
+						displayPanelHeading("Add School Year");
 echo '
                         </div>
                         <!-- /.panel-heading -->

@@ -12,6 +12,23 @@ if (isset($_POST['changeAnnouncement']))
     unset($_SESSION['announcementID']);
 }
 
+if (isset($_SESSION['success']))
+{
+    unset($_SESSION['announcementID']);
+}
+
+function checkPermissions($mysqli)
+{
+    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
+    {
+        viewEditAnnouncementForm($mysqli);
+    }
+    else
+    {
+        $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+    }
+}
+
 // We have to set the correct Date for the date() function otherwise it uses UTC
 date_default_timezone_set('America/New_York');
 
@@ -23,23 +40,8 @@ function viewEditAnnouncementForm($mysqli)
                     <div class="panel panel-default">
                         <div class="panel-heading">
        	';
-						if (isset($_SESSION['fail']))
-                        {
-                        	// Echo fail message and Unset Variable
-                        	echo $_SESSION['fail'];
-                            unset($_SESSION['fail']);
-                        }
-						else if (isset($_SESSION['success']))
-						{
-							// Echo success message and Unset Variable
-                        	echo $_SESSION['success'];
-                            unset($_SESSION['success']);
-						}
-                        else
-                        {
-                        	// Echo default message
-                        	echo 'Edit Announcement';
-                        }
+						// Call Session Message code and Panel Heading here
+                        displayPanelHeading("Edit Announcement");
 	echo '
                         </div>
                         <!-- /.panel-heading -->
@@ -107,7 +109,7 @@ function modifyAnnouncementForm($announcementID, $mysqli)
 
         // Output form that contains the DB variables
         echo '
-		<form action="../includes/adminFunctions/updateAnnouncement" method="post" role="form">
+		<form action="../includes/adminFunctions/editAnnouncement" method="post" role="form">
 				<input type="hidden" name="announcementID" value="'.$announcementID.'">
 				<div class="form-group">
 					<input class="form-control" name="announcementName" value="' . $announcementName . '">

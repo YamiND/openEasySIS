@@ -1,5 +1,19 @@
 <?php
 
+// TODO: I need to rewrite this and provide a year select
+
+function checkPermissions($mysqli)
+{
+    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
+    {
+        viewModifySchoolYearForm($mysqli);
+    }
+    else
+    {
+        $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+    }
+}
+
 date_default_timezone_set('America/New_York');
 
 function viewModifySchoolYearForm($mysqli)
@@ -10,20 +24,7 @@ function viewModifySchoolYearForm($mysqli)
                     <div class="panel panel-default">
                         <div class="panel-heading">
 	';
-						if (isset($_SESSION['invalidModify']))
-                        {
-                        	echo $_SESSION['invalidModify'];
-                            unset($_SESSION['invalidModify']);
-                        }
-						else if (isset($_SESSION['successModify']))
-						{
-                        	echo $_SESSION['successModify'];
-                            unset($_SESSION['successModify']);
-						}
-                        else
-                        {
-                        	echo 'Modify School Year';
-                        }
+						displayPanelHeading("Modify School Year");
 echo '
                         </div>
                         <!-- /.panel-heading -->

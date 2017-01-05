@@ -1,47 +1,14 @@
-<?php include("../includes/customizations.php");?>
+<?php
 
-<!DOCTYPE html>
-<html lang="en">
+// Most pages (if not all), can use this template file
+include("../includes/pageTemplate.php");
 
-<head>
-    <title><?php echo aliasOpenEasySIS; ?> - Overview</title>
-    <!-- Header Information, CSS, and JS -->
-    <?php include("../includes/header.php"); ?>
-</head>
+// Function call goes like this:
+// Title (<title>), functionFile (should be in ../includes/*), functionName, pageHeader
 
-<body>
-    <div id="wrapper">
-	<!-- Navigation Menu -->
-        <?php include('../includes/navPanel.php'); ?>
-		<?php include('../includes/adminFunctions/viewAllAnnouncementsForm.php'); ?>
+// All functionNames need to have ($mysqli) in functionFile, but NOT HERE
+// if you do something like viewForm($mysqli) in this file, IT WILL NOT WORK
 
-        <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">View all Announcements</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div class="row">
-	<?php 
-		if (roleID_check($mysqli) == 1):
-	?>
+echo displaySite("View all Announcements", "../includes/adminFunctions/viewAllAnnouncementsForm.php", "checkPermissions", "View all Announcements");
 
-			<?php
-				viewAllAnnouncements($mysqli);
-			?>
-            </div>
-            <!-- /.row -->
-
-	<?php 
-		else:
-			echo '<h1 class="text-danger">Invalid Page Access.</h1>';
-		endif;
-	?>
-        </div>
-        <!-- /#page-wrapper -->
-    </div>
-    <!-- /#wrapper -->
-</body>
-</html>
+?>

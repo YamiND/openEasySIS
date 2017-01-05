@@ -1,5 +1,40 @@
 <?php
 
+if (isset($_POST['gradeID']))
+{
+    // After the user selects an grade, set it as a $_SESSION variable
+    $_SESSION['gradeID'] = $_POST['gradeID'];
+}
+
+if (isset($_POST['classID']))
+{
+    // After the user selects an class, set it as a $_SESSION variable
+    $_SESSION['classID'] = $_POST['classID'];
+}
+
+if (isset($_POST['changeGradeLevel']))
+{
+    unset($_SESSION['gradeID']);
+    unset($_SESSION['classID']);
+}
+
+if (isset($_POST['changeClass']))
+{
+    unset($_SESSION['classID']);
+}
+
+function checkPermissions($mysqli)
+{
+    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
+    {
+        viewModifyClassForm($mysqli);
+    }
+    else
+    {
+        $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+    }
+}
+
 function viewModifyClassForm($mysqli)
 {
 	echo '
@@ -8,25 +43,8 @@ function viewModifyClassForm($mysqli)
                     <div class="panel panel-default">
                         <div class="panel-heading">
 	';
-						if (isset($_SESSION['fail']))
-                        {
-                        	echo $_SESSION['fail'];
-                            unset($_SESSION['fail']);
-                        }
-						else if (isset($_SESSION['gradeSelected']))
-						{
-							echo $_SESSION['gradeSelected'];
-						}
-						else if (isset($_SESSION['success']))
-						{
-                        	echo $_SESSION['success'];
-                            unset($_SESSION['success']);
-						}
-                        else
-                        {
-                        	echo 'Modify a Class';
-                        }
-echo '
+						 displayPanelHeading("Modify a Class");
+    echo '
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -37,100 +55,54 @@ echo '
                             </ul>
 
                             <!-- Tab panes -->
-                            <div class="tab-content">';
-                            if(!isset($_POST['classID']))
+                            <div class="tab-content">
+        ';
+                            if(!isset($_SESSION['gradeID']))
                             {
                                 echo '<h4>Select Grade Level</h4>';
                             }
                             else
                             {
-                                echo '<h4>Modify Class Information</h4>';
+                                echo '<h4>Select Class</h4>';
                             }
     echo '
-                                <div class="tab-pane fade in active" id="modifyClass">';
+                                <div class="tab-pane fade in active" id="modifyClass">
+        ';
 
-                if (!isset($_POST['classID']))
-                {
+                            if (!isset($_SESSION['gradeID']))
+                            {
+					           getGradeLevelForm();
+                            }
+                            else if (!isset($_SESSION['classID']))
+                            {
+                                getClassForm($_SESSION['gradeID'], $mysqli);
+                            }
+                            else
+                            {
+                                getClassInfo($_SESSION['classID'], $mysqli);
+                            }
 
-                                echo '
-
-                                    <form action="" method="post" role="form">';
-
-										if (isset($_POST['gradeLevelID']))
-										{
-											$gradeLevelID = $_POST['gradeLevelID'];
-										
-											echo '
-													<div class="form-group">
-														<select class="form-control" name="gradeLevelID">';
-														    getGradeLevel($gradeLevelID);
-											echo '
-														</select>
-													</div>
-													<button type="submit" class="btn btn-default">Select Grade Level</button>
-												';
-
-										}
-										else
-										{
-											echo ' 
-                                        			<div class="form-group">
-			                                        	<select class="form-control" name="gradeLevelID">';
-															getGradeLevel();
-				echo '									</select> 
-           				                             </div>
-                        			                <button type="submit" class="btn btn-default">Select Grade Level</button>';
-										}
-
-echo '
-                                    </form>
-
-                                    <br>
-
-                                    <form action="" method="post" role="form">';
-
-										if (!isset($_POST['gradeLevelID']))
-										{
-											echo '<fieldset disabled>
-													<div class="form-group">
-														<select class="form-control" name="classID">
-															<option value="class">No Grade Selected</option>
-														</select>
-													</div>
-													<button type="submit" class="btn btn-default">Modify Class</button>
-													</fieldset>';
-
-										}
-										else
-										{
-										    getClassNames($mysqli);
-										}
-
-echo '
-                                    </form>
-                                    
-                                    <br>
-';
-
-}
-else
-{
-
-echo '
-                                    <form action="../includes/adminFunctions/modifyClass" method="post" role="form">';
-                                        
-                                        if (isset($_POST['classID']))
-                                        {
-                                            getClassInfo($_POST['classID'], $mysqli);
-                                        }
-
-echo '
+                            if (isset($_SESSION['classID']))
+                                {
+    echo '
+                                <br>
+                                <form action="" method="post" role="form">
+                                <button type="submit" class="btn btn-default" name="changeClass">Change Class</button> 
                                 </form>
-';
+                                
+    ';
+                                }
 
-}
-
-echo '
+                                if (isset($_SESSION['gradeID']))
+                                {
+    echo '
+                                <br>
+                                <form action="" method="post" role="form">
+                                <button type="submit" class="btn btn-default" name="changeGradeLevel">Change Grade Level</button> 
+                                </form>
+    ';
+                                }   
+    echo '
                                 </div>
                             </div>
                         </div>
@@ -139,71 +111,101 @@ echo '
                     <!-- /.panel -->
                 </div>
 			</div>
-';
-
+        ';
 }
 
-function getGradeLevel($selected = NULL)
+function getGradeLevelForm()
 {
-    for ($i = 1; $i <= 12; $i++)
+    echo '
+        <form action="" method="post" role="form">
+            <div class="form-group">
+                <label>Class Grade Level</label>
+                <select class="form-control" name="gradeID">
+        ';
+            for ($i = 1; $i <= 12; $i++)
+            {
+                echo "<option value='" . $i . "'>$i</option>";
+            }
+    echo '
+                </select>
+            </div>
+            <button type="submit" class="btn btn-default">Select Grade Level</button>
+        </form>
+        ';
+}
+
+function getClassForm($gradeID, $mysqli)
+{
+    if ($stmt = $mysqli->prepare("SELECT className, classID FROM classes WHERE classGrade = ?"))
     {
-        if ($i == $selected)
+        $stmt->bind_param('i', $gradeID);
+
+        $stmt->execute();
+        $stmt->bind_result($className, $classID);
+
+        $stmt->store_result();
+    
+        if ($stmt->num_rows == 0)
         {
-            echo "<option value='" . $i . "' selected> $i </option>";
+			echo '<h3>No classes for grade, please change grade level or add class </h3>';
         }
         else
         {
-            echo "<option value='" . $i . "'> $i </option>";
-        }
-    }
-
-}
-
-function getClassNames($mysqli)
-{
-    if (isset($_POST['gradeLevelID']))
-    {
-        $classGrade = $_POST['gradeLevelID'];
-
-        if ($stmt = $mysqli->prepare("SELECT className, classID FROM classes WHERE classGrade = ?"))
-        {
-            $stmt->bind_param('i', $classGrade);
-
-            $stmt->execute();
-            $stmt->bind_result($className, $classID);
-
-            $stmt->store_result();
-        
-            if ($stmt->num_rows == 0)
-            {
-				echo ' 
-				<fieldset disabled>
+            echo '
+                <form action="" method="post" role="form">
                     <div class="form-group">
-			          	<select class="form-control" name="classID">
-                            <option value="NULL">No Classes for Grade Level</option>
-				        </select> 
-           			</div>
-                    <button type="submit" class="btn btn-default">Modify Class</button>
-                </fieldset>';
-            }
-            else
-            {
-				echo ' 
-                    <div class="form-group">
-			          	<select class="form-control" name="classID">';
+        		    	<select class="form-control" name="classID">
+                ';
                         while($stmt->fetch())
                         {
                             echo "<option value='" . $classID . "'>$className</option>";
                         }
-				echo '
-				        </select> 
-           			</div>
-                    <button type="submit" class="btn btn-default">Modify Class</button>';
-            }
+        	echo '
+                        </select> 
+               		</div>
+                    <button type="submit" class="btn btn-default">Modify Class</button>
+                </form>
+                ';
         }
     }
 }
-function getGradeLevelInfo($selected = NULL)
+
+function getClassInfo($classID, $mysqli)
+{
+    echo '
+            <form action="../includes/adminFunctions/modifyClass" method="post" role="form">
+        ';
+
+    if($stmt = $mysqli->prepare("SELECT classGrade, className, classTeacherID FROM classes WHERE classID = ?"))
+    {
+        $stmt->bind_param('i', $classID);
+
+        $stmt->execute();
+
+        $stmt->bind_result($classGrade, $className, $classTeacherID);
+        $stmt->store_result();
+
+        while ($stmt->fetch())
+        {
+            echo '
+                <input type="hidden" name="classID" value="'.$classID.'">
+                    <div class="form-group">
+                        <label>Class Name</label>
+                        <input class="form-control" name="className" value="' . $className . '">
+                    </div>
+                ';
+                    getGradeLevel($classGrade);
+
+                    getTeacherList($classTeacherID, $mysqli);
+        echo '
+                <button type="submit" class="btn btn-default">Modify Class Information</button>
+            </form>
+            ';
+        }
+    }
+}
+
+function getGradeLevel($selected = NULL)
 {
     echo '
         <div class="form-group">
@@ -258,38 +260,4 @@ function getTeacherList($selected = NULL, $mysqli)
     }
 }
 
-function getClassInfo($classID, $mysqli)
-{
-    if (isset($_POST['classID']))
-    {
-        $classID = $_POST['classID'];
-
-        if($stmt = $mysqli->prepare("SELECT classGrade, className, classTeacherID FROM classes WHERE classID = ?"))
-        {
-            $stmt->bind_param('i', $classID);
-
-            $stmt->execute();
-
-            $stmt->bind_result($classGrade, $className, $classTeacherID);
-            $stmt->store_result();
-
-            while ($stmt->fetch())
-            {
-            echo '
-                <input type="hidden" name="classID" value="'.$classID.'">
-                    <div class="form-group">
-                        <label>Class Name</label>
-                        <input class="form-control" name="className" value="' . $className . '">
-                    </div>';
-                        getGradeLevelInfo($classGrade);
-
-                        getTeacherList($classTeacherID, $mysqli);
-            echo '
-                    <button type="submit" class="btn btn-default">Modify Class Information</button>
-
-            ';
-            }
-        }
-    }
-}
 ?>
