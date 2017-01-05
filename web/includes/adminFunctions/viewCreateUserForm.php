@@ -34,7 +34,7 @@ echo '
                                 </li>
                                 <li><a href="#teacher" data-toggle="tab">Teacher</a>
                                 </li>
-                                <li><a href="#guardian" data-toggle="tab">Parent/Guardian</a>
+                                <li><a href="#parent" data-toggle="tab">Parent</a>
                                 </li>
                                 <li><a href="#student" data-toggle="tab">Student</a>
                                 </li>
@@ -141,30 +141,30 @@ echo '
                                         <button type="submit" class="btn btn-default">Create Teacher</button>
                                     </form>
                                 </div>
-                                <div class="tab-pane fade" id="guardian">
-                                    <h4>Parent/Guardian</h4>
+                                <div class="tab-pane fade" id="parent">
+                                    <h4>Parent</h4>
                                     <form action="../includes/adminFunctions/createUser" method="post" role="form">
 										<input type="hidden" name="roleID" value="4">
 										<input type="hidden" name="modProfile" value="0">
 										<input type="hidden" name="modClassList" value="0">
 										<input type="hidden" name="viewAllGrades" value="0">
                                         <div class="form-group">
-                                            <input class="form-control" name="guardianEmail" placeholder="Email">
+                                            <input class="form-control" name="parentEmail" placeholder="Email">
                                         </div>
                                         <div class="form-group">
-                                            <input class="form-control" name="guardianFirstName" placeholder="First Name">
+                                            <input class="form-control" name="parentFirstName" placeholder="First Name">
                                         </div>
                                         <div class="form-group">
-                                            <input class="form-control" name="guardianLastName" placeholder="Last Name">
+                                            <input class="form-control" name="parentLastName" placeholder="Last Name">
                                         </div>
                                         <div class="form-group">
-                                            <input class="form-control" name="guardianAddress" placeholder="Address">
+                                            <input class="form-control" name="parentAddress" placeholder="Address">
                                         </div>
                                         <div class="form-group">
-                                            <input class="form-control" name="guardianCity" placeholder="City">
+                                            <input class="form-control" name="parentCity" placeholder="City">
                                         </div>
                                         <div class="form-group">
-					    					<select name="guardianState" class="form-control">
+					    					<select name="parentState" class="form-control">
 												<option value="AL">Alabama</option>
 												<option value="AK">Alaska</option>
 												<option value="AZ">Arizona</option>
@@ -219,9 +219,9 @@ echo '
 											</select>
                                         </div>
                                         <div class="form-group">
-                                            <input class="form-control" name="guardianZip" placeholder="Zip">
+                                            <input class="form-control" name="parentZip" placeholder="Zip">
                                         </div>
-                                        <button type="submit" class="btn btn-default">Create Parent/Guardian</button>
+                                        <button type="submit" class="btn btn-default">Create Parent</button>
                                     </form>
                                 </div>
                                 <div class="tab-pane fade" id="student">

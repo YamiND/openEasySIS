@@ -32,8 +32,8 @@ if (isset($_POST['userEmail'], $_POST['password']))
 		}
 		else if (roleID_check($mysqli) == 4)
 		{
-			// Display Guardian Dashboard
-        	header('Location: ../pages/guardianDashboard');
+			// Display Parent Dashboard
+        	header('Location: ../pages/parentDashboard');
 		}
 		else if (roleID_check($mysqli) == 5)
 		{
