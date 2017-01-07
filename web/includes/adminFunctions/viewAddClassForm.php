@@ -81,7 +81,7 @@ function getAddClassForm($mysqli)
                 }
             }
         generateFormEndSelectDiv();
-        generateFormButton("createStudentButton", "Create Student");
+        generateFormButton("addClassButton", "Add Class");
     generateFormEnd();
 }
 

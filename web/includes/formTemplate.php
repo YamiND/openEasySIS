@@ -58,7 +58,22 @@ function generateFormHiddenInput($name = NULL, $value = NULL)
     echo '<input type="hidden" name="' . $name . '" value="'. $value .'">';
 }
 
-function generateFormInputDiv($label = NULL, $type = "text", $name = NULL, $value = NULL, $disabled = NULL, $min = NULL, $max = NULL, $placeholder = NULL)
+function generateFormInput($type = "text", $name = NULL, $value = NULL, $disabled = NULL, $min = NULL, $max = NULL, $placeholder = NULL, $size = NULL)
+{
+    switch($type)
+    {
+        case "date":
+               echo  '<input class="form-control" type="' . $type . '" name="' . $name . '" value="' . $value . '" min="' . $min . '" max="' . $max . '" ' . $disabled . '>';
+            break;
+
+        default:
+            echo  '<input class="form-control" type="' . $type . '" placeholder="' . $placeholder . '" name="' . $name . '" value="' . $value . '"' . $disabled . '>';
+            break;
+
+    }
+}
+
+function generateFormInputDiv($label = NULL, $type = "text", $name = NULL, $value = NULL, $disabled = NULL, $min = NULL, $max = NULL, $placeholder = NULL, $size = NULL)
 {
     echo '
             <div class="form-group">

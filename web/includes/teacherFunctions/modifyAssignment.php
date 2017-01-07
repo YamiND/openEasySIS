@@ -10,7 +10,7 @@ if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
 }
 else
 {
-   	$_SESSION['invalidModify'] = 'Assignment could not be modified';
+   	$_SESSION['fail'] = 'Assignment could not be modified';
    	header('Location: ../../pages/modifyAssignment');
 
 	return;
@@ -32,20 +32,20 @@ function modifyAssignment($mysqli)
 
         $stmt->execute();    // Execute the prepared query.
         
-        $_SESSION['successModify'] = "Assignment Modified";
+        $_SESSION['success'] = "Assignment Modified";
    	    header('Location: ../../pages/modifyAssignment');
 		  }
 		  else
 		  {
     		// The correct POST variables were not sent to this page.
-    		$_SESSION['invalidModify'] = 'Assignment could not be modified';
+    		$_SESSION['fail'] = 'Assignment could not be modified';
    	   		header('Location: ../../pages/modifyAssignment');
 		  }
   }
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['invalidAdd'] = 'Assignment could not be modified';
+    	$_SESSION['fail'] = 'Assignment could not be modified';
    	   	header('Location: ../../pages/modifiedAssignment');
 	}
 }

@@ -277,6 +277,9 @@ else if (roleID_check($mysqli) == 3)
                 <li>
                     <a href="deleteMaterialType">Delete Assignment Type</a>
                 </li>
+                <li>
+                    <a href="viewMaterialTypes">View All Assignment Types</a>
+                </li>
             </ul>   
         </li>
 	';
@@ -291,11 +294,33 @@ else if (roleID_check($mysqli) == 4)
 }
 else if (roleID_check($mysqli) == 5)
 {
-echo '
-                        <li>
-                            <a href="studentDashboard"><i class="fa fa-dashboard fa-fw"></i>Student</a>
-                        </li>
-';
+    echo '
+            <li>
+                <a href="studentDashboard"><i class="fa fa-dashboard fa-fw"></i>Student</a>
+            </li>
+            <li>
+                    <a href="viewProfile">My Profile</a>
+            </li>
+            <li>
+            <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Grades <span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="viewStudentClassGrades">TODO: View all Class Grades</a>
+                </li>
+            </ul>   
+            </li>
+                <li>
+                <a href="#"><i class="fa fa-book fa-fw"></i> Assignments <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="viewStudentDueAssignments">View Due Assignments</a>
+                    </li>
+                    <li>
+                        <a href="viewStudentAllAssignments">View All Assignments</a>
+                    </li>
+                </ul>   
+            </li>
+    ';
 }
 else
 {

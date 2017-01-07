@@ -8,20 +8,8 @@ function viewDeleteAssignmentForm($mysqli)
                     <div class="panel panel-default">
                         <div class="panel-heading">
 	';
-						if (isset($_SESSION['invalidDelete']))
-                        {
-                        	echo $_SESSION['invalidDelete'];
-                            unset($_SESSION['invalidDelete']);
-                        }
-						else if (isset($_SESSION['successDelete']))
-						{
-                        	echo $_SESSION['successDelete'];
-                            unset($_SESSION['successDelete']);
-						}
-                        else
-                        {
-                        	echo 'Delete an Assignment';
-                        }
+						// Call Session Message code and Panel Heading here
+                        displayPanelHeading("Delete an Assignment");
 echo '
                         </div>
                         <!-- /.panel-heading -->
@@ -72,16 +60,12 @@ echo '
 
 function chooseAssignmentForm($classID, $mysqli)
 {
-    echo '
-            <form action="../includes/teacherFunctions/deleteAssignment" method="post" role="form">
-                <div class="form-group">
-                    <select class="form-control" name="materialID">';
-                        getAssignmentList($classID, $mysqli);
-    echo '                                  
-                    </select> 
-                 </div>
-                <button type="submit" class="btn btn-default">Delete Assignment</button>
-            </form>';
+    generateFormStart("../includes/teacherFunctions/deleteAssignment", "post"); 
+        generateFormStartSelectDiv(NULL, "classID");
+            getAssignmentList($classID, $mysqli);
+        generateFormEndSelectDiv();
+        generateFormButton(NULL, "Delete Assignment");
+    generateFormEnd();
 }
 
 function getAssignmentList($classID, $mysqli)
@@ -95,27 +79,23 @@ function getAssignmentList($classID, $mysqli)
 
         while ($stmt->fetch())
         {
-            echo "<option value='" . $materialID . "'> $materialName </option>";
+            generateFormOption($materialID, $materialName);
         }
     }
     else
     {
-        return;
+        generateFormOption(NULL, "No Assignments", "disabled", "selected");
     }
 }
 
 function getClassForm($mysqli)
 {
-    echo '
-            <form action="" method="post" role="form">
-                <div class="form-group">
-                    <select class="form-control" name="classID">';
-                        getClassList($mysqli);
-    echo '                                  
-                    </select> 
-                 </div>
-                <button type="submit" class="btn btn-default">Select Class</button>
-            </form>';
+    generateFormStart("", "post"); 
+        generateFormStartSelectDiv(NULL, "classID");
+            getClassList($mysqli);
+        generateFormEndSelectDiv();
+        generateFormButton("selectClassButton", "Select Class");
+    generateFormEnd();
 }
 
 function getClassList($mysqli)
@@ -131,8 +111,12 @@ function getClassList($mysqli)
 
         while($stmt->fetch())
         {
-            echo "<option value='" . $classID . "'>$className</option>";
+            generateFormOption($classID, $className);
         }
+    }
+    else
+    {
+        generateFormOption(NULL, "No Classes", "disabled", "selected");
     }
 }
 

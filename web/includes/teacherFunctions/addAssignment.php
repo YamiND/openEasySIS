@@ -10,7 +10,7 @@ if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
 }
 else
 {
-   	$_SESSION['invalidAdd'] = 'Assignment could not be added';
+   	$_SESSION['fail'] = 'Assignment could not be added';
    	header('Location: ../../pages/addAssignment');
 
 	return;
@@ -32,20 +32,20 @@ function addAssignment($mysqli)
 
         $stmt->execute();    // Execute the prepared query.
         
-        $_SESSION['successAdd'] = "Assignment Added";
+        $_SESSION['success'] = "Assignment Added";
    	    header('Location: ../../pages/addAssignment');
 		  }
 		  else
 		  {
     		// The correct POST variables were not sent to this page.
-    		$_SESSION['invalidAdd'] = 'Assignment could not be added';
+    		$_SESSION['fail'] = 'Assignment could not be added';
    	   		header('Location: ../../pages/addAssignment');
 		  }
   }
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['invalidAdd'] = 'Assignment could not be added';
+    	$_SESSION['fail'] = 'Assignment could not be added';
    	   	header('Location: ../../pages/addAssignment');
 	}
 }

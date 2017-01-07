@@ -10,7 +10,7 @@ if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
 }
 else
 {
-   	$_SESSION['invalidModify'] = 'Assignment could not be deleted';
+   	$_SESSION['fail'] = 'Assignment could not be deleted';
    	header('Location: ../../pages/deleteAssignment');
 
 	return;
@@ -28,20 +28,20 @@ function deleteAssignment($mysqli)
 
         $stmt->execute();    // Execute the prepared query.
         
-        $_SESSION['successDelete'] = "Assignment Deleted";
+        $_SESSION['success'] = "Assignment Deleted";
    	    header('Location: ../../pages/deleteAssignment');
 		  }
 		  else
 		  {
     		// The correct POST variables were not sent to this page.
-    		$_SESSION['invalidDelete'] = 'Assignment could not be deleted';
+    		$_SESSION['fail'] = 'Assignment could not be deleted';
    	   		header('Location: ../../pages/deleteAssignment');
 		  }
   }
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['invalidDelete'] = 'Assignment could not be deleted';
+    	$_SESSION['fail'] = 'Assignment could not be deleted';
    	   	header('Location: ../../pages/deleteAssignment');
 	}
 }

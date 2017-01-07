@@ -90,7 +90,7 @@ CREATE  TABLE IF NOT EXISTS `openEasySIS`.`studentProfile` (
   `studentID` INT NOT NULL ,
   `studentFirstName` VARCHAR(45) NOT NULL ,
   `studentLastName` VARCHAR(45) NOT NULL ,
-  `studentBirthdate` DATETIME NULL ,
+  `studentBirthdate` DATE NULL ,
   `studentGender` VARCHAR(1) NOT NULL ,
   `studentGradYear` YEAR NULL ,
   `studentGPA` FLOAT NULL ,
@@ -294,7 +294,7 @@ DROP TABLE IF EXISTS `openEasySIS`.`studentParentIDs` ;
 
 CREATE  TABLE IF NOT EXISTS `openEasySIS`.`studentParentIDs` (
   `studentID` INT NOT NULL ,
-  `parentID` VARCHAR(45) NOT NULL )
+  `parentID` INT NOT NULL )
 ENGINE = InnoDB;
 
 USE `openEasySIS` ;
@@ -454,6 +454,6 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `openEasySIS`;
-INSERT INTO `openEasySIS`.`studentParentIDs` (`studentID`, `parentID`) VALUES (5, '4');
+INSERT INTO `openEasySIS`.`studentParentIDs` (`studentID`, `parentID`) VALUES (5, 4);
 
 COMMIT;
