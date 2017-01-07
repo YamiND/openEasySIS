@@ -43,9 +43,10 @@ function viewDeleteClassForm($mysqli)
 
                             <!-- Tab panes -->
                             <div class="tab-content">
-                            	<h4>Select Grade Level</h4>
                                 <div class="tab-pane fade in active" id="deleteClass">
+                                <br>
         ';
+
                             if (!isset($_SESSION['gradeID']))
                             {
                                 getGradeLevelForm();
@@ -53,17 +54,24 @@ function viewDeleteClassForm($mysqli)
                             else
                             {
                                 getClassForm($_SESSION['gradeID'], $mysqli);
+                                echo "<br>";
+                            }
+
+                            if (isset($_SESSION['classID']))
+                            {
+                                generateFormStart("", "post"); 
+                                    generateFormButton("changeClass", "Change Class");
+                                generateFormEnd();
+
+                                echo "<br>";
                             }
 
                             if (isset($_SESSION['gradeID']))
                             {
-    echo '
-                                <br>
-                                <form action="" method="post" role="form">
-                                <button type="submit" class="btn btn-default" name="changeGradeLevel">Change Grade Level</button> 
-                                </form>
-    ';
-                            }  
+                                generateFormStart("", "post"); 
+                                    generateFormButton("changeGradeLevel", "Change Grade Level");
+                                generateFormEnd();
+                            }   
     echo '
                                 </div>
                             </div>
@@ -78,58 +86,43 @@ function viewDeleteClassForm($mysqli)
 
 function getGradeLevelForm()
 {
-    echo '
-        <form action="" method="post" role="form">
-            <div class="form-group">
-                <label>Class Grade Level</label>
-                <select class="form-control" name="gradeID">
-        ';
+    generateFormStart("", "post"); 
+        generateFormStartSelectDiv("Grade", "gradeID");
             for ($i = 1; $i <= 12; $i++)
             {
-                echo "<option value='" . $i . "'>$i</option>";
+                generateFormOption($i, $i);
             }
-    echo '
-                </select>
-            </div>
-            <button type="submit" class="btn btn-default">Select Grade Level</button>
-        </form>
-        ';
+        generateFormEndSelectDiv();
+        generateFormButton("gradeButton", "Select Grade Level");
+    generateFormEnd();
 }
 
 function getClassForm($gradeID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT className, classID FROM classes WHERE classGrade = ?"))
+{   
+    if ($stmt = $mysqli->prepare("SELECT classID, className FROM classes WHERE classGrade = ?"))
     {
         $stmt->bind_param('i', $gradeID);
-
         $stmt->execute();
-        $stmt->bind_result($className, $classID);
-
+        $stmt->bind_result($classID, $className);
         $stmt->store_result();
-    
-        if ($stmt->num_rows == 0)
-        {
-            echo '<h3>No classes for grade, please change grade level or add class </h3>';
-        }
-        else
-        {
-            echo '
-                <form action="../includes/adminFunctions/deleteClass" method="post" role="form">
-                    <div class="form-group">
-                        <select class="form-control" name="classID">
-                ';
-                        while($stmt->fetch())
-                        {
-                            echo "<option value='" . $classID . "'>$className</option>";
-                        }
-            echo '
-                        </select> 
-                    </div>
-                    <button type="submit" class="btn btn-default">Delete Class</button>
-                </form>
-                ';
-        }
-    }
+
+        generateFormStart("../includes/adminFunctions/deleteClass", "post"); 
+            generateFormStartSelectDiv("Class Name", "classID");
+            if ($stmt->num_rows > 0)
+            {
+                while ($stmt->fetch())
+                {
+                    generateFormOption($classID, $className);
+                }
+            }
+            else
+            {
+                generateFormOption(NULL, "No Classes", "disabled", "selected");
+            }
+            generateFormEndSelectDiv();
+            generateFormButton(NULL, "Delete Class");
+        generateFormEnd();
+    }       
 }
 
 ?>

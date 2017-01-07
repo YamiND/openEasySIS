@@ -10,7 +10,7 @@ if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
 }
 else
 {
-   	$_SESSION['fail'] = 'Student could not be added';
+   	$_SESSION['fail'] = 'Student could not be added, incorrect permissions';
    	header('Location: ../../pages/assignStudent');
 
 	return;
@@ -23,25 +23,25 @@ function assignStudentClass($mysqli)
       $studentID = $_POST['studentID'];
     	$classID = $_POST['classID'];
 
-    if ($stmt = $mysqli->prepare("INSERT INTO studentClassIDs (studentID, classID) VALUES (?, ?)"))
-		{
-    		$stmt->bind_param('ii', $studentID, $classID); 
-	    	$stmt->execute();    // Execute the prepared query
+	    if ($stmt = $mysqli->prepare("INSERT INTO studentClassIDs (studentID, classID) VALUES (?, ?)"))
+			{
+	    		$stmt->bind_param('ii', $studentID, $classID); 
+		    	$stmt->execute();    // Execute the prepared query
 
-			$_SESSION['success'] = "Student added to Class";
-   	   		header('Location: ../../pages/assignStudent');
-		}
-		else
-		{
-    		// The correct POST variables were not sent to this page.
-    		$_SESSION['fail'] = 'Student could not be added to Class';
-   	   		header('Location: ../../pages/assignStudent');
-		}
+				$_SESSION['success'] = "Student added to Class";
+	   	   		header('Location: ../../pages/assignStudent');
+			}
+			else
+			{
+	    		// The correct POST variables were not sent to this page.
+	    		$_SESSION['fail'] = 'Student could not be added to Class';
+	   	   		header('Location: ../../pages/assignStudent');
+			}
     }
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['fail'] = 'Student could not be added to Class';
+    	$_SESSION['fail'] = 'Student could not be added to Class, data not sent';
    	   	header('Location: ../../pages/assignStudent');
 	}
 }

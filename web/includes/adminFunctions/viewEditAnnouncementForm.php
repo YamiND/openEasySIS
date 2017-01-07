@@ -88,8 +88,8 @@ function changeAnnouncementButton()
 {
     // Form to allow user to change announcement selected
     generateFormStart("", "post");  
-        generateFormHiddenInput("changeAnnouncement", "changeAnnouncement");                          
-        generateFormButton("Change Announcement");
+        generateFormHiddenInput("changeAnnouncement", "changeAnnouncement");
+        generateFormButton("changeAnnouncementButton", "Choose Another Announcement");
     generateFormEnd();
 }
 
@@ -111,7 +111,7 @@ function modifyAnnouncementForm($announcementID, $mysqli)
             generateFormInputDiv("Announcement Post Date", "date", "announcementPostDate", $announcementPostDate);
             generateFormInputDiv("Announcement End Date", "date", "announcementEndDate", $announcementEndDate);
             generateFormTextAreaDiv("Announcement Description", "announcementDescription", $rows = "5", $announcementDescription);
-            generateFormButton("Edit Announcement");
+            generateFormButton("editAnnouncementButton", "Edit Announcement");
         generateFormEnd();
     }  
 }
@@ -138,7 +138,7 @@ function getAnnouncementsForm($mysqli)
                 generateFormOption($announcementID, $announcementName);
             }  
             generateFormEndSelectDiv();
-            generateFormButton("Select Announcement");
+            generateFormButton("selectAnnouncementButton", "Select Announcement");
         generateFormEnd();
     }   
     else

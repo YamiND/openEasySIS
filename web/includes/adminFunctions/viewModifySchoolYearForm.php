@@ -23,24 +23,25 @@ function viewModifySchoolYearForm($mysqli)
                 <div class="col-lg-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-	';
+	   ';
 						displayPanelHeading("Modify School Year");
-echo '
+    echo '
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs">
-                                <li class="active"><a href="#modifyClass" data-toggle="tab">Modify a Class</a>
+                                <li class="active"><a href="#modifySchoolYear" data-toggle="tab">Modify School Year</a>
                                 </li>
                             </ul>
 
                             <!-- Tab panes -->
                             <div class="tab-content">
-                                <h4>Modify School Year</h4>
-                                <div class="tab-pane fade in active" id="modifyClass">';
+                                <div class="tab-pane fade in active" id="modifyClass">
+                                    <br>
+        ';
                                         getSchoolYearInfo($mysqli);
-echo '
+    echo '
                                 </div>
                             </div>
                         </div>
@@ -49,8 +50,7 @@ echo '
                     <!-- /.panel -->
                 </div>
 			</div>
-';
-
+        ';
 }
 
 function getSchoolYearInfo($mysqli)
@@ -64,60 +64,22 @@ function getSchoolYearInfo($mysqli)
          
         $stmt->fetch();
 
-        echo '
-            <form action="../includes/adminFunctions/modifySchoolYear" method="post" role="form">
-                <input type="hidden" name="schoolYearID" value="'. $dbSchoolYearID .'">
-                <div class="form-group">
-                    <label>School Year Start Date</label>
-                    <input class="form-control" type="date" name="schoolYearStart" value="' . $dbSchoolYearStart . '">
-                </div>
-                <div class="form-group">
-                    <label>School Year End Date</label>
-                    <input class="form-control" type="date" name="schoolYearEnd" value="' . $dbSchoolYearEnd . '">
-                </div>
-                <div class="form-group">
-                    <label>Fall Semester Start Date</label>
-                    <input class="form-control" type="date" name="fallSemesterStart" value="' . $dbFallSemesterStart . '">
-                </div>
-                <div class="form-group">
-                    <label>Fall Semester End Date</label>
-                    <input class="form-control" type="date" name="fallSemesterEnd" value="' . $dbFallSemesterEnd . '">
-                </div>
-                <div class="form-group">
-                    <label>Spring Semester Start Date</label>
-                    <input class="form-control" type="date" name="springSemesterStart" value="' . $dbSpringSemesterStart . '">
-                </div>
-                <div class="form-group">
-                    <label>Spring Semester End Date</label>
-                    <input class="form-control" type="date" name="springSemesterEnd" value="' . $dbSpringSemesterEnd . '">
-                </div>
-                <div class="form-group">
-                    <label>Quarter One Start Date</label>
-                    <input class="form-control" type="date" name="quarterOneStart" value="' . $dbQuarterOneStart . '">
-                </div>
-                <div class="form-group">
-                    <label>Quarter One End Date</label>
-                    <input class="form-control" type="date" name="quarterOneEnd" value="' . $dbQuarterOneEnd . '">
-                </div>
-                <div class="form-group">
-                    <label>Quarter Two Start Date</label>
-                    <input class="form-control" type="date" name="quarterTwoStart" value="' . $dbQuarterTwoStart . '">
-                </div>
-                <div class="form-group">
-                    <label>Quarter Two End Date</label>
-                    <input class="form-control" type="date" name="quarterTwoEnd" value="' . $dbQuarterTwoEnd . '">
-                </div>
-                <div class="form-group">
-                    <label>Quarter Three Start Date</label>
-                    <input class="form-control" type="date" name="quarterThreeStart" value="' . $dbQuarterThreeStart . '">
-                </div>
-                <div class="form-group">
-                    <label>Quarter Three End Date</label>
-                    <input class="form-control" type="date" name="quarterThreeEnd" value="' . $dbQuarterThreeEnd . '">
-                </div>
-                <button type="submit" class="btn btn-default">Modify School Year</button>
-            </form>
-        ';
+        generateFormStart("../includes/adminFunctions/modifySchoolYear", "post");
+            generateFormHiddenInput("schoolYearID", $dbSchoolYearID);
+            generateFormInputDiv("School Year Start Date", "date", $dbSchoolYearStart);
+            generateFormInputDiv("School Year End Date", "date", $dbSchoolYearEnd);
+            generateFormInputDiv("Fall Semester Start Date", "date", $dbFallSemesterStart);
+            generateFormInputDiv("Fall Semester End Date", "date", $dbFallSemesterEnd);
+            generateFormInputDiv("Spring Semester Start Date", "date", $dbSpringSemesterStart);
+            generateFormInputDiv("Spring Semester End Date", "date", $dbSpringSemesterEnd);
+            generateFormInputDiv("Quarter One Start Date", "date", $dbQuarterOneStart);
+            generateFormInputDiv("Quarter One End Date", "date", $dbQuarterOneEnd);
+            generateFormInputDiv("Quarter Two Start Date", "date", $dbQuarterTwoStart);
+            generateFormInputDiv("Quarter Two End Date", "date", $dbQuarterTwoEnd);
+            generateFormInputDiv("Quarter Three Start Date", "date", $dbQuarterThreeStart);
+            generateFormInputDiv("Quarter Three End Date", "date", $dbQuarterThreeEnd);
+            generateFormButton("modifySchoolYearButton", "Modify School Year");
+        generateFormEnd();
     }
     else
     {

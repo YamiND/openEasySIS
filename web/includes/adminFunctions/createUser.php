@@ -44,7 +44,7 @@ function determineAccountType($mysqli)
 		}
 		else
 		{
-   			$_SESSION['fail'] = 'Account Creations Failed';
+   			$_SESSION['fail'] = 'Account Creations Failed, improper permissions';
 		   	header('Location: ../../pages/createUser');
 
 			return;
@@ -107,7 +107,7 @@ function createAdminAccount($mysqli)
 		createAdminProfile($userID, $adminFirstName, $adminLastName, $adminEmail, $mysqli);
     	
 		$_SESSION['success'] = "Admin Account Created - email is $adminEmail and password is $password";
-   	   	header('Location: ../../pages/createUserAccount');
+   	   	header('Location: ../../pages/createUser');
     }
 	else
 	{
@@ -173,13 +173,13 @@ function createSchoolAdminAccount($mysqli)
 		createSchoolAdminProfile($schoolAdminID, $schoolAdminFirstName, $schoolAdminLastName, $schoolAdminEmail, $mysqli);
     	
 		$_SESSION['success'] = "School Admin Account Created - email is $schoolAdminEmail and password is $password";
-   	   	header('Location: ../../pages/createUserAccount');
+   	   	header('Location: ../../pages/createUser');
     }
 	else
 	{
     	// The correct POST variables were not sent to this page.
     	$_SESSION['fail'] = 'Account Creation Failed';
-   	   	header('Location: ../../pages/createUserAccount');
+   	   	header('Location: ../../pages/createUser');
 	}
 }
 
@@ -239,13 +239,13 @@ function createTeacherAccount($mysqli)
 		createTeacherProfile($teacherID, $teacherFirstName, $teacherLastName, $teacherEmail, $mysqli);
     	
 		$_SESSION['success'] = "Teacher Account Created - email is $teacherEmail and password is $password";
-   	   	header('Location: ../../pages/createUserAccount');
+   	   	header('Location: ../../pages/createUser');
     }
 	else
 	{
     	// The correct POST variables were not sent to this page.
     	$_SESSION['fail'] = 'Account Creation Failed';
-   	   	header('Location: ../../pages/createUserAccount');
+   	   	header('Location: ../../pages/createUser');
 	}
 }
 
@@ -289,13 +289,13 @@ function createParentAccount($mysqli)
 		createParentProfile($parentID, $parentFirstName, $parentLastName, $parentEmail, $parentAddress, $parentCity, $parentState, $parentZip, $mysqli);
     	
 		$_SESSION['success'] = "parent Account Created - email is $parentEmail and password is $password";
-   	   	header('Location: ../../pages/createUserAccount');
+   	   	header('Location: ../../pages/createUser');
     }
 	else
 	{
     	// The correct POST variables were not sent to this page.
     	$_SESSION['fail'] = 'Account Creation Failed';
-   	   	header('Location: ../../pages/createUserAccount');
+   	   	header('Location: ../../pages/createUser');
 	}
 }
 
@@ -342,7 +342,7 @@ function createStudentAccount($mysqli)
 	{
     	// The correct POST variables were not sent to this page.
     	$_SESSION['fail'] = 'Account Creation Failed';
-   	   	header('Location: ../../pages/createUserAccount');
+   	   	header('Location: ../../pages/createUser');
 	}
 }
 
@@ -362,7 +362,7 @@ function createUserAccount($email, $password, $roleID, $modProfile, $modClassLis
 		if ($stmt->num_rows > 0)
 		{
     		$_SESSION['fail'] = 'Account Creation Failed, Account already exists';
-   	   		header('Location: ../../pages/createUserAccount');
+   	   		header('Location: ../../pages/createUser');
 		}
 		else
 		{

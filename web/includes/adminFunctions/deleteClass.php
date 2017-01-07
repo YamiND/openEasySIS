@@ -10,7 +10,7 @@ if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
 }
 else
 {
-   	$_SESSION['invalidDelete'] = 'Class could not be deleted';
+   	$_SESSION['fail'] = 'Class could not be deleted';
    	header('Location: ../../pages/deleteClass');
 
 	return;
@@ -27,20 +27,20 @@ function deleteClass($mysqli)
     		$stmt->bind_param('i', $classID); 
 	    	$stmt->execute();    // Execute the prepared query.
 
-			$_SESSION['deleteSuccess'] = "Class Deleted";
+			$_SESSION['success'] = "Class Deleted";
    	   		header('Location: ../../pages/deleteClass');
 		}
 		else
 		{
     		// The correct POST variables were not sent to this page.
-    		$_SESSION['invalidDelete'] = 'Class could not be deleted';
+    		$_SESSION['success'] = 'Class could not be deleted';
    	   		header('Location: ../../pages/deleteClass');
 		}
     }
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['invalidDelete'] = 'Class could not be deleted, data not sent';
+    	$_SESSION['fail'] = 'Class could not be deleted, data not sent';
    	   	header('Location: ../../pages/deleteClass');
 	}
 }

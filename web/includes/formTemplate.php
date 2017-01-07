@@ -12,9 +12,9 @@ function generateFormEnd()
 	echo '</form>';
 }
 
-function generateFormOption($value, $name, $disabled = NULL)
+function generateFormOption($value, $name, $disabled = NULL, $selected = NULL)
 {
-    echo "<option" . $disabled . " value='" . $value . "'>$name</option>";
+    echo "<option " . $disabled . " " . $selected . " value='" . $value . "'>$name</option>";
 }
 
 function generateFormStartSelectDiv($label = NULL, $name = NULL)
@@ -103,10 +103,10 @@ function generateFormTextAreaDiv($label = NULL, $name = NULL, $rows = "5", $valu
             </div>
         ';
 }
-function generateFormButton($name = "Generic", $type = "submit", $class = "btn btn-default")
+function generateFormButton($name = NULL, $value = "NULL", $type = "submit", $class = "btn btn-default")
 {
 	echo '
-			<button type="' . $type . '" class="' . $class . '">' . $name .'</button>
+			<button name="' . $name . '" type="' . $type . '" class="' . $class . '">' . $value .'</button>
 		';
 }
 

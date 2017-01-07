@@ -74,7 +74,7 @@ function getAnnouncementsForm($mysqli)
                 generateFormOption($announcementID, "$announcementName, $announcementPostDate");
             }  
             generateFormEndSelectDiv();
-            generateFormButton("Delete Announcement");
+            generateFormButton("deleteAnnouncementButton", "Delete Announcement");
         generateFormEnd();
     }   
     else

@@ -42,11 +42,11 @@ echo '
             ';
 
                                 generateFormStart("../includes/adminFunctions/createAnnouncement", "post");
-                                    generateFormInputDiv("Announcement Name", "text", "announcementName");
+                                    generateFormInputDiv("Announcement Name", "text", "announcementName", NULL, NULL, NULL, NULL, "Announcement Name");
                                     generateFormInputDiv("Announcement Post Date", "date", "announcementPostDate", date('Y-m-d'), NULL, date('Y-m-d'));
                                     generateFormInputDiv("Announcement End Date", "date", "announcementEndDate", NULL, NULL, date('Y-m-d'));
                                     generateFormTextAreaDiv("Announcement Description", "announcementDescription", "5");
-                                    generateFormButton("Create Announcement");
+                                    generateFormButton("createAnnouncementButton", "Create Announcement");
                                 generateFormEnd();
 
                                     

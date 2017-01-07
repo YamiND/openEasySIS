@@ -43,28 +43,33 @@ echo '
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="administrator">
+                                    <br>
             ';
                                     createAdminForm();
                                     
     echo '
                                 </div>
                                 <div class="tab-pane fade" id="schoolAdmin">
+                                <br>
         ';
                                     createSchoolAdminForm();
         echo '
                                 </div>
                                 <div class="tab-pane fade" id="teacher">
+                                <br>
             ';
                                     createTeacherForm();
         echo '
                                 </div>
                                 <div class="tab-pane fade" id="parent">
+                                <br>
             ';
                                     createParentForm();
         echo '
                                     
                                 </div>
                                 <div class="tab-pane fade" id="student">
+                                <br>
             ';
                                     createStudentForm();
         echo '
@@ -90,7 +95,7 @@ function createAdminForm()
         generateFormCheckboxDiv("checked", "modProfile", "modProfile", "Modify Profiles");
         generateFormCheckboxDiv("checked", "modClassList", "modClassList", "Modify Class Lists");
         generateFormCheckboxDiv("checked", "viewAllGrades", "viewAllGrades", "View All Grades");
-        generateFormButton("Create Administrator");
+        generateFormButton(NULL, "Create Administrator");
     generateFormEnd();
 }
 
@@ -104,7 +109,7 @@ function createSchoolAdminForm()
         generateFormCheckboxDiv(NULL, "modProfile", "modProfile", "Modify Profiles");
         generateFormCheckboxDiv(NULL, "modClassList", "modClassList", "Modify Class Lists");
         generateFormCheckboxDiv(NULL, "viewAllGrades", "viewAllGrades", "View All Grades");
-        generateFormButton("Create School Administrator");
+        generateFormButton(NULL, "Create School Administrator");
     generateFormEnd();
 }
 
@@ -118,7 +123,7 @@ function createTeacherForm()
         generateFormCheckboxDiv(NULL, "modProfile", "modProfile", "Modify Profiles");
         generateFormCheckboxDiv(NULL, "modClassList", "modClassList", "Modify Class Lists");
         generateFormCheckboxDiv(NULL, "viewAllGrades", "viewAllGrades", "View All Grades");
-        generateFormButton("Create Teacher");
+        generateFormButton(NULL, "Create Teacher");
     generateFormEnd();
 }
 
@@ -190,15 +195,15 @@ function createParentForm()
                     <option value="WY">Wyoming</option>
                 ';
         generateFormEndSelectDiv();
-        generateFormButton("Create Parent");
+        generateFormButton(NULL, "Create Parent");
     generateFormEnd();
 }
 
 function createStudentForm()
 {
     generateFormStart("../includes/adminFunctions/createUser", "post"); 
-        generateFormHiddenInput("roleID", "4");
-        generateFormHiddenInput("modeProfile", "0");
+        generateFormHiddenInput("roleID", "5");
+        generateFormHiddenInput("modProfile", "0");
         generateFormHiddenInput("modClassList", "0");
         generateFormHiddenInput("viewAllGrades", "0");
         generateFormInputDiv(NULL, "email", "studentEmail", NULL, NULL, NULL, NULL, "Email");
@@ -214,7 +219,7 @@ function createStudentForm()
                 generateFormOption($i, $i);
             }
         generateFormEndSelectDiv();
-        generateFormButton("Create Student");
+        generateFormButton(NULL, "Create Student");
     generateFormEnd();
 }
 
