@@ -14,7 +14,6 @@ function checkPermissions($mysqli)
 
 function viewAddClassForm($mysqli)
 {
-
 	echo '
             <div class="row">
                 <div class="col-lg-6">
@@ -35,28 +34,11 @@ echo '
 
                             <!-- Tab panes -->
                             <div class="tab-content">
-                                <div class="tab-pane fade in active" id="administrator">
-                                    <h4>Add a Class</h4>
-                                    <form action="../includes/adminFunctions/addClass" method="post" role="form">
-                                        <div class="form-group">
-                                            <input class="form-control" name="className" placeholder="Class Name">
-                                        </div>
-										<div class="form-group">
-                                            <label>Class Grade Level</label>
-                                            <select class="form-control" name="classGradeLevel">';
-                                                getGradeLevel();
-                                    echo '
-                                            </select>
-                                        </div>
-										<div class="form-group">
-                                            <label>Class Teacher</label>
-                                            <select class="form-control" name="classTeacherID">';
-                                                getTeacherList($mysqli);
-                                    echo '
-                                            </select>
-                                        </div>
-                                        <button type="submit" class="btn btn-default">Add Class</button>
-                                    </form>
+                                <div class="tab-pane fade in active" id="addClass">
+                                    <br>
+        ';
+                                    getAddClassForm($mysqli);
+    echo '
                                 </div>
                             </div>
                         </div>
@@ -69,31 +51,38 @@ echo '
 
 }
 
-function getGradeLevel()
+function getAddClassForm($mysqli)
 {
-    for ($i = 1; $i <= 12; $i++)
-    {
-        echo "<option value='" . $i . "'>$i</option>";
-    }
-}
+    generateFormStart("../includes/adminFunctions/addClass", "post"); 
+        generateFormInputDiv(NULL, "text", "className", NULL, NULL, NULL, NULL, "Class Name");
+        generateFormStartSelectDiv("Class Grade Level", "classGradeLevel");
+            for ($i = 1; $i <= 12; $i++)
+            {
+                generateFormOption($i, $i);
+            }
+        generateFormEndSelectDiv();
+        generateFormStartSelectDiv("Class Teacher", "classTeacherID");
+            if ($stmt = $mysqli->prepare("SELECT teacherID, teacherFirstName, teacherLastName FROM teacherProfile"))
+            {
+                $stmt->execute();
+                $stmt->bind_result($teacherID, $teacherFirstName, $teacherLastName);
+                $stmt->store_result();
 
-function getTeacherList($mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT teacherID, teacherFirstName, teacherLastName FROM teacherProfile"))
-    {
-        $stmt->execute();
-        $stmt->bind_result($teacherID, $teacherFirstName, $teacherLastName);
-        $stmt->store_result();
-
-        while ($stmt->fetch())
-        {
-            echo "<option value='" . $teacherID . "'>$teacherLastName, $teacherFirstName</option>";
-        }
-    }
-    else
-    {
-        return;
-    }
+                if ($stmt->num_rows == 0)
+                {
+                    generateFormOption(NULL, "No teachers", "disabled");
+                }
+                else
+                {
+                    while ($stmt->fetch())
+                    {
+                        generateFormOption($teacherID, "$teacherLastName, $teacherFirstName");
+                    }
+                }
+            }
+        generateFormEndSelectDiv();
+        generateFormButton("addClassButton", "Add Class");
+    generateFormEnd();
 }
 
 ?>

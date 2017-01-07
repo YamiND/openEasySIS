@@ -56,17 +56,8 @@ function viewModifyClassForm($mysqli)
 
                             <!-- Tab panes -->
                             <div class="tab-content">
-        ';
-                            if(!isset($_SESSION['gradeID']))
-                            {
-                                echo '<h4>Select Grade Level</h4>';
-                            }
-                            else
-                            {
-                                echo '<h4>Select Class</h4>';
-                            }
-    echo '
                                 <div class="tab-pane fade in active" id="modifyClass">
+                                    <br>
         ';
 
                             if (!isset($_SESSION['gradeID']))
@@ -83,25 +74,20 @@ function viewModifyClassForm($mysqli)
                             }
 
                             if (isset($_SESSION['classID']))
-                                {
-    echo '
-                                <br>
-                                <form action="" method="post" role="form">
-                                <button type="submit" class="btn btn-default" name="changeClass">Change Class</button> 
-                                </form>
-                                
-    ';
-                                }
+                            {
+                                generateFormStart("", "post"); 
+                                    generateFormButton("changeClass", "Change Class");
+                                generateFormEnd();
 
-                                if (isset($_SESSION['gradeID']))
-                                {
-    echo '
-                                <br>
-                                <form action="" method="post" role="form">
-                                <button type="submit" class="btn btn-default" name="changeGradeLevel">Change Grade Level</button> 
-                                </form>
-    ';
-                                }   
+                                echo "<br>";
+                            }
+
+                            if (isset($_SESSION['gradeID']))
+                            {
+                                generateFormStart("", "post"); 
+                                    generateFormButton("changeGradeLevel", "Change Grade Level");
+                                generateFormEnd();
+                            } 
     echo '
                                 </div>
                             </div>
@@ -116,66 +102,48 @@ function viewModifyClassForm($mysqli)
 
 function getGradeLevelForm()
 {
-    echo '
-        <form action="" method="post" role="form">
-            <div class="form-group">
-                <label>Class Grade Level</label>
-                <select class="form-control" name="gradeID">
-        ';
+    generateFormStart("", "post"); 
+        generateFormStartSelectDiv("Grade Level", "gradeID");
             for ($i = 1; $i <= 12; $i++)
             {
-                echo "<option value='" . $i . "'>$i</option>";
+                generateFormOption($i, $i);
             }
-    echo '
-                </select>
-            </div>
-            <button type="submit" class="btn btn-default">Select Grade Level</button>
-        </form>
-        ';
+        generateFormEndSelectDiv();
+        generateFormButton("gradeButton", "Select Grade Level");
+    generateFormEnd();
 }
 
 function getClassForm($gradeID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT className, classID FROM classes WHERE classGrade = ?"))
+{   
+    if ($stmt = $mysqli->prepare("SELECT classID, className FROM classes WHERE classGrade = ?"))
     {
         $stmt->bind_param('i', $gradeID);
-
         $stmt->execute();
-        $stmt->bind_result($className, $classID);
-
+        $stmt->bind_result($classID, $className);
         $stmt->store_result();
-    
-        if ($stmt->num_rows == 0)
-        {
-			echo '<h3>No classes for grade, please change grade level or add class </h3>';
-        }
-        else
-        {
-            echo '
-                <form action="" method="post" role="form">
-                    <div class="form-group">
-        		    	<select class="form-control" name="classID">
-                ';
-                        while($stmt->fetch())
-                        {
-                            echo "<option value='" . $classID . "'>$className</option>";
-                        }
-        	echo '
-                        </select> 
-               		</div>
-                    <button type="submit" class="btn btn-default">Modify Class</button>
-                </form>
-                ';
-        }
-    }
+
+        generateFormStart("", "post"); 
+            generateFormStartSelectDiv("Class Name", "classID");
+            if ($stmt->num_rows > 0)
+            {
+                while ($stmt->fetch())
+                {
+                    generateFormOption($classID, $className);
+                }
+            }
+            else
+            {
+                generateFormOption(NULL, "No Classes", "disabled", "selected");
+            }
+            generateFormEndSelectDiv();
+            generateFormButton(NULL, "Select Class");
+        generateFormEnd();
+        echo "<br>";
+    }       
 }
 
 function getClassInfo($classID, $mysqli)
 {
-    echo '
-            <form action="../includes/adminFunctions/modifyClass" method="post" role="form">
-        ';
-
     if($stmt = $mysqli->prepare("SELECT classGrade, className, classTeacherID FROM classes WHERE classID = ?"))
     {
         $stmt->bind_param('i', $classID);
@@ -187,45 +155,30 @@ function getClassInfo($classID, $mysqli)
 
         while ($stmt->fetch())
         {
-            echo '
-                <input type="hidden" name="classID" value="'.$classID.'">
-                    <div class="form-group">
-                        <label>Class Name</label>
-                        <input class="form-control" name="className" value="' . $className . '">
-                    </div>
-                ';
-                    getGradeLevel($classGrade);
-
+            generateFormStart("../includes/adminFunctions/modifyClass", "post"); 
+                generateFormHiddenInput("classID", $classID);
+                generateFormInputDiv("Class", "text", "className", $className, NULL, NULL, NULL, "Class Name");
+                generateFormStartSelectDiv("Grade Level", "classGradeLevel");
+                    for ($i = 1; $i <= 12; $i++)
+                    {
+                        if ($i == $classGrade)
+                        {
+                            generateFormOption($classGrade, $classGrade, NULL, "selected");
+                        }
+                        else
+                        {
+                            generateFormOption($i, $i);
+                        }
+                    }
+                generateFormEndSelectDiv();
+                generateFormStartSelectDiv("Teacher", "classTeacherID");
                     getTeacherList($classTeacherID, $mysqli);
-        echo '
-                <button type="submit" class="btn btn-default">Modify Class Information</button>
-            </form>
-            ';
+                generateFormEndSelectDiv();
+                generateFormButton(NULL, "Modify Class Information");
+            generateFormEnd();
+            echo "<br>";
         }
     }
-}
-
-function getGradeLevel($selected = NULL)
-{
-    echo '
-        <div class="form-group">
-            <label>Grade Level</label>
-            <select class="form-control" name="classGradeLevel">';
-
-        for ($i = 1; $i <= 12; $i++)
-        {   
-            if ($i == $selected)
-            {   
-                echo "<option value='" . $i . "' selected> $i </option>";
-            }   
-            else
-            {   
-                echo "<option value='" . $i . "'> $i </option>";
-            }   
-        }
-    echo ' 
-            </select>
-        </div>';
 }
 
 function getTeacherList($selected = NULL, $mysqli)
@@ -237,26 +190,17 @@ function getTeacherList($selected = NULL, $mysqli)
         
         $stmt->store_result();
 
-    echo '
-        <div class="form-group">
-            <label>Teacher</label>
-            <select class="form-control" name="classTeacherID">';
-
         while ($stmt->fetch())
         {
             if ($dbTeacherID == $selected)
             {   
-                echo "<option value='$dbTeacherID' selected>$dbTeacherLastName, $dbTeacherFirstName</option>";
+                generateFormOption($dbTeacherID, "$dbTeacherLastName, $dbTeacherFirstName", NULL, "selected");
             }   
             else
             {   
-                echo "<option value='$dbTeacherID'>$dbTeacherLastName, $dbTeacherFirstName</option>";
+                generateFormOption($dbTeacherID, "$dbTeacherLastName, $dbTeacherFirstName");
             }   
         }
-
-    echo ' 
-            </select>
-        </div>';
     }
 }
 

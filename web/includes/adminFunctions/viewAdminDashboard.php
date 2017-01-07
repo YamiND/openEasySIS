@@ -13,21 +13,20 @@ function checkPermissions($mysqli)
     else
     {
         $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+        // Call Session Message code and Panel Heading here
+        displayPanelHeading();
     }
 }
 
 function viewAdminDashboard($mysqli)
 {
-    // Call Session Message code and Panel Heading here
-    displayPanelHeading();
-
     // Provide 
     viewAnnouncements($mysqli);
 
     viewTotalUsers($mysqli, "Administrators", "adminProfile");
     viewTotalUsers($mysqli, "Students", "studentProfile");
     viewTotalUsers($mysqli, "Teachers", "teacherProfile");
-    viewTotalUsers($mysqli, "Guardians", "guardianProfile");
+    viewTotalUsers($mysqli, "Parents", "parentProfile");
 
     viewTotalClasses($mysqli);
 }

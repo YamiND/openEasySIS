@@ -1,42 +1,14 @@
-<?php include("../includes/customizations.php");?>
+<?php
 
-<!DOCTYPE html>
-<html lang="en">
+// Most pages (if not all), can use this template file
+include("../includes/pageTemplate.php");
 
-<head>
+// Function call goes like this:
+// Title (<title>), functionFile (should be in ../includes/*), functionName, pageHeader
 
-    <title><?php echo aliasOpenEasySIS; ?> - Modify Assignment</title>
-    <!-- Header Information, CSS, and JS -->
-    <?php include("../includes/header.php"); ?>
+// All functionNames need to have ($mysqli) in functionFile, but NOT HERE
+// if you do something like viewForm($mysqli) in this file, IT WILL NOT WORK
 
-</head>
+echo displaySite("Modify Assignment", "../includes/teacherFunctions/viewModifyAssignmentForm.php", "checkPermissions", "Modify Assignment");
 
-<body>
-
-    <div id="wrapper">
-
-	<!-- Navigation Menu -->
-        <?php include('../includes/navPanel.php'); ?>
-		<?php include('../includes/teacherFunctions/viewModifyAssignmentForm.php'); ?>
-
-        <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Modify Assignment</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-			
-		<?php 
-			viewModifyAssignmentForm($mysqli); 
-		?>
-
-        </div>
-        <!-- /#page-wrapper -->
-
-    </div>
-    <!-- /#wrapper -->
-
-</body>
-
-</html>
+?>

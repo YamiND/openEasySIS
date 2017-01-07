@@ -10,7 +10,7 @@ if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
 }
 else
 {
-   	$_SESSION['invalidAdd'] = 'Assignment Type could not be added';
+   	$_SESSION['fail'] = 'Assignment Type could not be added';
    	header('Location: ../../pages/addMaterialType');
 
 	return;
@@ -30,20 +30,20 @@ function addMaterialType($mysqli)
 
         $stmt->execute();    // Execute the prepared query.
         
-        $_SESSION['successAdd'] = "Assignment Type Added";
+        $_SESSION['success'] = "Assignment Type Added";
    	    header('Location: ../../pages/addMaterialType');
 		  }
 		  else
 		  {
     		// The correct POST variables were not sent to this page.
-    		$_SESSION['invalidAdd'] = 'Assignment Type could not be added';
+    		$_SESSION['fail'] = 'Assignment Type could not be added';
    	   		header('Location: ../../pages/addMaterialType');
 		  }
   }
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['invalidAdd'] = 'Assignment Type could not be added';
+    	$_SESSION['fail'] = 'Assignment Type could not be added';
    	   	header('Location: ../../pages/addMaterialType');
 	}
 }

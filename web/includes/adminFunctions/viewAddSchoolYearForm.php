@@ -23,7 +23,7 @@ function viewAddSchoolYearForm($mysqli)
                         <div class="panel-heading">
 	';
 						displayPanelHeading("Add School Year");
-echo '
+    echo '
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -36,58 +36,10 @@ echo '
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="addSchoolYear">
-                                    <h4>Add School Year</h4>
-                                    <form action="../includes/adminFunctions/addSchoolYear" method="post" role="form">
-                                        <div class="form-group">
-											<label>School Year Start Date</label>
-											<input class="form-control" type="date" name="schoolYearStart" value="' . date('Y-m-d') . '">
-                                        </div>
-                                        <div class="form-group">
-											<label>School Year End Date</label>
-											<input class="form-control" type="date" name="schoolYearEnd">
-                                        </div>
-                                        <div class="form-group">
-											<label>Fall Semester Start Date</label>
-											<input class="form-control" type="date" name="fallSemesterStart">
-                                        </div>
-                                        <div class="form-group">
-											<label>Fall Semester End Date</label>
-											<input class="form-control" type="date" name="fallSemesterEnd">
-                                        </div>
-                                        <div class="form-group">
-											<label>Spring Semester Start Date</label>
-											<input class="form-control" type="date" name="springSemesterStart">
-                                        </div>
-                                        <div class="form-group">
-											<label>Spring Semester End Date</label>
-											<input class="form-control" type="date" name="springSemesterEnd">
-                                        </div>
-                                        <div class="form-group">
-											<label>Quarter One Start Date</label>
-											<input class="form-control" type="date" name="quarterOneStart">
-                                        </div>
-                                        <div class="form-group">
-											<label>Quarter One End Date</label>
-											<input class="form-control" type="date" name="quarterOneEnd">
-                                        </div>
-                                        <div class="form-group">
-											<label>Quarter Two Start Date</label>
-											<input class="form-control" type="date" name="quarterTwoStart">
-                                        </div>
-                                        <div class="form-group">
-											<label>Quarter Two End Date</label>
-											<input class="form-control" type="date" name="quarterTwoEnd">
-                                        </div>
-                                        <div class="form-group">
-											<label>Quarter Three Start Date</label>
-											<input class="form-control" type="date" name="quarterThreeStart">
-                                        </div>
-                                        <div class="form-group">
-											<label>Quarter Three End Date</label>
-											<input class="form-control" type="date" name="quarterThreeEnd">
-                                        </div>
-                                        <button type="submit" class="btn btn-default">Add School Year</button>
-                                    </form>
+        ';
+                                getAddSchoolYearForm();
+    echo '
+                                    
                                 </div>
                             </div>
                         </div>
@@ -96,8 +48,27 @@ echo '
                     <!-- /.panel -->
                 </div>
 			</div>
-';
+        ';
+}
 
+function getAddSchoolYearForm()
+{
+    generateFormStart("../includes/adminFunctions/addSchoolYear", "post");
+        generateFormInputDiv("School Year Start Date", "date", "schoolYearStart");
+        generateFormInputDiv("School Year End Date", "date", "schoolYearEnd");
+        generateFormInputDiv("Fall Semester Start Date", "date", "fallSemesterStart");
+        generateFormInputDiv("Fall Semester End Date", "date", "fallSemesterEnd");
+        generateFormInputDiv("Spring Semester Start Date", "date", "springSemesterStart");
+        generateFormInputDiv("Spring Semester End Date", "date", "springSemesterEnd");
+        generateFormInputDiv("Quarter One Start Date", "date", "quarterOneStart");
+        generateFormInputDiv("Quarter One End Date", "date", "quarterOneEnd");
+        generateFormInputDiv("Quarter Two Start Date", "date", "quarterTwoStart");
+        generateFormInputDiv("Quarter Two End Date", "date", "quarterTwoEnd");
+        generateFormInputDiv("Quarter Three Start Date", "date", "quarterThreeStart");
+        generateFormInputDiv("Quarter Three End Date", "date", "quarterThreeEnd");
+
+        generateFormButton("addSchoolYearButton", "Add School Year");
+    generateFormEnd();
 }
 
 ?>

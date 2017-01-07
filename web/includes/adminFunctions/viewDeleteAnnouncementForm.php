@@ -32,19 +32,13 @@ function viewDeleteAnnouncementForm($mysqli)
                                 </li>
                             </ul>
 
- <!-- Tab panes -->
+                        <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="deleteAnnouncement">
                                     <h4>Announcement Title, Announcement Post Date</h4>
-                                    <form action="../includes/adminFunctions/deleteAnnouncement" method="post" role="form">
-                                        <div class="form-group">
-                                        	<select class="form-control" name="announcementID">
         ';
-												getAnnouncements($mysqli);
-	echo '									</select> 
-                                        </div>
-                                        <button type="submit" class="btn btn-default">Delete Announcement</button>
-                                    </form>
+										getAnnouncementsForm($mysqli);
+	echo '									
                                 </div>
                             </div>
                         </div>
@@ -57,22 +51,31 @@ function viewDeleteAnnouncementForm($mysqli)
 
 }
 
-function getAnnouncements($mysqli)
+function getAnnouncementsForm($mysqli)
 {
     // Displays a list of announcements for the user
     // Field submits the announcementID that will be deleted
     // In the future this may be replaced with Archived announcements (maybe TODO)
-
+     
 	if ($stmt = $mysqli->prepare("SELECT announcementID, announcementPostDate, announcementName FROM announcements"))
     {   
     	$stmt->execute();
         $stmt->bind_result($announcementID, $announcementPostDate, $announcementName);
         $stmt->store_result();
 
-        while($stmt->fetch())
-        {  
-			echo "<option value='" . $announcementID . "'>$announcementName, $announcementPostDate</option>";
-        }   
+        generateFormStart("../includes/adminFunctions/deleteAnnouncement", "post"); 
+            generateFormStartSelectDiv(NULL, "announcementID");
+            if ($stmt->num_rows == 0)
+            {
+                generateFormOption(NULL, NULL, "disabled");
+            }
+            while($stmt->fetch())
+            { 
+                generateFormOption($announcementID, "$announcementName, $announcementPostDate");
+            }  
+            generateFormEndSelectDiv();
+            generateFormButton("deleteAnnouncementButton", "Delete Announcement");
+        generateFormEnd();
     }   
     else
     {   

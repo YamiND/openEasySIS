@@ -6,9 +6,9 @@ include("../includes/pageTemplate.php");
 // Function call goes like this:
 // Title (<title>), functionFile (should be in ../includes/*), functionName, pageHeader
 
-// All functionNames need to have ($mysqli) in functionFile, but NOT HERE
+// All functionNames should be checkPermissions, unless it is a user function that can be accessed by all. In functionFile, but NOT HERE
 // if you do something like viewForm($mysqli) in this file, IT WILL NOT WORK
 
-echo displaySite("Student Gradebook", "../includes/teacherFunctions/viewGradebookForm.php", "checkPermissions", "Student Gradebook");
+echo displaySite("My Profile", "../includes/userFunctions/viewProfile.php", "checkPermissions", "My Profile");
 
 ?>

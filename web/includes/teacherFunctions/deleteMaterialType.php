@@ -10,7 +10,7 @@ if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
 }
 else
 {
-   	$_SESSION['invalidModify'] = 'Assignment Type could not be deleted';
+   	$_SESSION['fail'] = 'Assignment Type could not be deleted';
    	header('Location: ../../pages/deleteMaterialType');
 
 	return;
@@ -28,20 +28,20 @@ function deleteMaterialType($mysqli)
 
         $stmt->execute();    // Execute the prepared query.
         
-        $_SESSION['successDelete'] = "Assignment Type Deleted";
+        $_SESSION['success'] = "Assignment Type Deleted";
    	    header('Location: ../../pages/deleteMaterialType');
 		  }
 		  else
 		  {
     		// The correct POST variables were not sent to this page.
-    		$_SESSION['invalidDelete'] = 'Assignment Type could not be deleted';
+    		$_SESSION['fail'] = 'Assignment Type could not be deleted';
    	   		header('Location: ../../pages/deleteMaterialType');
 		  }
   }
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['invalidDelete'] = 'Assignment Type could not be deleted';
+    	$_SESSION['fail'] = 'Assignment Type could not be deleted';
    	   	header('Location: ../../pages/deleteMaterialType');
 	}
 }

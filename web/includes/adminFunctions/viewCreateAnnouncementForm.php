@@ -38,25 +38,19 @@ echo '
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="announcement">
-                                    <h4>Create Announcement</h4>
-                                    <form action="../includes/adminFunctions/createAnnouncement" method="post" role="form">
-                                        <div class="form-group">
-                                            <input class="form-control" name="announcementName" placeholder="Announcement Name">
-                                        </div>
-                                        <div class="form-group">
-											<label>Announcement Post Date</label>
-											<input class="form-control" type="date" name="announcementPostDate" value="' . date('Y-m-d') . '" min="' . date('Y-m-d') . '">
-                                        </div>
-                                        <div class="form-group">
-											<label>Announcement End Date</label>
-											<input class="form-control" type="date" name="announcementEndDate" min="' . date('Y-m-d') . '">
-                                        </div>
-										<div class="form-group">
-                                            <label>Announcement Description</label>
-                                            <textarea class="form-control" name="announcementDescription" rows="5"></textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-default">Create Announcement</button>
-                                    </form>
+                                <br>
+            ';
+
+                                generateFormStart("../includes/adminFunctions/createAnnouncement", "post");
+                                    generateFormInputDiv("Announcement Name", "text", "announcementName", NULL, NULL, NULL, NULL, "Announcement Name");
+                                    generateFormInputDiv("Announcement Post Date", "date", "announcementPostDate", date('Y-m-d'), NULL, date('Y-m-d'));
+                                    generateFormInputDiv("Announcement End Date", "date", "announcementEndDate", NULL, NULL, date('Y-m-d'));
+                                    generateFormTextAreaDiv("Announcement Description", "announcementDescription", "5");
+                                    generateFormButton("createAnnouncementButton", "Create Announcement");
+                                generateFormEnd();
+
+                                    
+	echo '
                                 </div>
                             </div>
                         </div>

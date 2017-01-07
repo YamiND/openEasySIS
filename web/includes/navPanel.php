@@ -2,6 +2,7 @@
 include_once '../includes/dbConnect.php';
 include_once '../includes/functions.php';
 include_once '../includes/panelSessionMessages.php';
+include_once '../includes/formTemplate.php';
 
 sec_session_start();
 
@@ -30,6 +31,7 @@ echo '
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
+                        <li><a href="viewProfile"><i class="fa fa-user fa-fw"></i> My Profile</a></li>
                         <li><a href="settings"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
@@ -73,6 +75,17 @@ echo '
 					<a href="viewAllAnnouncements">View All Announcements</a>
 				</li>
 			</ul>	
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-user fa-fw"></i> Profiles <span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="viewProfile">My Profile</a>
+                </li>
+                <li>
+                    <a href="lookupProfile">Lookup Profile</a>
+                </li>
+            </ul>   
         </li>
         <li>
             <a href="#"><i class="fa fa-users fa-fw"></i> Users <span class="fa arrow"></span></a>
@@ -264,6 +277,9 @@ else if (roleID_check($mysqli) == 3)
                 <li>
                     <a href="deleteMaterialType">Delete Assignment Type</a>
                 </li>
+                <li>
+                    <a href="viewMaterialTypes">View All Assignment Types</a>
+                </li>
             </ul>   
         </li>
 	';
@@ -272,17 +288,39 @@ else if (roleID_check($mysqli) == 4)
 {
 	echo '
                         <li>
-                            <a href="guardianDashboard"><i class="fa fa-dashboard fa-fw"></i> Parent/Guardian</a>
+                            <a href="parentDashboard"><i class="fa fa-dashboard fa-fw"></i> Parent</a>
                         </li>
 	';
 }
 else if (roleID_check($mysqli) == 5)
 {
-echo '
-                        <li>
-                            <a href="studentDashboard"><i class="fa fa-dashboard fa-fw"></i>Student</a>
-                        </li>
-';
+    echo '
+            <li>
+                <a href="studentDashboard"><i class="fa fa-dashboard fa-fw"></i>Student</a>
+            </li>
+            <li>
+                    <a href="viewProfile">My Profile</a>
+            </li>
+            <li>
+            <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Grades <span class="fa arrow"></span></a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="viewStudentClassGrades">TODO: View all Class Grades</a>
+                </li>
+            </ul>   
+            </li>
+                <li>
+                <a href="#"><i class="fa fa-book fa-fw"></i> Assignments <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="viewStudentDueAssignments">View Due Assignments</a>
+                    </li>
+                    <li>
+                        <a href="viewStudentAllAssignments">View All Assignments</a>
+                    </li>
+                </ul>   
+            </li>
+    ';
 }
 else
 {

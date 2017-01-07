@@ -10,7 +10,7 @@ if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
 }
 else
 {
-   	$_SESSION['invalidModify'] = 'Assignment Type could not be modified';
+   	$_SESSION['fail'] = 'Assignment Type could not be modified';
    	header('Location: ../../pages/modifyMaterialType');
 
 	return;
@@ -30,20 +30,20 @@ function modifyMaterialType($mysqli)
 
         $stmt->execute();    // Execute the prepared query.
         
-        $_SESSION['successModify'] = "Assignment Type Modified";
+        $_SESSION['success'] = "Assignment Type Modified";
    	    header('Location: ../../pages/modifyMaterialType');
 		  }
 		  else
 		  {
     		// The correct POST variables were not sent to this page.
-    		$_SESSION['invalidModify'] = 'Assignment Type could not be modified';
+    		$_SESSION['fail'] = 'Assignment Type could not be modified';
    	   		header('Location: ../../pages/modifyMaterialType');
 		  }
   }
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['invalidModify'] = 'Assignment Type could not be modified';
+    	$_SESSION['fail'] = 'Assignment Type could not be modified';
    	   	header('Location: ../../pages/modifyMaterialType');
 	}
 }

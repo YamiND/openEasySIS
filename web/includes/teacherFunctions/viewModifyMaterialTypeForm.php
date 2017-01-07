@@ -1,5 +1,38 @@
 <?php
 
+if (isset($_POST['classID']))
+{
+    $_SESSION['classID'] = $_POST['classID'];
+}
+
+if (isset($_POST['materialTypeID']))
+{
+    $_SESSION['materialTypeID'] = $_POST['materialTypeID'];
+}
+
+if (isset($_POST['changeClass']))
+{
+    unset($_SESSION['classID']);
+    unset($_SESSION['materialTypeID']);
+}
+
+if (isset($_POST['changeMaterialType']))
+{
+    unset($_SESSION['materialTypeID']);
+}
+
+function checkPermissions($mysqli)
+{
+    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
+    {
+        viewModifyMaterialTypeForm($mysqli);
+    }
+    else
+    {
+        $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+    }
+}
+
 function viewModifyMaterialTypeForm($mysqli)
 {
 	echo '
@@ -8,20 +41,7 @@ function viewModifyMaterialTypeForm($mysqli)
                     <div class="panel panel-default">
                         <div class="panel-heading">
 	';
-						if (isset($_SESSION['invalidModify']))
-                        {
-                        	echo $_SESSION['invalidModify'];
-                            unset($_SESSION['invalidModify']);
-                        }
-						else if (isset($_SESSION['successModify']))
-						{
-                        	echo $_SESSION['successModify'];
-                            unset($_SESSION['successModify']);
-						}
-                        else
-                        {
-                        	echo 'Modify Material Type';
-                        }
+						displayPanelHeading("Modify Material Type");
 echo '
                         </div>
                         <!-- /.panel-heading -->
@@ -34,40 +54,54 @@ echo '
 
                             <!-- Tab panes -->
                             <div class="tab-content">
-                                <h4>Select Material Type</h4>
-                                <div class="tab-pane fade in active" id="modifyAssignment">';
-
-                            if (!isset($_POST['materialTypeID']))
+            ';
+                            if (!isset($_SESSION['classID']))
                             {
-                               if (getClassNumber($mysqli) > 1)
-                                {
-                                    getClassForm($mysqli);
-                                }
-                               else if ((isset($_POST['classID'])) && (!empty($_POST['classID']))) 
-                                {
-                                    $classID = $_POST['classID'];
-                                }
-                                else
-                                {
-                                    $classID = getClassID($mysqli);
-                                }
-                                    
-
-                                if (!empty($classID))
-                                {
-                                    chooseMaterialTypeForm($classID, $mysqli);
-                                }
+                                echo '<h4>Select Class</h4>';
                             }
                             else
                             {
-                                $materialTypeID = $_POST['materialTypeID'];
-                                $classID = $_POST['classID'];
+                                echo '<h4>Class Name: ' . getClassName($_SESSION['classID'], $mysqli) . '</h4>';
+                            }  
+            echo '
+                                <div class="tab-pane fade in active" id="modifyAssignment">';
 
-                                getMaterialTypeForm($classID, $materialTypeID, $mysqli);
+                            if ((getClassNumber($mysqli) > 1) && (!isset($_SESSION['classID'])))
+                            {
+                                getClassForm($mysqli);
+                            }
+                            else if (!isset($_SESSION['classID']))
+                            {
+                                $_SESSION['classID'] = getClassID($mysqli);
+                            }
+                                
+                            if ((isset($_SESSION['classID'])) && (!isset($_SESSION['materialTypeID'])))
+                            {
+                                chooseMaterialTypeForm($_SESSION['classID'], $mysqli);
+                            }
+
+                            if ((isset($_SESSION['classID'])) && (isset($_SESSION['materialTypeID'])))
+                            {
+                                getMaterialTypeForm($_SESSION['classID'], $_SESSION['materialTypeID'], $mysqli);
+                            }
+
+                            if (isset($_SESSION['classID']))
+                            {
+                                echo "<br>";
+                                generateFormStart("", "post"); 
+                                    generateFormButton("changeClass", "Change Class");
+                                generateFormEnd();
+                                echo "<br>";
+                            }
+
+                            if (isset($_SESSION['materialTypeID']))
+                            {
+                                generateFormStart("", "post"); 
+                                    generateFormButton("changeMaterialType", "Change Assignment Type");
+                                generateFormEnd();
+                                echo "<br>";
                             }
 echo '
-
-              
                                 </div>
                             </div>
                         </div>
@@ -91,43 +125,30 @@ function getMaterialTypeForm($classID, $materialTypeID, $mysqli)
 
         while ($stmt->fetch())
         {
-            echo '
-            <form action="../includes/teacherFunctions/modifyMaterialType" method="post" role="form">
-                <input type="hidden" name="materialTypeID" value="'. $materialTypeID .'">
-                <div class="form-group">
-                    <label>Assignment Type Name</label>
-                    <input class="form-control" name="materialName" value="'. $materialName .'">
-                </div>
-                <div class="form-group">
-                    <label>Assignment Type Weight</label>
-                    <input class="form-control" type="number" name="materialWeight" size="100" value="' . $materialWeight . '">
-                </div>
-                <button type="submit" class="btn btn-default">Modify Material Type</button>
-            </form>
-                ';
+            generateFormStart("../includes/teacherFunctions/modifyMaterialType", "post"); 
+                generateFormHiddenInput("materialTypeID", $materialTypeID);
+                generateFormInputDiv("Assignment Type Name", "text", "materialName", $materialName);
+                generateFormInputDiv("Assignment Type Weight", "number", "materialWeight", $materialWeight, NULL, NULL, NULL, "100");
+                generateFormButton("modifyMaterialTypeButton", "Modify Material Type");
+            generateFormEnd();
         }
     }
     else
     {
+        echo "No Material Types";
         return;
-    }
-
-   
+    } 
 }
 
 function chooseMaterialTypeForm($classID, $mysqli)
 {
-    echo '
-            <form action="" method="post" role="form">
-                <input type="hidden" name="classID" value="'. $classID .'">
-                <div class="form-group">
-                    <select class="form-control" name="materialTypeID">';
-                        getMaterialTypeList($classID, $mysqli);
-    echo '                                  
-                    </select> 
-                 </div>
-                <button type="submit" class="btn btn-default">Select Assignment Type</button>
-            </form>';
+    generateFormStart("", "post"); 
+        generateFormHiddenInput("classID", $classID);
+        generateFormStartSelectDiv(NULL, "materialTypeID");
+            getMaterialTypeList($classID, $mysqli);
+        generateFormEndSelectDiv();
+        generateFormButton("selectAssignmentTypeButton", "Select Assignment Type");
+    generateFormEnd();
 }
 
 function getMaterialTypeList($classID, $mysqli)
@@ -139,14 +160,21 @@ function getMaterialTypeList($classID, $mysqli)
         $stmt->bind_result($materialTypeID, $materialName);
         $stmt->store_result();
 
-        while ($stmt->fetch())
+        if ($stmt->num_rows > 0)
         {
-            echo "<option value='" . $materialTypeID . "'> $materialName </option>";
+            while ($stmt->fetch())
+            {
+                generateFormOption($materialTypeID, $materialName);
+            } 
+        }
+        else
+        {
+            generateFormOption(NULL, "No Material Items", "disabled", "selected");
         }
     }
     else
     {
-        return;
+        generateFormOption(NULL, "No Material Items", "disabled", "selected");
     }
 }
 
@@ -201,6 +229,21 @@ function getClassNumber($mysqli)
         {
             return 0;
         }
+    }
+}
+
+function getClassName($classID, $mysqli)
+{
+    if ($stmt = $mysqli->prepare("SELECT className FROM classes WHERE classID = ?"))
+    {
+        $stmt->bind_param('i', $classID);
+        $stmt->execute();
+        $stmt->bind_result($className);
+        $stmt->store_result();
+
+        $stmt->fetch();
+
+        return $className;
     }
 }
 

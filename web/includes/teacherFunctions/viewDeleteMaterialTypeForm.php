@@ -8,20 +8,8 @@ function viewDeleteMaterialTypeForm($mysqli)
                     <div class="panel panel-default">
                         <div class="panel-heading">
 	';
-						if (isset($_SESSION['invalidDelete']))
-                        {
-                        	echo $_SESSION['invalidDelete'];
-                            unset($_SESSION['invalidDelete']);
-                        }
-						else if (isset($_SESSION['successDelete']))
-						{
-                        	echo $_SESSION['successDelete'];
-                            unset($_SESSION['successDelete']);
-						}
-                        else
-                        {
-                        	echo 'Delete Material Type';
-                        }
+						// Call Session Message code and Panel Heading here
+                        displayPanelHeading("Delete Material Type");
 echo '
                         </div>
                         <!-- /.panel-heading -->
@@ -36,7 +24,6 @@ echo '
                             <div class="tab-content">
                                 <h4>Select Material Type</h4>
                                 <div class="tab-pane fade in active" id="modifyAssignment">';
-
                             
                                if (getClassNumber($mysqli) > 1)
                                 {
@@ -73,17 +60,13 @@ echo '
 
 function chooseMaterialTypeForm($classID, $mysqli)
 {
-    echo '
-            <form action="../includes/teacherFunctions/deleteMaterialType" method="post" role="form">
-                <input type="hidden" name="classID" value="'. $classID .'">
-                <div class="form-group">
-                    <select class="form-control" name="materialTypeID">';
-                        getMaterialTypeList($classID, $mysqli);
-    echo '                                  
-                    </select> 
-                 </div>
-                <button type="submit" class="btn btn-default">Delete Assignment Type</button>
-            </form>';
+    generateFormStart("../includes/teacherFunctions/deleteMaterialType", "post"); 
+        generateFormHiddenInput("classID", $classID);
+        generateFormStartSelectDiv(NULL, "materialTypeID");
+            getMaterialTypeList($classID, $mysqli);
+        generateFormEndSelectDiv();
+        generateFormButton("deleteAssignmentTypeButton", "Delete Assignment Type");
+    generateFormEnd();
 }
 
 function getMaterialTypeList($classID, $mysqli)
@@ -97,27 +80,24 @@ function getMaterialTypeList($classID, $mysqli)
 
         while ($stmt->fetch())
         {
-            echo "<option value='" . $materialTypeID . "'> $materialName </option>";
+            generateFormOption($materialTypeID, $materialName);
         }
     }
     else
     {
-        return;
+        generateFormOption(NULL, "No Assignment Types", "disabled", "selected");
     }
 }
 
 function getClassForm($mysqli)
 {
-    echo '
-            <form action="" method="post" role="form">
-                <div class="form-group">
-                    <select class="form-control" name="classID">';
-                        getClassList($mysqli);
-    echo '                                  
-                    </select> 
-                 </div>
-                <button type="submit" class="btn btn-default">Select Class</button>
-            </form>';
+
+    generateFormStart("", "post"); 
+        generateFormStartSelectDiv(NULL, "classID");
+            getClassList($mysqli);
+        generateFormEndSelectDiv();
+        generateFormButton("selectClassButton", "Select Class");
+    generateFormEnd();
 }
 
 function getClassList($mysqli)
@@ -133,8 +113,12 @@ function getClassList($mysqli)
 
         while($stmt->fetch())
         {
-            echo "<option value='" . $classID . "'>$className</option>";
+            generateFormOption($classID, $className);
         }
+    }
+    else
+    {
+        generateFormOption(NULL, "No Classes", "disabled", "selected");
     }
 }
 
@@ -157,33 +141,6 @@ function getClassNumber($mysqli)
         {
             return 0;
         }
-    }
-}
-
-function getAssignmentTypes($classID, $materialTypeID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT materialTypeID, materialName FROM materialType WHERE classID = ?"))
-    {
-        $stmt->bind_param('i', $classID);
-        $stmt->execute();
-        $stmt->bind_result($dbMaterialTypeID, $dbMaterialName);
-        $stmt->store_result();
-
-        while ($stmt->fetch())
-        {
-            if ($materialTypeID == $dbMaterialTypeID)
-            {
-                echo "<option value='" . $dbMaterialTypeID . "' selected> $dbMaterialName </option>";
-            }
-            else
-            {
-                echo "<option value='" . $dbMaterialTypeID . "'> $dbMaterialName </option>";
-            }
-        }
-    }
-    else
-    {
-        return;
     }
 }
 

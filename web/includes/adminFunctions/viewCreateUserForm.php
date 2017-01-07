@@ -34,7 +34,7 @@ echo '
                                 </li>
                                 <li><a href="#teacher" data-toggle="tab">Teacher</a>
                                 </li>
-                                <li><a href="#guardian" data-toggle="tab">Parent/Guardian</a>
+                                <li><a href="#parent" data-toggle="tab">Parent</a>
                                 </li>
                                 <li><a href="#student" data-toggle="tab">Student</a>
                                 </li>
@@ -43,215 +43,36 @@ echo '
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="administrator">
-                                    <h4>Create Administrator Account</h4>
-                                    <form action="../includes/adminFunctions/createUser" method="post" role="form">
-										<input type="hidden" name="roleID" value="1">
-                                        <div class="form-group">
-                                            <input class="form-control" name="adminEmail" placeholder="Email">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="adminFirstName" placeholder="First Name">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="adminLastName" placeholder="Last Name">
-                                        </div>
-										<div class="form-group">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" checked="checked" name="modProfile" value="modProfile">Modify Profiles
-                                                </label>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" checked="checked" name="modClassList" value="modClassList">Modify Class Lists
-                                                </label>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" checked="checked" name="viewAllGrades" value="viewAllGrades">View all Grades
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-default">Create Administrator</button>
-                                    </form>
+                                    <br>
+            ';
+                                    createAdminForm();
+                                    
+    echo '
                                 </div>
                                 <div class="tab-pane fade" id="schoolAdmin">
-                                    <h4>School Administrator</h4>
-                                    <form action="../includes/adminFunctions/createUser" method="post" role="form">
-										<input type="hidden" name="roleID" value="2">
-                                        <div class="form-group">
-                                            <input class="form-control" name="schoolAdminEmail" placeholder="Email">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="schoolAdminFirstName" placeholder="First Name">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="schoolAdminLastName" placeholder="Last Name">
-                                        </div>
-										<div class="form-group">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" name="modProfile" value="modProfile">Modify Profiles
-                                                </label>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" name="modClassList" value="modClassList">Modify Class Lists
-                                                </label>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" name="viewAllGrades" value="viewAllGrades">View all Grades
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-default">Create School Admin</button>
-                                    </form>
+                                <br>
+        ';
+                                    createSchoolAdminForm();
+        echo '
                                 </div>
                                 <div class="tab-pane fade" id="teacher">
-                                    <h4>Teacher</h4>
-                                    <form action="../includes/adminFunctions/createUser" method="post" role="form">
-										<input type="hidden" name="roleID" value="3">
-                                        <div class="form-group">
-                                            <input class="form-control" name="teacherEmail" placeholder="Email">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="teacherFirstName" placeholder="First Name">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="teacherLastName" placeholder="Last Name">
-                                        </div>
-										<div class="form-group">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" name="modProfile" value="modProfile">Modify Profiles
-                                                </label>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" name="modClassList" value="modClassList">Modify Class Lists
-                                                </label>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" name="viewAllGrades" value="viewAllGrades">View all Grades
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-default">Create Teacher</button>
-                                    </form>
+                                <br>
+            ';
+                                    createTeacherForm();
+        echo '
                                 </div>
-                                <div class="tab-pane fade" id="guardian">
-                                    <h4>Parent/Guardian</h4>
-                                    <form action="../includes/adminFunctions/createUser" method="post" role="form">
-										<input type="hidden" name="roleID" value="4">
-										<input type="hidden" name="modProfile" value="0">
-										<input type="hidden" name="modClassList" value="0">
-										<input type="hidden" name="viewAllGrades" value="0">
-                                        <div class="form-group">
-                                            <input class="form-control" name="guardianEmail" placeholder="Email">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="guardianFirstName" placeholder="First Name">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="guardianLastName" placeholder="Last Name">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="guardianAddress" placeholder="Address">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="guardianCity" placeholder="City">
-                                        </div>
-                                        <div class="form-group">
-					    					<select name="guardianState" class="form-control">
-												<option value="AL">Alabama</option>
-												<option value="AK">Alaska</option>
-												<option value="AZ">Arizona</option>
-												<option value="AR">Arkansas</option>
-												<option value="CA">California</option>
-												<option value="CO">Colorado</option>
-												<option value="CT">Connecticut</option>
-												<option value="DE">Delaware</option>
-												<option value="DC">District of Columbia</option>
-												<option value="FL">Florida</option>
-												<option value="GA">Georgia</option>
-												<option value="HI">Hawaii</option>
-												<option value="ID">Idaho</option>
-												<option value="IL">Illinois</option>
-												<option value="IN">Indiana</option>
-												<option value="IA">Iowa</option>
-												<option value="KS">Kansas</option>
-												<option value="KY">Kentucky</option>
-												<option value="LA">Louisiana</option>
-												<option value="ME">Maine</option>
-												<option value="MD">Maryland</option>
-												<option value="MA">Massachusetts</option>
-												<option value="MI">Michigan</option>
-												<option value="MN">Minnesota</option>
-												<option value="MS">Mississippi</option>
-												<option value="MO">Missouri</option>
-												<option value="MT">Montana</option>
-												<option value="NE">Nebraska</option>
-												<option value="NV">Nevada</option>
-												<option value="NH">New Hampshire</option>
-												<option value="NJ">New Jersey</option>
-												<option value="NM">New Mexico</option>
-												<option value="NY">New York</option>
-												<option value="NC">North Carolina</option>
-												<option value="ND">North Dakota</option>
-												<option value="OH">Ohio</option>
-												<option value="OK">Oklahoma</option>
-												<option value="OR">Oregon</option>
-												<option value="PA">Pennsylvania</option>
-												<option value="RI">Rhode Island</option>
-												<option value="SC">South Carolina</option>
-												<option value="SD">South Dakota</option>
-												<option value="TN">Tennessee</option>
-												<option value="TX">Texas</option>
-												<option value="UT">Utah</option>
-												<option value="VT">Vermont</option>
-												<option value="VA">Virginia</option>
-												<option value="WA">Washington</option>
-												<option value="WV">West Virginia</option>
-												<option value="WI">Wisconsin</option>
-												<option value="WY">Wyoming</option>
-											</select>
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="guardianZip" placeholder="Zip">
-                                        </div>
-                                        <button type="submit" class="btn btn-default">Create Parent/Guardian</button>
-                                    </form>
+                                <div class="tab-pane fade" id="parent">
+                                <br>
+            ';
+                                    createParentForm();
+        echo '
+                                    
                                 </div>
                                 <div class="tab-pane fade" id="student">
-                                    <h4>Student</h4>
-                                    <form action="../includes/adminFunctions/createUser" method="post" role="form">
-										<input type="hidden" name="roleID" value="5">
-										<input type="hidden" name="modProfile" value="0">
-										<input type="hidden" name="modClassList" value="0">
-										<input type="hidden" name="viewAllGrades" value="0">
-                                        <div class="form-group">
-                                            <input class="form-control" name="studentEmail" placeholder="Email">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="studentFirstName" placeholder="First Name">
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="form-control" name="studentLastName" placeholder="Last Name">
-                                        </div>
-                                        <div class="form-group">
-					    					<select name="studentGender" class="form-control">
-												<option value="M">Male</option>
-												<option value="F">Female</option>
-											</select>
-                                        </div>
-                        ';
-                                        getGradeLevel();
-                        echo '
-                                        
-                                        <button type="submit" class="btn btn-default">Create Student</button>
-                                    </form>
+                                <br>
+            ';
+                                    createStudentForm();
+        echo '
                                 </div>
                             </div>
                         </div>
@@ -264,40 +85,142 @@ echo '
 
 }
 
-function getGradeLevel()
+function createAdminForm()
 {
-    echo '
-            <div class="form-group">
-                <label>Class Grade Level</label>
-                <select class="form-control" name="studentGradeLevel">
-        ';
-            for ($i = 1; $i <= 12; $i++)
-            {
-                echo "<option value='" . $i . "'>$i</option>";
-            }
-    echo '
-                </select>
-            </div>
-        ';
+    generateFormStart("../includes/adminFunctions/createUser", "post"); 
+        generateFormHiddenInput("roleID", "1");
+        generateFormInputDiv(NULL, "email", "adminEmail", NULL, NULL, NULL, NULL, "Email");
+        generateFormInputDiv(NULL, "text", "adminFirstName", NULL, NULL, NULL, NULL, "First Name");
+        generateFormInputDiv(NULL, "text", "adminLastName", NULL, NULL, NULL, NULL, "Last Name");
+        generateFormCheckboxDiv("checked", "modProfile", "modProfile", "Modify Profiles");
+        generateFormCheckboxDiv("checked", "modClassList", "modClassList", "Modify Class Lists");
+        generateFormCheckboxDiv("checked", "viewAllGrades", "viewAllGrades", "View All Grades");
+        generateFormButton(NULL, "Create Administrator");
+    generateFormEnd();
 }
 
-function getUserRoles($mysqli)
+function createSchoolAdminForm()
 {
-    // This function gets the number of classes
-        if ($stmt = $mysqli->prepare("SELECT roleName FROM roles"))
-        {
-            $stmt->execute();
-			$stmt->bind_result($roleName);
-            $stmt->store_result();
-			
-			while($stmt->fetch())
-			{
-				echo "<option>$roleName</option>";
-			}
-        }
-        else
-        {
-            return 0;
-        }
+    generateFormStart("../includes/adminFunctions/createUser", "post"); 
+        generateFormHiddenInput("roleID", "2");
+        generateFormInputDiv(NULL, "email", "schoolAdminEmail", NULL, NULL, NULL, NULL, "Email");
+        generateFormInputDiv(NULL, "text", "schoolAdminFirstName", NULL, NULL, NULL, NULL, "First Name");
+        generateFormInputDiv(NULL, "text", "schoolAdminLastName", NULL, NULL, NULL, NULL, "Last Name");
+        generateFormCheckboxDiv(NULL, "modProfile", "modProfile", "Modify Profiles");
+        generateFormCheckboxDiv(NULL, "modClassList", "modClassList", "Modify Class Lists");
+        generateFormCheckboxDiv(NULL, "viewAllGrades", "viewAllGrades", "View All Grades");
+        generateFormButton(NULL, "Create School Administrator");
+    generateFormEnd();
 }
+
+function createTeacherForm()
+{
+    generateFormStart("../includes/adminFunctions/createUser", "post"); 
+        generateFormHiddenInput("roleID", "3");
+        generateFormInputDiv(NULL, "email", "teacherEmail", NULL, NULL, NULL, NULL, "Email");
+        generateFormInputDiv(NULL, "text", "teacherFirstName", NULL, NULL, NULL, NULL, "First Name");
+        generateFormInputDiv(NULL, "text", "teacherLastName", NULL, NULL, NULL, NULL, "Last Name");
+        generateFormCheckboxDiv(NULL, "modProfile", "modProfile", "Modify Profiles");
+        generateFormCheckboxDiv(NULL, "modClassList", "modClassList", "Modify Class Lists");
+        generateFormCheckboxDiv(NULL, "viewAllGrades", "viewAllGrades", "View All Grades");
+        generateFormButton(NULL, "Create Teacher");
+    generateFormEnd();
+}
+
+function createParentForm()
+{
+    generateFormStart("../includes/adminFunctions/createUser", "post"); 
+        generateFormHiddenInput("roleID", "4");
+        generateFormHiddenInput("modeProfile", "0");
+        generateFormHiddenInput("modClassList", "0");
+        generateFormHiddenInput("viewAllGrades", "0");
+        generateFormInputDiv(NULL, "email", "parentEmail", NULL, NULL, NULL, NULL, "Email");
+        generateFormInputDiv(NULL, "text", "parentFirstName", NULL, NULL, NULL, NULL, "First Name");
+        generateFormInputDiv(NULL, "text", "parentLastName", NULL, NULL, NULL, NULL, "Last Name");
+        generateFormInputDiv(NULL, "text", "parentAddress", NULL, NULL, NULL, NULL, "Address");
+        generateFormInputDiv(NULL, "text", "parentyCity", NULL, NULL, NULL, NULL, "City");
+        generateFormStartSelectDiv(NULL, "parentState");
+            // There is no good way to do this that I know...
+            echo '
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="CA">California</option>
+                    <option value="CO">Colorado</option>
+                    <option value="CT">Connecticut</option>
+                    <option value="DE">Delaware</option>
+                    <option value="DC">District of Columbia</option>
+                    <option value="FL">Florida</option>
+                    <option value="GA">Georgia</option>
+                    <option value="HI">Hawaii</option>
+                    <option value="ID">Idaho</option>
+                    <option value="IL">Illinois</option>
+                    <option value="IN">Indiana</option>
+                    <option value="IA">Iowa</option>
+                    <option value="KS">Kansas</option>
+                    <option value="KY">Kentucky</option>
+                    <option value="LA">Louisiana</option>
+                    <option value="ME">Maine</option>
+                    <option value="MD">Maryland</option>
+                    <option value="MA">Massachusetts</option>
+                    <option value="MI">Michigan</option>
+                    <option value="MN">Minnesota</option>
+                    <option value="MS">Mississippi</option>
+                    <option value="MO">Missouri</option>
+                    <option value="MT">Montana</option>
+                    <option value="NE">Nebraska</option>
+                    <option value="NV">Nevada</option>
+                    <option value="NH">New Hampshire</option>
+                    <option value="NJ">New Jersey</option>
+                    <option value="NM">New Mexico</option>
+                    <option value="NY">New York</option>
+                    <option value="NC">North Carolina</option>
+                    <option value="ND">North Dakota</option>
+                    <option value="OH">Ohio</option>
+                    <option value="OK">Oklahoma</option>
+                    <option value="OR">Oregon</option>
+                    <option value="PA">Pennsylvania</option>
+                    <option value="RI">Rhode Island</option>
+                    <option value="SC">South Carolina</option>
+                    <option value="SD">South Dakota</option>
+                    <option value="TN">Tennessee</option>
+                    <option value="TX">Texas</option>
+                    <option value="UT">Utah</option>
+                    <option value="VT">Vermont</option>
+                    <option value="VA">Virginia</option>
+                    <option value="WA">Washington</option>
+                    <option value="WV">West Virginia</option>
+                    <option value="WI">Wisconsin</option>
+                    <option value="WY">Wyoming</option>
+                ';
+        generateFormEndSelectDiv();
+        generateFormButton(NULL, "Create Parent");
+    generateFormEnd();
+}
+
+function createStudentForm()
+{
+    generateFormStart("../includes/adminFunctions/createUser", "post"); 
+        generateFormHiddenInput("roleID", "5");
+        generateFormHiddenInput("modProfile", "0");
+        generateFormHiddenInput("modClassList", "0");
+        generateFormHiddenInput("viewAllGrades", "0");
+        generateFormInputDiv(NULL, "email", "studentEmail", NULL, NULL, NULL, NULL, "Email");
+        generateFormInputDiv(NULL, "text", "studentFirstName", NULL, NULL, NULL, NULL, "First Name");
+        generateFormInputDiv(NULL, "text", "studentLastName", NULL, NULL, NULL, NULL, "Last Name");
+        generateFormStartSelectDiv("Gender", "studentGender");
+            generateFormOption("M", "Male");
+            generateFormOption("F", "Female");
+        generateFormEndSelectDiv();
+        generateFormStartSelectDiv("Grade Level", "studentGradeLevel");
+            for ($i = 1; $i <= 12; $i++)
+            {
+                generateFormOption($i, $i);
+            }
+        generateFormEndSelectDiv();
+        generateFormButton(NULL, "Create Student");
+    generateFormEnd();
+}
+
 ?>
