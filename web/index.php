@@ -3,13 +3,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="refresh" content="0;url=pages/index">
+<meta http-equiv="refresh" content="0;url=pages/login">
 <title><?php echo aliasOpenEasySIS; ?></title>
 <script language="javascript">
-    window.location.href = "pages/index"
+    window.location.href = "pages/login"
 </script>
 </head>
 <body>
-Go to <a href="pages/index">/pages/index</a>
+Go to <a href="pages/index">/pages/login</a>
 </body>
 </html>

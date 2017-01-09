@@ -9,6 +9,8 @@ function checkPermissions($mysqli)
     else
     {
         $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+        // Call Session Message code and Panel Heading here
+        displayPanelHeading();
     }
 }
 
@@ -67,7 +69,7 @@ function getAnnouncementsForm($mysqli)
             generateFormStartSelectDiv(NULL, "announcementID");
             if ($stmt->num_rows == 0)
             {
-                generateFormOption(NULL, NULL, "disabled");
+                generateFormOption(NULL, "No announcements to delete", "disabled", "selected");
             }
             while($stmt->fetch())
             { 
@@ -79,7 +81,7 @@ function getAnnouncementsForm($mysqli)
     }   
     else
     {   
-    	return;
+    	generateFormOption(NULL, "No announcements to delete", "disabled", "selected");
     }   
 }
 

@@ -1,5 +1,19 @@
 <?php
 
+function checkPermissions($mysqli)
+{
+    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
+    {
+        viewDeleteMaterialTypeForm($mysqli);
+    }
+    else
+    {
+        $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+        // Call Session Message code and Panel Heading here
+        displayPanelHeading();
+    }
+}
+
 function viewDeleteMaterialTypeForm($mysqli)
 {
 	echo '

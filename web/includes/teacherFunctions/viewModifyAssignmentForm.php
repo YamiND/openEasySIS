@@ -1,5 +1,26 @@
 <?php
 
+if (isset($_POST['classID']))
+{
+    $_SESSION['classID'] = $_POST['classID'];
+}
+
+if (isset($_POST['assignmentID']))
+{
+    $_SESSION['assignmentID'] = $_POST['assignmentID'];
+}
+
+if (isset($_POST['changeClass']))
+{
+    unset($_SESSION['classID']);
+    unset($_SESSION['assignmentID']);
+}
+
+if (isset($_POST['changeMaterial']))
+{
+    unset($_SESSION['assignmentID']);
+}
+
 function checkPermissions($mysqli)
 {
     if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
@@ -9,6 +30,8 @@ function checkPermissions($mysqli)
     else
     {
         $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+        // Call Session Message code and Panel Heading here
+        displayPanelHeading();
     }
 }
 
@@ -36,36 +59,42 @@ echo '
                                 <h4>Modify Assignment Information</h4>
                                 <div class="tab-pane fade in active" id="modifyAssignment">';
 
-                            if (!isset($_POST['assignmentID']))
+                             if ((getClassNumber($mysqli) > 1) && (!isset($_SESSION['classID'])))
                             {
-                               if (getClassNumber($mysqli) > 1)
-                                {
-                                    getClassForm($mysqli);
-                                }
-                               else if ((isset($_POST['classID'])) && (!empty($_POST['classID']))) 
-                                {
-                                    $classID = $_POST['classID'];
-                                }
-                                else
-                                {
-                                    $classID = getClassID($mysqli);
-                                }
-                                    
-
-                                if (!empty($classID))
-                                {
-                                    chooseAssignmentForm($classID, $mysqli);
-                                }
+                                getClassForm($mysqli);
                             }
-                            else
+                            else if (!isset($_SESSION['classID']))
                             {
-                                $assignmentID = $_POST['assignmentID'];
-                                $classID = $_POST['classID'];
-                                getAssignmentForm($classID, $assignmentID, $mysqli);
+                                $_SESSION['classID'] = getClassID($mysqli);
                             }
-echo '
+                                
+                            if ((isset($_SESSION['classID'])) && (!isset($_SESSION['assignmentID'])))
+                            {
+                                chooseAssignmentForm($_SESSION['classID'], $mysqli);
+                            }
 
-              
+                            if ((isset($_SESSION['classID'])) && (isset($_SESSION['assignmentID'])))
+                            {
+                                getAssignmentForm($_SESSION['classID'], $_SESSION['assignmentID'], $mysqli);
+                            }
+
+                            if (isset($_SESSION['classID']))
+                            {
+                                echo "<br>";
+                                generateFormStart("", "post"); 
+                                    generateFormButton("changeClass", "Change Class");
+                                generateFormEnd();
+                                echo "<br>";
+                            }
+
+                            if (isset($_SESSION['assignmentID']))
+                            {
+                                generateFormStart("", "post"); 
+                                    generateFormButton("changeMaterial", "Change Assignment");
+                                generateFormEnd();
+                                echo "<br>";
+                            }
+    echo '
                                 </div>
                             </div>
                         </div>
@@ -74,8 +103,7 @@ echo '
                     <!-- /.panel -->
                 </div>
 			</div>
-';
-
+        ';
 }
 
 function getAssignmentForm($classID, $assignmentID, $mysqli)
@@ -89,54 +117,67 @@ function getAssignmentForm($classID, $assignmentID, $mysqli)
 
         while ($stmt->fetch())
         {
-            echo '
-            <form action="../includes/teacherFunctions/modifyAssignment" method="post" role="form">
-                <input type="hidden" name="materialID" value="'. $assignmentID .'">
-                <div class="form-group">
-                    <label>Assignment Name</label>
-                    <input class="form-control" name="materialName" value="'. $materialName .'">
-                </div>
-                <div class="form-group">
-                    <label>Assignment Points Possible</label>
-                    <input class="form-control" type="number" name="materialPointsPossible" size="100" value="' . $materialPointsPossible . '">
-                </div>
-                <div class="form-group">
-                    <label>Assignment Due Date</label>
-                    <input class="form-control" type="date" name="materialDueDate" value="'. $materialDueDate .'">
-                </div>
-                <div class="form-group">
-                    <label>Type of Assignment</label>
-                    <select class="form-control" name="materialTypeID">';
-                        getAssignmentTypes($classID, $materialTypeID, $mysqli);
-            echo '
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-default">Modify Assignment</button>
-            </form>
-                ';
+            generateFormStart("../includes/teacherFunctions/modifyAssignment", "post"); 
+                generateFormHiddenInput("materialID", $assignmentID);
+                generateFormInputDiv("Assignment Name", "text", "materialName", $materialName);
+                generateFormInputDiv("Assignment Points Possible", "number", "materialPointsPossible", $materialPointsPossible, NULL, NULL, NULL, NULL, "100");
+                generateFormInputDiv("Assignment Name", "date", "materialDueDate", $materialDueDate);
+                generateFormStartSelectDiv(NULL, "materialTypeID");
+                    getAssignmentTypes($classID, $materialTypeID, $mysqli);
+                generateFormEndSelectDiv();
+                generateFormButton("modifyAssignmentButton", "Modify Assignment");
+            generateFormEnd();
         }
     }
     else
     {
         return;
-    }
+    }  
+}
 
-   
+function getAssignmentTypes($classID, $materialTypeID, $mysqli)
+{
+    if ($stmt = $mysqli->prepare("SELECT materialTypeID, materialName FROM materialType WHERE classID = ?"))
+    {
+        $stmt->bind_param('i', $classID);
+        $stmt->execute();
+        $stmt->bind_result($dbMaterialTypeID, $dbMaterialName);
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0)
+        {
+            while ($stmt->fetch())
+            {
+                if ($materialTypeID == $dbMaterialTypeID)
+                {
+                     generateFormOption($dbMaterialTypeID, $dbMaterialName, NULL, "selected");
+                }
+                else
+                {
+                    generateFormOption($dbMaterialTypeID, $dbMaterialName);
+                }
+            }
+        }
+        else
+        {
+            generateFormOption(NULL, "No Assignments", "disabled", "selected");
+        }
+    }
+    else
+    {
+        generateFormOption(NULL, "No Assignments", "disabled", "selected");
+    }
 }
 
 function chooseAssignmentForm($classID, $mysqli)
 {
-    echo '
-            <form action="" method="post" role="form">
-                <input type="hidden" name="classID" value="'. $classID .'">
-                <div class="form-group">
-                    <select class="form-control" name="assignmentID">';
-                        getAssignmentList($classID, $mysqli);
-    echo '                                  
-                    </select> 
-                 </div>
-                <button type="submit" class="btn btn-default">Select Assignment</button>
-            </form>';
+    generateFormStart("", "post"); 
+        generateFormHiddenInput("classID", $classID);
+        generateFormStartSelectDiv(NULL, "assignmentID");
+            getAssignmentList($classID, $mysqli);
+        generateFormEndSelectDiv();
+        generateFormButton("selectAssignmentButton", "Select Assignment");
+    generateFormEnd();
 }
 
 function getAssignmentList($classID, $mysqli)
@@ -148,29 +189,32 @@ function getAssignmentList($classID, $mysqli)
         $stmt->bind_result($materialID, $materialName);
         $stmt->store_result();
 
-        while ($stmt->fetch())
+        if ($stmt->num_rows > 0)
         {
-            echo "<option value='" . $materialID . "'> $materialName </option>";
+            while ($stmt->fetch())
+            {
+                generateFormOption($materialID, $materialName);
+            }
+        }
+        else
+        {
+            generateFormOption(NULL, "No Assignments", "disabled", "selected");
         }
     }
     else
     {
-        return;
+        generateFormOption(NULL, "No Assignments", "disabled", "selected");
     }
 }
 
 function getClassForm($mysqli)
 {
-    echo '
-            <form action="" method="post" role="form">
-                <div class="form-group">
-                    <select class="form-control" name="classID">';
-                        getClassList($mysqli);
-    echo '                                  
-                    </select> 
-                 </div>
-                <button type="submit" class="btn btn-default">Select Class</button>
-            </form>';
+    generateFormStart("", "post"); 
+        generateFormStartSelectDiv(NULL, "classID");
+            getClassList($mysqli);
+        generateFormEndSelectDiv();
+        generateFormButton("selectClassButton", "Select Classß");
+    generateFormEnd();
 }
 
 function getClassList($mysqli)
@@ -184,10 +228,21 @@ function getClassList($mysqli)
         $stmt->bind_result($classID, $className);
         $stmt->store_result();
 
-        while($stmt->fetch())
+        if ($stmt->num_rows > 0)
         {
-            echo "<option value='" . $classID . "'>$className</option>";
+            while($stmt->fetch())
+            {
+                generateFormOption($classID, $className);
+            }
         }
+        else
+        {
+            generateFormOption(NULL, "No Classes", "disabled", "selected");
+        }
+    }
+    else
+    {
+        generateFormOption(NULL, "No Classes", "disabled", "selected");
     }
 }
 
@@ -210,33 +265,6 @@ function getClassNumber($mysqli)
         {
             return 0;
         }
-    }
-}
-
-function getAssignmentTypes($classID, $materialTypeID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT materialTypeID, materialName FROM materialType WHERE classID = ?"))
-    {
-        $stmt->bind_param('i', $classID);
-        $stmt->execute();
-        $stmt->bind_result($dbMaterialTypeID, $dbMaterialName);
-        $stmt->store_result();
-
-        while ($stmt->fetch())
-        {
-            if ($materialTypeID == $dbMaterialTypeID)
-            {
-                echo "<option value='" . $dbMaterialTypeID . "' selected> $dbMaterialName </option>";
-            }
-            else
-            {
-                echo "<option value='" . $dbMaterialTypeID . "'> $dbMaterialName </option>";
-            }
-        }
-    }
-    else
-    {
-        return;
     }
 }
 

@@ -1,56 +1,46 @@
 <?php
 
+function checkPermissions($mysqli)
+{
+    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
+    {
+        viewUserPasswordResetForm($mysqli);
+    }
+    else
+    {
+        $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+        // Call Session Message code and Panel Heading here
+        displayPanelHeading();
+    }
+}
+
 function viewUserPasswordResetForm($mysqli)
 {
-    echo ' <!-- /.col-lg-4 -->
+    echo ' 
+            <!-- /.col-lg-4 -->
                 <div class="col-lg-4">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-						';  
-                        if (isset($_SESSION['fail']))
-                        {   
-                            echo $_SESSION['fail'];
-                            unset($_SESSION['fail']);
-                        }   
-                        else if (isset($_SESSION['success']))
-						{
-                            echo $_SESSION['success'];
-                            unset($_SESSION['success']);
-						}
-                        else
-                        {   
-                        	echo 'Reset Password';
-                        }   
+		';  
+                        displayPanelHeading("Reset a Password");  
 	echo '  
                         </div>
                         <div class="panel-body">
-            <form action="../includes/userFunctions/userPasswordReset" method="post" name="login_form" role="form">
-            <input type="hidden" name="userEmail" value="' . $_SESSION["userEmail"] . '"> 
-                            <fieldset>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="Enter old Password" name="oldPassword" type="password" autofocus>
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="Enter new Password" name="newPassword" type="password" value="">
-                                </div>
-                <div class="form-group">
-                                    <input class="form-control" placeholder="Repeat new Password" name="repeatPassword" type="password" value="">
-                                </div>
 
-                                <!-- I may implement a remember me feature in the future -->
-                              <!--  <div class="checkbox">
-                                    <label>
-                                        <input name="remember" type="checkbox" value="Remember Me">Remember Me                                    </label>
-                                </div>-->
-                                <!-- Change this to a button or input when using this as a form -->
-<!--                                <a href="index.html" class="btn btn-lg btn-success btn-block">Login</a> -->
-                                <input type="Submit" class="btn btn-lg btn-success btn-block" 
-                                                   value="Reset Password" />
-                            </fieldset>
-                        </form> 
+        ';
+            generateFormStart("../includes/userFunctions/userPasswordReset", "post"); 
+                generateFormHiddenInput("userEmail", $_SESSION["userEmail"]);
+                generateFormInputDiv("Old Password", "password", "oldPassword");
+                generateFormInputDiv("New Password", "password", "newPassword");
+                generateFormInputDiv("Repeat New Password", "password", "repeatPassword");
+                generateFormButton("resetPasswordButton", "Reset Password");
+            generateFormEnd();
+    echo '
                         </div>
                     </div>
                 </div>
-                <!-- /.col-lg-4 -->';
+                <!-- /.col-lg-4 -->
+        ';
 }
+
 ?>

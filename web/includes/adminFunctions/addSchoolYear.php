@@ -24,8 +24,6 @@ else
 {
    	$_SESSION['fail'] = 'School Year could not be added, invalid permissions';
    	header('Location: ../../pages/addSchoolYear');
-
-	return;
 }
 
 function addSchoolYear($mysqli)
