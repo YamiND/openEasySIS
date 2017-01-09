@@ -52,19 +52,8 @@ if (!isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail'])):
 				<div class="form-group">
 				    <a href="forgotPassword">Forgot your password?</a>
 				</div>
-				<!-- I may implement a remember me feature in the future -->
-                              <!--  <div class="checkbox">
-                                    <label>
-                                        <input name="remember" type="checkbox" value="Remember Me">Remember Me
-                                    </label>
-                                </div>-->
-                                <!-- Change this to a button or input when using this as a form -->
-<!--                                <a href="index.html" class="btn btn-lg btn-success btn-block">Login</a> -->
 				<input type="Submit" class="btn btn-lg btn-success btn-block" 
                                                    value="Sign in" />
-			<!--	<input type="button" class="btn btn-lg btn-success btn-block" 
-                                                   value="Sign in" 
-                                                   onclick="formhash(this.form, this.form.password);" />-->
                             </fieldset>
                         </form>
                     </div>
@@ -81,7 +70,7 @@ if (!isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail'])):
 
 else:
 //TODO: Update this with a better page
-$url = "index";
+$url = "../pages/viewProfile";
 header("Location:$url");
 return;
 endif;

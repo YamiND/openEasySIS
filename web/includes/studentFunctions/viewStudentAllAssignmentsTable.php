@@ -9,6 +9,8 @@ function checkPermissions($mysqli)
     else
     {
         $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+        // Call Session Message code and Panel Heading here
+        displayPanelHeading();
     }
 }
 

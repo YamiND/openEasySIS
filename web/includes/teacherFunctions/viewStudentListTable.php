@@ -1,5 +1,19 @@
 <?php 
 
+function checkPermissions($mysqli)
+{
+    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
+    {
+        viewStudentList($mysqli);
+    }
+    else
+    {
+        $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+        // Call Session Message code and Panel Heading here
+        displayPanelHeading();
+    }
+}
+
 function viewStudentList($mysqli)
 {
 
@@ -66,10 +80,7 @@ function viewStudentList($mysqli)
     {
         echo "You are not a teacher!";
         return;
-    }
-
-    
-           
+    }   
 }
 
 function getStudentID($classID, $mysqli)

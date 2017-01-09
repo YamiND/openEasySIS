@@ -4,20 +4,14 @@ include_once '../functions.php';
 
 sec_session_start(); // Our custom secure way of starting a PHP session.
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
 {
 	modifySchoolYear($mysqli);
 }
 else
 {
-   	$_SESSION['invalidModify'] = 'School Year could not be updated, not correct permissions';
+   	$_SESSION['fail'] = 'School Year could not be updated, not correct permissions';
    	header('Location: ../../pages/modifySchoolYear');
-
-	return;
 }
 
 function modifySchoolYear($mysqli)
@@ -44,14 +38,14 @@ function modifySchoolYear($mysqli)
             $stmt->bind_param('ssssssssssssi', $fallSemesterStart, $fallSemesterEnd, $springSemesterStart, $springSemesterEnd, $quarterOneStart, $quarterOneEnd, $quarterTwoStart, $quarterTwoEnd, $quarterThreeStart, $quarterThreeEnd, $schoolYearStart, $schoolYearEnd, $schoolYearID);
             $stmt->execute();
            
-            $_SESSION['successModify'] = "School Year Modified Successfully";
+            $_SESSION['success'] = "School Year Modified Successfully";
             header('Location: ../../pages/modifySchoolYear');
         }
     }
     else
     {
         // The correct POST variables were not sent to this page.
-        $_SESSION['invalidModify'] = 'School Year could not be modified, please check out all fields';
+        $_SESSION['fail'] = 'School Year could not be modified, please check out all fields';
         header('Location: ../../pages/modifySchoolYear');
     }
 }

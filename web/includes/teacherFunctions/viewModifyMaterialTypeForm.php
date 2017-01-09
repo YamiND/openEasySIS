@@ -30,6 +30,8 @@ function checkPermissions($mysqli)
     else
     {
         $_SESSION['fail'] = 'Invalid Access, you do not have permission';
+        // Call Session Message code and Panel Heading here
+        displayPanelHeading();
     }
 }
 
@@ -180,16 +182,12 @@ function getMaterialTypeList($classID, $mysqli)
 
 function getClassForm($mysqli)
 {
-    echo '
-            <form action="" method="post" role="form">
-                <div class="form-group">
-                    <select class="form-control" name="classID">';
-                        getClassList($mysqli);
-    echo '                                  
-                    </select> 
-                 </div>
-                <button type="submit" class="btn btn-default">Select Class</button>
-            </form>';
+    generateFormStart("", "post"); 
+        generateFormStartSelectDiv(NULL, "classID");
+            getClassList($mysqli);
+        generateFormEndSelectDiv();
+        generateFormButton("selectAssignmentTypeButton", "Select Class");
+    generateFormEnd();
 }
 
 function getClassList($mysqli)
@@ -203,10 +201,21 @@ function getClassList($mysqli)
         $stmt->bind_result($classID, $className);
         $stmt->store_result();
 
-        while($stmt->fetch())
+        if ($stmt->num_rows > 0)
         {
-            echo "<option value='" . $classID . "'>$className</option>";
+            while($stmt->fetch())
+            {
+                generateFormOption($classID, $className);
+            }
         }
+        else
+        {
+            generateFormOption(NULL, "No Classes", "disabled", "selected");
+        }
+    }
+    else
+    {
+        generateFormOption(NULL, "No Classes", "disabled", "selected");
     }
 }
 
