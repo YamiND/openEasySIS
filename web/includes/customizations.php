@@ -3,5 +3,5 @@
  * These are customizations for each installation
  */  
 
-define("aliasOpenEasySIS", "openEasySIS"); // The name of the system
+define("aliasOpenEasySIS", "MBA SIS"); // The name of the system
 ?>

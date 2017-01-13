@@ -84,6 +84,9 @@ if (login_check($mysqli) == true)
                         <a href="viewProfile">My Profile</a>
                     </li>
                     <li>
+                        <a href="editProfile">Edit a Profile</a>
+                    </li>
+                    <li>
                         <a href="lookupProfile">Lookup Profile</a>
                     </li>
                 </ul>   
@@ -183,6 +186,9 @@ if (login_check($mysqli) == true)
                     </li>
                     <li>
                         <a href="deleteAssignment">Delete Assignment</a>
+                    </li>
+                    <li>
+                        <a href="viewAllAssignments">View all Assignments</a>
                     </li>
                 </ul>   
             </li>
