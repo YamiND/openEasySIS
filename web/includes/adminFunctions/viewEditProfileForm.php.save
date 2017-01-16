@@ -100,7 +100,7 @@ function viewEditProfileForm($mysqli)
                             if (isset($_SESSION['selectUserID']))
                             {
                                 echo "<br>";
-                                generateFormStart("../includes/adminFunctions/editProfile", "post"); 
+                                generateFormStart("", "post"); 
                                     generateFormButton("changeUser", "Change User");
                                 generateFormEnd();
                             } 
@@ -108,7 +108,7 @@ function viewEditProfileForm($mysqli)
                             if (isset($_SESSION['gradeID']))
                             {
                                 echo "<br>";
-                                generateFormStart("../includes/adminFunctions/editProfile", "post"); 
+                                generateFormStart("", "post"); 
                                     generateFormButton("changeGrade", "Change Grade Level");
                                 generateFormEnd();
                             } 
@@ -116,7 +116,7 @@ function viewEditProfileForm($mysqli)
                             if (isset($_SESSION['selectRoleID']))
                             {
                                 echo "<br>";
-                                generateFormStart("../includes/adminFunctions/editProfile", "post"); 
+                                generateFormStart("", "post"); 
                                     generateFormButton("changeRole", "Change Role Level");
                                 generateFormEnd();
                             } 
@@ -159,7 +159,7 @@ function getUserInfoForm($userID, $roleID, $mysqli)
 
 function getStudentListForm($gradeID, $mysqli)
 {
-    generateFormStart("../includes/adminFunctions/editProfile", "post"); 
+    generateFormStart("", "post"); 
         generateFormStartSelectDiv("Student", "selectUserID");
             getStudentListInfo($gradeID, $mysqli);
         generateFormEndSelectDiv();
@@ -188,12 +188,12 @@ function getStudentListInfo($gradeID, $mysqli)
         }
         else
         {
-            generateFormOption(NULL, "No Users available", "selected");
+            generateFormOption(NULL, "No Users available", "disabled", "selected");
         }
     }
     else
     {
-        generateFormOption(NULL, "No Users available", "selected");
+        generateFormOption(NULL, "No Users available", "disabled", "selected");
     }
 }
 
@@ -219,12 +219,12 @@ function getRoleLevelForm($mysqli)
             }
             else
             {
-                generateFormOption(NULL, "No roles available", "selected");
+                generateFormOption(NULL, "No roles available", "disabled", "selected");
             }
         }
         else
         {
-            generateFormOption(NULL, "No roles available", "selected");
+            generateFormOption(NULL, "No roles available", "disabled", "selected");
         }
         generateFormEndSelectDiv();
         generateFormButton("roleButton", "Select Role Level");
@@ -419,17 +419,17 @@ function getParentProfile($userID, $mysqli)
 
                     if (!empty($parentPhoneNumber))
                     {
-                        generateFormInputDiv("Phone Number", "tel", "parentPhoneNumber", $parentPhoneNumber);
+                        generateFormInputDiv("Phone Number", "tel", "parentPhoneNumber", $parentPhoneNumber, "disabled");
                     }
 
                     if (!empty($parentAltEmail))
                     {
-                        generateFormInputDiv("Alt Email", "email", "parentAltEmail", $parentAltEmail);
+                        generateFormInputDiv("Alt Email", "email", "parentAltEmail", $parentAltEmail, "disabled");
                     }
 
-                    generateFormInputDiv("Address", "text", "parentAddress", $parentAddress);
-                    generateFormInputDiv("City", "text", "parentCity", $parentCity);
-                    generateFormInputDiv("State", "text", "parentState", $parentState);
+                    generateFormInputDiv("Address", "text", "parentAddress", $parentAddress, "disabled");
+                    generateFormInputDiv("City", "text", "parentCity", $parentCity, "disabled");
+                    generateFormInputDiv("State", "text", "parentState", $parentState, "disabled");
                     generateFormInputDiv("Zip", "number", "parentZip", $parentZip);
 
 
@@ -459,16 +459,16 @@ function getStudentProfile($userID, $mysqli)
         while ($stmt->fetch())
         {
 
-            generateFormStart("../includes/adminFunctions/editProfile", "post");
+            generateFormStart();
 
-                generateFormInputDiv("First Name", "text", "studentFirstName", $studentFirstName);
-                generateFormInputDiv("Last Name", "text", "studentLastName", $studentLastName);
-                generateFormInputDiv("Email", "email", "studentEmail", $studentEmail);
-                generateFormInputDiv("Birthdate", "text", "studentBirthdate", $studentBirthdate);
-                generateFormInputDiv("Gender", "text", "studentGender", $studentGender);
-                generateFormInputDiv("Graduation Year", "number", "studentGradYear", $studentGradYear);
-                generateFormInputDiv("GPA", "number", "studentGPA", $studentGPA);
-                generateFormInputDiv("Grade Level", "number", "studentGradeLevel", $studentGradeLevel);
+                generateFormInputDiv("First Name", "text", "studentFirstName", $studentFirstName, "disabled");
+                generateFormInputDiv("Last Name", "text", "studentLastName", $studentLastName, "disabled");
+                generateFormInputDiv("Email", "email", "studentEmail", $studentEmail, "disabled");
+                generateFormInputDiv("Birthdate", "text", "studentBirthdate", $studentBirthdate, "disabled");
+                generateFormInputDiv("Gender", "text", "studentGender", $studentGender, "disabled");
+                generateFormInputDiv("Graduation Year", "number", "studentGradYear", $studentGradYear, "disabled");
+                generateFormInputDiv("GPA", "number", "studentGPA", $studentGPA, "disabled");
+                generateFormInputDiv("Grade Level", "number", "studentGradeLevel", $studentGradeLevel, "disabled");
 
 				generateFormButton(NULL, "Edit Profile");
             generateFormEnd();

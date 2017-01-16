@@ -95,7 +95,10 @@ if (login_check($mysqli) == true)
                 <a href="#"><i class="fa fa-users fa-fw"></i> Users <span class="fa arrow"></span></a>
     			<ul class="nav nav-second-level">
     				<li>
-    					<a href="createUser">Create User</a>
+    					<a href="createUser">Create User (Single)</a>
+    				</li>
+    				<li>
+    					<a href="createBulkUser">Create User (CSV Upload)</a>
     				</li>
     				<li>
     					<a href="adminPasswordReset">Reset User Password</a>

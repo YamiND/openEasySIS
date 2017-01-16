@@ -1,9 +1,9 @@
 <?php
 
-function generateFormStart($action = NULL, $method = NULL)
+function generateFormStart($action = NULL, $method = NULL, $enctype = NULL)
 {
 	echo '
-		<form action="'. $action .'" method="' . $method . '" role="form">
+		<form action="'. $action .'" method="' . $method . '" role="form" enctype="' . $enctype . '">
 	';
 }
 
