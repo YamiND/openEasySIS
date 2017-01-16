@@ -21,6 +21,9 @@ function deleteAssignment($mysqli)
 	if (isset($_POST['materialID'])) 
   {
       $materialID = $_POST['materialID'];
+
+		// Need to delete grade before can delete assignment
+		deleteGradedAssignments($materialID, $mysqli);
       
     	if ($stmt = $mysqli->prepare("DELETE FROM materials WHERE materialID = ?"))
 		  {
@@ -34,15 +37,26 @@ function deleteAssignment($mysqli)
 		  else
 		  {
     		// The correct POST variables were not sent to this page.
-    		$_SESSION['fail'] = 'Assignment could not be deleted';
+    		$_SESSION['fail'] = 'Assignment could not be deleted, delete failed';
    	   		header('Location: ../../pages/deleteAssignment');
 		  }
   }
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['fail'] = 'Assignment could not be deleted';
+    	$_SESSION['fail'] = 'Assignment could not be deleted, data not sent';
    	   	header('Location: ../../pages/deleteAssignment');
+	}
+}
+
+function deleteGradedAssignments($materialID, $mysqli)
+{
+	
+	if ($stmt = $mysqli->prepare("DELETE FROM grades WHERE gradeMaterialID = ?"))
+	{
+    	$stmt->bind_param('i', $materialID); 
+        $stmt->execute();    // Execute the prepared query.
+        
 	}
 }
 

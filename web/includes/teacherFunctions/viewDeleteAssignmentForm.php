@@ -1,5 +1,16 @@
 <?php
 
+if (isset($_POST['classID']))
+{
+	$_SESSION['classID'] = $_POST['classID'];
+}
+
+if (isset($_POST['changeClass']))
+{
+	unset($_SESSION['classID']);
+}
+
+
 function checkPermissions($mysqli)
 {
     if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
@@ -39,23 +50,25 @@ echo '
                                 <h4>Delete Assignment</h4>
                                 <div class="tab-pane fade in active" id="deleteAssignment">';
 
-                               if (getClassNumber($mysqli) > 1)
+                               if ((getClassNumber($mysqli) > 1) && !isset($_SESSION['classID']))
                                 {
                                     getClassForm($mysqli);
                                 }
-                               else if ((isset($_POST['classID'])) && (!empty($_POST['classID']))) 
+                               else if (getClassNumber($mysqli) == 1) 
                                 {
-                                    $classID = $_POST['classID'];
-                                }
-                                else
-                                {
-                                    $classID = getClassID($mysqli);
+                                    $_SESSION['classID'] = getClassID($mysqli);
                                 }
                                     
 
-                                if (!empty($classID))
+                                if (isset($_SESSION['classID']))
                                 {
-                                    chooseAssignmentForm($classID, $mysqli);
+                                    chooseAssignmentForm($_SESSION['classID'], $mysqli);
+									echo "<br>";
+
+
+  									generateFormStart("", "post"); 
+								        generateFormButton("changeClass", "Change Class");
+								    generateFormEnd();
                                 }
 echo '
 
@@ -75,7 +88,7 @@ echo '
 function chooseAssignmentForm($classID, $mysqli)
 {
     generateFormStart("../includes/teacherFunctions/deleteAssignment", "post"); 
-        generateFormStartSelectDiv(NULL, "classID");
+        generateFormStartSelectDiv(NULL, "materialID");
             getAssignmentList($classID, $mysqli);
         generateFormEndSelectDiv();
         generateFormButton(NULL, "Delete Assignment");
