@@ -18,7 +18,7 @@ else
 
 function deleteMaterialType($mysqli)
 {
-	if (isset($_POST['materialTypeID'])) 
+	if (isset($_POST['materialTypeID']) && !empty($_POST['materialTypeID']) )
   {
       $materialTypeID = $_POST['materialTypeID'];
       
@@ -26,22 +26,29 @@ function deleteMaterialType($mysqli)
 		  {
     		$stmt->bind_param('i', $materialTypeID); 
 
-        $stmt->execute();    // Execute the prepared query.
-        
-        $_SESSION['success'] = "Assignment Type Deleted";
-   	    header('Location: ../../pages/deleteMaterialType');
+	        $stmt->execute();    // Execute the prepared query.
+   			     
+			if ($stmt->affected_rows > 0)
+			{
+       			$_SESSION['success'] = "Assignment Type Deleted";
+			}
+			else
+			{
+    			$_SESSION['fail'] = 'Could not delete, an Assignment has this type assigned';
+			}
+	   	    header('Location: ../../pages/deleteMaterialType');
 		  }
 		  else
 		  {
     		// The correct POST variables were not sent to this page.
-    		$_SESSION['fail'] = 'Assignment Type could not be deleted';
+    		$_SESSION['fail'] = 'Could not delete, an Assignment has this type assigned';
    	   		header('Location: ../../pages/deleteMaterialType');
 		  }
   }
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['fail'] = 'Assignment Type could not be deleted';
+    	$_SESSION['fail'] = 'Assignment Type could not be deleted, data not sent';
    	   	header('Location: ../../pages/deleteMaterialType');
 	}
 }
