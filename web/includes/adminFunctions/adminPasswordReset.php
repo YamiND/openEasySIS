@@ -19,7 +19,7 @@ function randomString($length = 8)
 
 if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
 {
-	if (isset($_POST['userEmail'])) 
+	if (isset($_POST['userEmail']) && !empty($_POST['userEmail']))
 	{
     	$userEmail = $_POST['userEmail'];
 		$password = randomString();	
@@ -39,7 +39,7 @@ if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['fail'] = 'Password Reset Failed';
+    	$_SESSION['fail'] = 'Password Reset Failed, data not sent';
         header('Location: ../../pages/adminPasswordReset');
 	}
 }
