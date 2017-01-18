@@ -18,7 +18,7 @@ else
 
 function createAnnouncement($mysqli)
 {
-	if (isset($_POST['announcementName'], $_POST['announcementPostDate'], $_POST['announcementEndDate'], $_POST['announcementDescription'])) 
+	if ((isset($_POST['announcementName'], $_POST['announcementPostDate'], $_POST['announcementEndDate'], $_POST['announcementDescription'])) && !empty($_POST['schoolYearStart']) && !empty($_POST['schoolYearEnd']) && !empty($_POST['fallSemesterStart']) && !empty($_POST['fallSemesterEnd']) && !empty($_POST['springSemesterStart']) && !empty($_POST['springSemesterEnd']) && !empty($_POST['quarterOneStart']) && !empty($_POST['quarterOneEnd']) && !empty($_POST['quarterTwoStart']) && !empty($_POST['quarterTwoEnd']) && !empty($_POST['quarterThreeStart']) && !empty($_POST['quarterThreeEnd']))
 	{
     	$announcementName = $_POST['announcementName'];
 		$announcementDescription = $_POST['announcementDescription'];
