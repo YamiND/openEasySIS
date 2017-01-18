@@ -1,6 +1,7 @@
 <?php
 include_once '../dbConnect.php';
 include_once '../functions.php';
+include_once '../classFunctionsTemplate.php';
 
 sec_session_start(); // Our custom secure way of starting a PHP session.
 
@@ -46,7 +47,7 @@ function addClass($mysqli)
 
     	if ($stmt = $mysqli->prepare("INSERT INTO classes (classGrade, className, classTeacherID, schoolYearID) VALUES (?, ?, ?, ?)"))
 		{
-    		$stmt->bind_param('isi', $classGradeLevel, $className, $classTeacherID, $classYearID); 
+    		$stmt->bind_param('isii', $classGradeLevel, $className, $classTeacherID, $classYearID); 
 	    	$stmt->execute();    // Execute the prepared query.
 			$_SESSION['success'] = "Class Added";
    	   		header('Location: ../../pages/addClass');
@@ -63,29 +64,6 @@ function addClass($mysqli)
     	// The correct POST variables were not sent to this page.
     	$_SESSION['fail'] = 'Class could not be added';
    	   	header('Location: ../../pages/addClass');
-	}
-}
-
-function getClassYearID($mysqli)
-{
-	if ($stmt = $mysqli->prepare("SELECT schoolYearID FROM schoolYear WHERE schoolYearStart <= CURDATE() AND schoolYearEnd >= CURDATE()"))
-	{
-		$stmt->execute();
-		$stmt->bind_result($schoolYearID);
-		$stmt->store_result();
-
-		if ($stmt->num_rows > 0)
-		{
-			while ($stmt->fetch())
-			{
-				return $schoolYearID;
-			}
-		}
-		else
-		{
-    		$_SESSION['fail'] = 'Class could not be added, you need to set a school year for this current year';
-	   	   	header('Location: ../../pages/addClass');
-		}
 	}
 }
 
