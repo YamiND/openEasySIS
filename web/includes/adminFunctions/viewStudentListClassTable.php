@@ -1,5 +1,7 @@
 <?php 
 
+include_once '../classFunctionsTemplate.php';
+
 if (isset($_POST['gradeID']))
 {
     // After the user selects an grade, set it as a $_SESSION variable
