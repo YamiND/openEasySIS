@@ -101,9 +101,10 @@ function getGradeLevelForm()
 
 function getClassForm($gradeID, $mysqli)
 {   
-    if ($stmt = $mysqli->prepare("SELECT classID, className FROM classes WHERE classGrade = ?"))
+	$yearID = getClassYearID($mysqli);
+    if ($stmt = $mysqli->prepare("SELECT classID, className FROM classes WHERE classGrade = ? AND schoolYearID = ?"))
     {
-        $stmt->bind_param('i', $gradeID);
+        $stmt->bind_param('ii', $gradeID, $yearID);
         $stmt->execute();
         $stmt->bind_result($classID, $className);
         $stmt->store_result();

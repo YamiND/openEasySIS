@@ -3,6 +3,7 @@ include_once '../includes/dbConnect.php';
 include_once '../includes/functions.php';
 include_once '../includes/panelSessionMessages.php';
 include_once '../includes/formTemplate.php';
+include_once '../includes/classFunctionsTemplate.php';
 
 sec_session_start();
 

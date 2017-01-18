@@ -146,9 +146,11 @@ function getClassForm($gradeID, $mysqli)
 
 function getClassInfo($classID, $mysqli)
 {
-    if($stmt = $mysqli->prepare("SELECT classGrade, className, classTeacherID FROM classes WHERE classID = ?"))
+	$yearID = getClassYearID($mysqli);
+
+    if($stmt = $mysqli->prepare("SELECT classGrade, className, classTeacherID FROM classes WHERE classID = ? AND schoolYearID = ?"))
     {
-        $stmt->bind_param('i', $classID);
+        $stmt->bind_param('ii', $classID, $yearID);
 
         $stmt->execute();
 

@@ -166,9 +166,11 @@ function getClassListForm($gradeID, $mysqli)
 
 function getClassList($gradeID, $mysqli)
 {
-    if ($stmt = $mysqli->prepare("SELECT classID, className FROM classes WHERE classGrade = ?"))
+	$yearID = getClassYearID($mysqli);
+
+    if ($stmt = $mysqli->prepare("SELECT classID, className FROM classes WHERE classGrade = ? AND schoolYearID = ?"))
     {   
-        $stmt->bind_param('i', $gradeID);
+        $stmt->bind_param('ii', $gradeID, $yearID);
         // Query database for announcement details to be modified
         $stmt->execute();
 
