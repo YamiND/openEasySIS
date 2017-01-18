@@ -18,7 +18,7 @@ else
 
 function assignStudentClass($mysqli)
 {
-	if (isset($_POST['studentID'], $_POST['classID'])) 
+	if (isset($_POST['studentID'], $_POST['classID']) && !empty($_POST['studentID']) && !empty($_POST['classID'])) 
 	{
       $studentID = $_POST['studentID'];
     	$classID = $_POST['classID'];
