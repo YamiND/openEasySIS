@@ -54,7 +54,7 @@ function determineAccountType($mysqli)
 
 function createAdminAccount($mysqli)
 {
-	if (isset($_POST['adminEmail'], $_POST['adminFirstName'], $_POST['adminLastName'])) 
+	if ((isset($_POST['adminEmail'], $_POST['adminFirstName'], $_POST['adminLastName'])) && !empty($_POST['adminEmail']) && !empty($_POST['adminFirstName']) && !empty($_POST['adminLastName']))
 	{
     	$adminEmail = $_POST['adminEmail'];
 		$adminFirstName = $_POST['adminFirstName'];
@@ -119,7 +119,7 @@ function createAdminAccount($mysqli)
 
 function createSchoolAdminAccount($mysqli)
 {
-	if (isset($_POST['schoolAdminEmail'], $_POST['schoolAdminFirstName'], $_POST['schoolAdminLastName'])) 
+	if ((isset($_POST['schoolAdminEmail'], $_POST['schoolAdminFirstName'], $_POST['schoolAdminLastName'])) && !empty($_POST['schoolAdminEmail']) && !empty($_POST['schoolAdminFirstName']) && !empty($_POST['schoolAdminLastName'])) 
 	{
     	$schoolAdminEmail = $_POST['schoolAdminEmail'];
 		$schoolAdminFirstName = $_POST['schoolAdminFirstName'];
@@ -185,7 +185,7 @@ function createSchoolAdminAccount($mysqli)
 
 function createTeacherAccount($mysqli)
 {
-	if (isset($_POST['teacherEmail'], $_POST['teacherFirstName'], $_POST['teacherLastName'])) 
+	if ((isset($_POST['teacherEmail'], $_POST['teacherFirstName'], $_POST['teacherLastName'])) && !empty($_POST['teacherEmail']) && !empty($_POST['teacherFirstName']) && !empty($_POST['teacherEmail'])) 
 	{
     	$teacherEmail = $_POST['teacherEmail'];
 		$teacherFirstName = $_POST['teacherFirstName'];
@@ -252,7 +252,7 @@ function createTeacherAccount($mysqli)
 
 function createParentAccount($mysqli)
 {
-	if (isset($_POST['parentEmail'], $_POST['parentFirstName'], $_POST['parentLastName'], $_POST['parentAddress'], $_POST['parentCity'], $_POST['parentState'], $_POST['parentZip'])) 
+	if ((isset($_POST['parentEmail'], $_POST['parentFirstName'], $_POST['parentLastName'], $_POST['parentAddress'], $_POST['parentCity'], $_POST['parentState'], $_POST['parentZip']))  && !empty($_POST['parentEmail']) && !empty($_POST['parentFirstName']) && !empty($_POST['parentLastName']) && !empty($_POST['parentAddress']) && !empty($_POST['parentCity']) && !empty($_POST['parentState']) && !empty($_POST['parentZip']))
 	{
     	$parentEmail = $_POST['parentEmail'];
 		$parentFirstName = $_POST['parentFirstName'];
@@ -302,7 +302,7 @@ function createParentAccount($mysqli)
 
 function createStudentAccount($mysqli)
 {
-	if (isset($_POST['studentEmail'], $_POST['studentFirstName'], $_POST['studentLastName'], $_POST['studentGender'], $_POST['studentGradeLevel'])) 
+	if ((isset($_POST['studentEmail'], $_POST['studentFirstName'], $_POST['studentLastName'], $_POST['studentGender'], $_POST['studentGradeLevel'])) && !empty($_POST['studentEmail']) && !empty($_POST['studentFirstName']) && !empty($_POST['studentLastName']) && !empty($_POST['studentGender']) && !empty($_POST['studentGradeLevel']))
 	{
     	$studentEmail = $_POST['studentEmail'];
 		$studentFirstName = $_POST['studentFirstName'];
