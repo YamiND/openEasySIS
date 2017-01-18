@@ -12,20 +12,21 @@ else
 {
    	$_SESSION['fail'] = 'Class could not be added';
    	header('Location: ../../pages/addClass');
-
-	return;
 }
 
 function addClass($mysqli)
 {
-	if (isset($_POST['className'], $_POST['classGradeLevel'], $_POST['classTeacherID'])) 
+	if (isset($_POST['className'], $_POST['classGradeLevel'], $_POST['classTeacherID']) && !empty($_POST['className']) && !empty($_POST['classGradeLevel']) && !empty($_POST['classTeacherID'])) 
 	{
     	$className = $_POST['className'];
     	$classGradeLevel = $_POST['classGradeLevel'];
 		$classTeacherID = $_POST['classTeacherID'];
+		$classYearID = getClassYearID($mysqli);
 
-        if ($stmt = $mysqli->prepare("SELECT className, classGrade FROM classes"))
+        if ($stmt = $mysqli->prepare("SELECT className, classGrade FROM classes WHERE schoolYearID = ?"))
         {
+			$stmt->bind_param("i", $classYearID);
+
             $stmt->bind_result($dbClassName, $dbClassGrade);
             $stmt->execute();
             
@@ -43,9 +44,9 @@ function addClass($mysqli)
             }
         }
 
-    	if ($stmt = $mysqli->prepare("INSERT INTO classes (classGrade, className, classTeacherID) VALUES (?, ?, ?)"))
+    	if ($stmt = $mysqli->prepare("INSERT INTO classes (classGrade, className, classTeacherID, schoolYearID) VALUES (?, ?, ?, ?)"))
 		{
-    		$stmt->bind_param('isi', $classGradeLevel, $className, $classTeacherID); 
+    		$stmt->bind_param('isi', $classGradeLevel, $className, $classTeacherID, $classYearID); 
 	    	$stmt->execute();    // Execute the prepared query.
 			$_SESSION['success'] = "Class Added";
    	   		header('Location: ../../pages/addClass');
@@ -62,6 +63,29 @@ function addClass($mysqli)
     	// The correct POST variables were not sent to this page.
     	$_SESSION['fail'] = 'Class could not be added';
    	   	header('Location: ../../pages/addClass');
+	}
+}
+
+function getClassYearID($mysqli)
+{
+	if ($stmt = $mysqli->prepare("SELECT schoolYearID FROM schoolYear WHERE schoolYearStart <= CURDATE() AND schoolYearEnd >= CURDATE()"))
+	{
+		$stmt->execute();
+		$stmt->bind_result($schoolYearID);
+		$stmt->store_result();
+
+		if ($stmt->num_rows > 0)
+		{
+			while ($stmt->fetch())
+			{
+				return $schoolYearID;
+			}
+		}
+		else
+		{
+    		$_SESSION['fail'] = 'Class could not be added, you need to set a school year for this current year';
+	   	   	header('Location: ../../pages/addClass');
+		}
 	}
 }
 
