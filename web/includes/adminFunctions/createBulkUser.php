@@ -16,12 +16,12 @@ else
 
 function parseCSV($mysqli)
 {
-$filename = "usersCreated.csv";
-$fp = fopen('php://output', 'w');
+	$filename = "usersCreated.csv";
+	$fp = fopen('php://output', 'w');
 
-$_SESSION['success'] = 'User Accounts Created';
-header('Content-type: application/csv');
-header('Content-Disposition: attachment; filename='.$filename);
+	$_SESSION['success'] = 'User Accounts Created';
+	header('Content-type: application/csv');
+	header('Content-Disposition: attachment; filename='.$filename);
 
 	if($_FILES['csvFile']['error'] == 0)
 	{
@@ -73,7 +73,7 @@ header('Content-Disposition: attachment; filename='.$filename);
 							$value = createParentAccount($roleID, $userEmail, $userFirstName, $userLastName, $phone, $altEmail, $address, $city, $state, $zip, $isParent, $mysqli);
 							break;
 						case 5:
-							$value = createStudentAccount($roleID, $userEmail, $userFirstName, $userLasName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli);
+							$value = createStudentAccount($roleID, $userEmail, $userFirstName, $userLastName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli);
 							break;
 						default:
 							break;
@@ -84,8 +84,6 @@ header('Content-Disposition: attachment; filename='.$filename);
 			}
     	}
 	}
-   	//header('Location: ../../pages/createBulkUser');
-
 }
 
 function createAdminAccount($roleID, $userEmail, $userFirstName, $userLastName, $isParent = 0, $mysqli)
@@ -214,17 +212,18 @@ function createParentAccount($roleID, $userEmail, $userFirstName, $userLastName,
 	}
 }
 
-function createStudentAccount($roleID, $userEmail, $userFirstName, $userLasName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli)
+function createStudentAccount($roleID, $userEmail, $userFirstName, $userLastName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli)
 {
 	if (!empty($roleID) && !empty($userEmail) && !empty($userFirstName) && !empty($userLastName) && !empty($gradeLevel)) 
 	{
 		$modProfile = 0;
 		$modClassList = 0;
 		$viewAllGrades = 0;
+		$isParent = 0;
 
 		$password = randomString();	
 
-		$value = createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $mysqli);
+		$value = createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
 
 		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
 		{
@@ -239,7 +238,7 @@ function createStudentAccount($roleID, $userEmail, $userFirstName, $userLasName,
 			}
 		}
 
-	    createStudentProfile($studentID, $userEmail, $userFirstName, $userLasName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli);
+	    createStudentProfile($studentID, $userEmail, $userFirstName, $userLastName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli);
 		
 		return $value;
     }
@@ -314,7 +313,6 @@ function createSchoolAdminProfile($schoolAdminID, $schoolAdminFirstName, $school
 	}
 }
 
-
 function createTeacherProfile($teacherID, $teacherFirstName, $teacherLastName, $teacherEmail, $mysqli)
 {
     if ($stmt = $mysqli->prepare("INSERT INTO teacherProfile (teacherID, teacherFirstName, teacherLastName, teacherEmail) VALUES (?, ?, ?, ?)"))
@@ -324,20 +322,20 @@ function createTeacherProfile($teacherID, $teacherFirstName, $teacherLastName, $
 	}
 }
 
-function createParentProfile($parentID, $userEmail, $userFirstName, $userLastName, $phone, $altEmail, $address, $city, $state, $zip, $mysqli)
+function createParentProfile($parentID, $userEmail, $userFirstName, $userLastName, $phone=NULL, $altEmail=NULL, $address, $city, $state, $zip, $mysqli)
 {
     if ($stmt = $mysqli->prepare("INSERT INTO parentProfile (parentID, parentFirstName, parentLastName, parentEmail, parentAddress, parentCity, parentState, parentZip, parentAltEmail, parentPhoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
 	{
-    	$stmt->bind_param('isssssss', $parentID, $userFirstName, $userLastName, $userEmail, $address, $city, $state, $zip, $altEmail, $phone); 
+    	$stmt->bind_param('isssssssss', $parentID, $userFirstName, $userLastName, $userEmail, $address, $city, $state, $zip, $altEmail, $phone); 
 	    $stmt->execute();    // Execute the prepared query.
 	}
 }
 
-function createStudentProfile($studentID, $userEmail, $userFirstName, $userLasName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli)
+function createStudentProfile($studentID, $userEmail, $userFirstName, $userLastName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli)
 {
     if ($stmt = $mysqli->prepare("INSERT INTO studentProfile (studentID, studentFirstName, studentLastName, studentBirthdate, studentGender, studentGradYear, studentGPA, studentGradeLevel, studentEmail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"))
 	{
-    	$stmt->bind_param('issssisis', $studentID, $userFirstName, $userLastName, $birthdate, $gender, $graduationYear, $gpa, $gradeLevel, $userEmail); 
+    	$stmt->bind_param('issssdiis', $studentID, $userFirstName, $userLastName, $birthdate, $gender, $graduationYear, $gpa, $gradeLevel, $userEmail); 
 	    $stmt->execute();    // Execute the prepared query.
 	}
 }
