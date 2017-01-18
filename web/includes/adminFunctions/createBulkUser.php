@@ -16,11 +16,12 @@ else
 
 function parseCSV($mysqli)
 {
-	$output = fopen('/tmp/createdUsers.csv', 'w');
+$filename = "usersCreated.csv";
+$fp = fopen('php://output', 'w');
 
-	$usersArray = array();
-
-	fputcsv($output, array('Email', 'Password'));
+$_SESSION['success'] = 'User Accounts Created';
+header('Content-type: application/csv');
+header('Content-Disposition: attachment; filename='.$filename);
 
 	if($_FILES['csvFile']['error'] == 0)
 	{
@@ -63,34 +64,26 @@ function parseCSV($mysqli)
 							$value = createAdminAccount($roleID, $userEmail, $userFirstName, $userLastName, $isParent, $mysqli);
 							break;
 						case 2:
-							createSchoolAdminAccount($roleID, $userEmail, $userFirstName, $userLastName, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
+							$value = createSchoolAdminAccount($roleID, $userEmail, $userFirstName, $userLastName, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
 							break;
 						case 3:
-							createTeacherAccount($roleID, $userEmail, $userFirstName, $userLastName, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
+							$value = createTeacherAccount($roleID, $userEmail, $userFirstName, $userLastName, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
 							break;
 						case 4:
-							createParentAccount($roleID, $userEmail, $userFirstName, $userLastName, $phone, $altEmail, $address, $city, $state, $zip, $isParent, $mysqli);
+							$value = createParentAccount($roleID, $userEmail, $userFirstName, $userLastName, $phone, $altEmail, $address, $city, $state, $zip, $isParent, $mysqli);
 							break;
 						case 5:
-							createStudentAccount($roleID, $userEmail, $userFirstName, $userLasName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli);
+							$value = createStudentAccount($roleID, $userEmail, $userFirstName, $userLasName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli);
 							break;
 						default:
 							break;
 					}
-					array_push($usersArray, explode(',', $value));
+					$row = explode(',', $value);
+					fputcsv($fp, $row);
 				}
 			}
     	}
 	}
-	fputcsv($output, $usersArray);
-	fclose($output);
-
-	// output headers so that the file is downloaded rather than displayed
-	header("Content-type: text/csv");
-	header("Content-disposition: attachment; filename = createdUsers.csv");
-	readfile("/tmp/createdUsers.csv");
-
-	$_SESSION['success'] = 'User Accounts Created';
    	//header('Location: ../../pages/createBulkUser');
 
 }
@@ -104,7 +97,6 @@ function createAdminAccount($roleID, $userEmail, $userFirstName, $userLastName, 
 		$viewAllGrades = 1;
 
 		$password = randomString();	
-
 
 		$value = createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
 
@@ -135,7 +127,7 @@ function createSchoolAdminAccount($roleID, $userEmail, $userFirstName, $userLast
 	if (!empty($roleID) && !empty($userEmail) && !empty($userFirstName) && !empty($userLastName))
 	{
 		$password = randomString();	
-		createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
+		$value = createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
 
 		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
 		{
@@ -150,6 +142,8 @@ function createSchoolAdminAccount($roleID, $userEmail, $userFirstName, $userLast
 			}
 		}
 		createSchoolAdminProfile($schoolAdminID, $userFirstName, $userLastName, $userEmail, $mysqli);
+	
+		return $value;
     }
 	else
 	{
@@ -162,7 +156,7 @@ function createTeacherAccount($roleID, $userEmail, $userFirstName, $userLastName
 	if (!empty($roleID) && !empty($userEmail) && !empty($userFirstName) && !empty($userLastName))
 	{
 		$password = randomString();	
-		createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
+		$value = createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
 
 		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
 		{
@@ -177,6 +171,8 @@ function createTeacherAccount($roleID, $userEmail, $userFirstName, $userLastName
 			}
 		}
 		createTeacherProfile($teacherID, $userFirstName, $userLastName, $userEmail, $mysqli);
+
+		return $value;
     }
 	else
 	{
@@ -194,7 +190,7 @@ function createParentAccount($roleID, $userEmail, $userFirstName, $userLastName,
 
 		$password = randomString();	
 
-		createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
+		$value = createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
 
 		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
 		{
@@ -209,6 +205,8 @@ function createParentAccount($roleID, $userEmail, $userFirstName, $userLastName,
 			}
 		}
 		createParentProfile($parentID, $userEmail, $userFirstName, $userLastName, $phone, $altEmail, $address, $city, $state, $zip, $mysqli);
+
+		return $value;
     }
 	else
 	{
@@ -226,7 +224,7 @@ function createStudentAccount($roleID, $userEmail, $userFirstName, $userLasName,
 
 		$password = randomString();	
 
-		createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $mysqli);
+		$value = createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $mysqli);
 
 		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
 		{
@@ -242,6 +240,8 @@ function createStudentAccount($roleID, $userEmail, $userFirstName, $userLasName,
 		}
 
 	    createStudentProfile($studentID, $userEmail, $userFirstName, $userLasName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli);
+		
+		return $value;
     }
 	else
 	{
