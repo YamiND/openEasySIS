@@ -25,12 +25,12 @@ function modifyMaterialType($mysqli)
       	$materialName = $_POST['materialName'];
       	$materialWeight = $_POST['materialWeight'];
 
-	  	$combinedWeight = getMaterialTypeWeight($classID, $mysqli);
+	  	$combinedWeight = getMaterialTypeWeight($classID, $materialTypeID, $mysqli);
 
 		if ((($combinedWeight + $materialWeight) > 100) || ($materialWeight <= 0))
         {
             $_SESSION['fail'] = 'Assignment Type could not be added, weight can not exceed 100 or be 0 or negative';
-            header('Location: ../../pages/addMaterialType');
+            header('Location: ../../pages/modifyMaterialType');
         }
         else
         {
@@ -59,20 +59,23 @@ function modifyMaterialType($mysqli)
 	}
 }
 
-function getMaterialTypeWeight($classID, $mysqli)
+function getMaterialTypeWeight($classID, $materialTypeID, $mysqli)
 {
-    if ($stmt = $mysqli->prepare("SELECT materialWeight FROM materialType WHERE classID = ?"))
+    if ($stmt = $mysqli->prepare("SELECT materialTypeID, materialWeight FROM materialType WHERE classID = ?"))
     {   
         $stmt->bind_param('i', $classID);
-        $stmt->bind_result($materialWeight);
+        $stmt->bind_result($dbMaterialTypeID, $materialWeight);
 
         $stmt->execute();
 
         $stmt->store_result();
 
         while ($stmt->fetch())
-        {   
-            $combinedWeight += $materialWeight;
+        {  
+			if ($materialTypeID != $dbMaterialTypeID)
+			{ 
+            	$combinedWeight += $materialWeight;
+			}
         }   
 
         return $combinedWeight;
