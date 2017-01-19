@@ -18,7 +18,7 @@ else
 
 function addAssignment($mysqli)
 {
-	if (isset($_POST['materialName'], $_POST['materialPointsPossible'], $_POST['materialDueDate'], $_POST['materialTypeID'], $_POST['classID'])) 
+	if ((isset($_POST['materialName'], $_POST['materialPointsPossible'], $_POST['materialDueDate'], $_POST['materialTypeID'], $_POST['classID'])) && !empty($_POST['materialName']) && !empty($_POST['materialPointsPossible']) && !empty($_POST['materialDueDate']) && !empty($_POST['materialTypeID']) && !empty($_POST['classID']))
   {
       $materialName = $_POST['materialName'];
 		  $materialPointsPossible = $_POST['materialPointsPossible'];
@@ -45,7 +45,7 @@ function addAssignment($mysqli)
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['fail'] = 'Assignment could not be added';
+    	$_SESSION['fail'] = 'Assignment could not be added, data not sent or incomplete';
    	   	header('Location: ../../pages/addAssignment');
 	}
 }
