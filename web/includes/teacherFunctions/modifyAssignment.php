@@ -10,42 +10,49 @@ if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
 }
 else
 {
-   	$_SESSION['fail'] = 'Assignment could not be modified';
+   	$_SESSION['fail'] = 'Assignment could not be modified, invalid permissions';
    	header('Location: ../../pages/modifyAssignment');
-
-	return;
 }
 
 function modifyAssignment($mysqli)
 {
-	if (isset($_POST['materialName'], $_POST['materialPointsPossible'], $_POST['materialDueDate'], $_POST['materialTypeID'], $_POST['materialID'])) 
+	if ((isset($_POST['materialName'], $_POST['materialPointsPossible'], $_POST['materialDueDate'], $_POST['materialTypeID'], $_POST['classID'])) && !empty($_POST['materialName']) && !empty($_POST['materialPointsPossible']) && !empty($_POST['materialDueDate']) && !empty($_POST['materialTypeID']) && !empty($_POST['classID']))
   {
       $materialID = $_POST['materialID'];
       $materialName = $_POST['materialName'];
 		  $materialPointsPossible = $_POST['materialPointsPossible'];
     	$materialDueDate = $_POST['materialDueDate'];
 		  $materialTypeID = $_POST['materialTypeID'];
-      
-    	if ($stmt = $mysqli->prepare("UPDATE materials SET materialName = ?, materialPointsPossible = ?, materialDueDate = ?, materialTypeID = ? WHERE materialID = ?"))
-		  {
-    		$stmt->bind_param('sisii', $materialName, $materialPointsPossible, $materialDueDate, $materialTypeID, $materialID); 
-
-        $stmt->execute();    // Execute the prepared query.
-        
-        $_SESSION['success'] = "Assignment Modified";
-   	    header('Location: ../../pages/modifyAssignment');
-		  }
-		  else
-		  {
-    		// The correct POST variables were not sent to this page.
-    		$_SESSION['fail'] = 'Assignment could not be modified';
+     
+		if ($materialDueDate < date('Y-m-d'))
+		{
+    		$_SESSION['fail'] = 'Assignment could not be modified, date can\'t be less than current date';
    	   		header('Location: ../../pages/modifyAssignment');
-		  }
+		}
+		else 
+		{
+ 
+    		if ($stmt = $mysqli->prepare("UPDATE materials SET materialName = ?, materialPointsPossible = ?, materialDueDate = ?, materialTypeID = ? WHERE materialID = ?"))
+		  	{
+    			$stmt->bind_param('sisii', $materialName, $materialPointsPossible, $materialDueDate, $materialTypeID, $materialID); 
+
+		        $stmt->execute();    // Execute the prepared query.
+        
+       			$_SESSION['success'] = "Assignment Modified";
+		   	    header('Location: ../../pages/modifyAssignment');
+			}
+		  	else
+		  	{
+    			// The correct POST variables were not sent to this page.
+    			$_SESSION['fail'] = 'Assignment could not be modified';
+   	   			header('Location: ../../pages/modifyAssignment');
+		  	}
+		}
   }
 	else
 	{
     	// The correct POST variables were not sent to this page.
-    	$_SESSION['fail'] = 'Assignment could not be modified';
+    	$_SESSION['fail'] = 'Assignment could not be modified, data not sent';
    	   	header('Location: ../../pages/modifiedAssignment');
 	}
 }
