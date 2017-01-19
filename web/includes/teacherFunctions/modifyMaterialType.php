@@ -18,34 +18,65 @@ else
 
 function modifyMaterialType($mysqli)
 {
-	if (isset($_POST['materialName'], $_POST['materialWeight'], $_POST['materialTypeID'])) 
-  {
-      $materialTypeID = $_POST['materialTypeID'];
-      $materialName = $_POST['materialName'];
-      $materialWeight = $_POST['materialWeight'];
-      
-    	if ($stmt = $mysqli->prepare("UPDATE materialType SET materialName = ?, materialWeight = ? WHERE materialTypeID = ?"))
-		  {
-    		$stmt->bind_param('sii', $materialName, $materialWeight, $materialTypeID); 
+	if ((isset($_POST['classID'], $_POST['materialName'], $_POST['materialWeight'], $_POST['materialTypeID'])) && !empty($_POST['materialName']) && !empty($_POST['materialWeight']) && !empty($_POST['materialTypeID']) && !empty($_POST['classID']))
+  	{
+		$classID = $_POST['classID'];
+		$materialTypeID = $_POST['materialTypeID'];
+      	$materialName = $_POST['materialName'];
+      	$materialWeight = $_POST['materialWeight'];
 
-        $stmt->execute();    // Execute the prepared query.
+	  	$combinedWeight = getMaterialTypeWeight($classID, $mysqli);
+
+		if ((($combinedWeight + $materialWeight) > 100) || ($materialWeight <= 0))
+        {
+            $_SESSION['fail'] = 'Assignment Type could not be added, weight can not exceed 100 or be 0 or negative';
+            header('Location: ../../pages/addMaterialType');
+        }
+        else
+        {
+			if ($stmt = $mysqli->prepare("UPDATE materialType SET materialName = ?, materialWeight = ? WHERE materialTypeID = ?"))
+			{
+   		 		$stmt->bind_param('sii', $materialName, $materialWeight, $materialTypeID); 
+
+		        $stmt->execute();    // Execute the prepared query.
         
-        $_SESSION['success'] = "Assignment Type Modified";
-   	    header('Location: ../../pages/modifyMaterialType');
-		  }
-		  else
-		  {
-    		// The correct POST variables were not sent to this page.
-    		$_SESSION['fail'] = 'Assignment Type could not be modified';
-   	   		header('Location: ../../pages/modifyMaterialType');
-		  }
-  }
+       			 $_SESSION['success'] = "Assignment Type Modified";
+		   	    header('Location: ../../pages/modifyMaterialType');
+		 	}
+			else
+		  	{
+    			// The correct POST variables were not sent to this page.
+	    		$_SESSION['fail'] = 'Assignment Type could not be modified';
+   		   		header('Location: ../../pages/modifyMaterialType');
+			}
+		}
+  	}
 	else
 	{
     	// The correct POST variables were not sent to this page.
     	$_SESSION['fail'] = 'Assignment Type could not be modified';
    	   	header('Location: ../../pages/modifyMaterialType');
 	}
+}
+
+function getMaterialTypeWeight($classID, $mysqli)
+{
+    if ($stmt = $mysqli->prepare("SELECT materialWeight FROM materialType WHERE classID = ?"))
+    {   
+        $stmt->bind_param('i', $classID);
+        $stmt->bind_result($materialWeight);
+
+        $stmt->execute();
+
+        $stmt->store_result();
+
+        while ($stmt->fetch())
+        {   
+            $combinedWeight += $materialWeight;
+        }   
+
+        return $combinedWeight;
+    }   
 }
 
 ?>
