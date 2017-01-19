@@ -121,7 +121,7 @@ function getAssignmentForm($classID, $assignmentID, $mysqli)
                 generateFormHiddenInput("materialID", $assignmentID);
                 generateFormInputDiv("Assignment Name", "text", "materialName", $materialName);
                 generateFormInputDiv("Assignment Points Possible", "number", "materialPointsPossible", $materialPointsPossible, NULL, NULL, NULL, NULL, "100");
-                generateFormInputDiv("Assignment Name", "date", "materialDueDate", $materialDueDate);
+                generateFormInputDiv("Assignment Due Date", "date", "materialDueDate", $materialDueDate);
                 generateFormStartSelectDiv(NULL, "materialTypeID");
                     getAssignmentTypes($classID, $materialTypeID, $mysqli);
                 generateFormEndSelectDiv();
@@ -213,7 +213,7 @@ function getClassForm($mysqli)
         generateFormStartSelectDiv(NULL, "classID");
             getClassList($mysqli);
         generateFormEndSelectDiv();
-        generateFormButton("selectClassButton", "Select Classß");
+        generateFormButton("selectClassButton", "Select Class");
     generateFormEnd();
 }
 

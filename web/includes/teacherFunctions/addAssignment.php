@@ -26,14 +26,29 @@ function addAssignment($mysqli)
 		  $materialTypeID = $_POST['materialTypeID'];
       $materialClassID = $_POST['classID'];
 
-    	if ($stmt = $mysqli->prepare("INSERT INTO materials (materialClassID, materialName, materialPointsPossible, materialDueDate, materialTypeID) VALUES (?, ?, ?, ?, ?)"))
-		  {
-    		$stmt->bind_param('isisi', $materialClassID, $materialName, $materialPointsPossible, $materialDueDate, $materialTypeID); 
 
-        $stmt->execute();    // Execute the prepared query.
+		if ($materialPointsPossible <= 0)
+		{
+    		$_SESSION['fail'] = 'Assignment could not be added, Points Possible can not be 0 or less';
+	   	   	header('Location: ../../pages/addAssignment');
+
+		}
+		else if ($materialDueDate < date('Y-m-d'))
+		{
+    		$_SESSION['fail'] = 'Assignment could not be added, Date can not be less than today';
+	   	   	header('Location: ../../pages/addAssignment');
+
+		}
+		else
+		{
+    		if ($stmt = $mysqli->prepare("INSERT INTO materials (materialClassID, materialName, materialPointsPossible, materialDueDate, materialTypeID) VALUES (?, ?, ?, ?, ?)"))
+		  	{
+    			$stmt->bind_param('isisi', $materialClassID, $materialName, $materialPointsPossible, $materialDueDate, $materialTypeID); 
+
+		        $stmt->execute();    // Execute the prepared query.
         
-        $_SESSION['success'] = "Assignment Added";
-   	    header('Location: ../../pages/addAssignment');
+       			 $_SESSION['success'] = "Assignment Added";
+		   	    header('Location: ../../pages/addAssignment');
 		  }
 		  else
 		  {
@@ -41,6 +56,7 @@ function addAssignment($mysqli)
     		$_SESSION['fail'] = 'Assignment could not be added';
    	   		header('Location: ../../pages/addAssignment');
 		  }
+		}
   }
 	else
 	{

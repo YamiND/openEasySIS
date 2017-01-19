@@ -23,8 +23,14 @@ function modifyAssignment($mysqli)
 		  $materialPointsPossible = $_POST['materialPointsPossible'];
     	$materialDueDate = $_POST['materialDueDate'];
 		  $materialTypeID = $_POST['materialTypeID'];
-     
-		if ($materialDueDate < date('Y-m-d'))
+    
+		if ($materialPointsPossible <= 0)
+		{
+    		$_SESSION['fail'] = 'Assignment could not be modified, Points Possible can\'t be 0 or less';
+   	   		header('Location: ../../pages/modifyAssignment');
+
+		} 
+		else if ($materialDueDate < date('Y-m-d'))
 		{
     		$_SESSION['fail'] = 'Assignment could not be modified, date can\'t be less than current date';
    	   		header('Location: ../../pages/modifyAssignment');
