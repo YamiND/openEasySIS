@@ -97,7 +97,7 @@ function addMaterialTypeForm($classID, $mysqli)
     generateFormStart("../includes/teacherFunctions/addMaterialType", "post"); 
         generateFormHiddenInput("classID", $classID);
         generateFormInputDiv("Assignment Type Name", "text", "materialName", NULL, NULL, NULL, NULL, "Assignment Type Name");
-        generateFormInputDiv("Assignment Type Weight", "number", "materialWeight", "0", NULL, NULL, NULL, "100");
+        generateFormInputDiv("Assignment Type Weight", "number", "materialWeight", 0, NULL, 0, 100, 100, 100);
         generateFormButton("addMaterialTypeButton", "Add Material Type");
     generateFormEnd();
 }

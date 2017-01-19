@@ -128,6 +128,7 @@ function getMaterialTypeForm($classID, $materialTypeID, $mysqli)
         while ($stmt->fetch())
         {
             generateFormStart("../includes/teacherFunctions/modifyMaterialType", "post"); 
+				generateFormHiddenInput("classID", $classID);
                 generateFormHiddenInput("materialTypeID", $materialTypeID);
                 generateFormInputDiv("Assignment Type Name", "text", "materialName", $materialName);
                 generateFormInputDiv("Assignment Type Weight", "number", "materialWeight", $materialWeight, NULL, NULL, NULL, "100");

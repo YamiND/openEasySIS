@@ -184,7 +184,7 @@ function getStudentID($classID, $materialID, $mysqli)
 
 function getStudentInfo($classID, $studentID, $materialID, $mysqli)
 {
-    $materialPointsPossible = getMaterialPointsPossible($materialID, $mysqli);
+    getMaterialPointsPossible($materialID, $mysqli);
 
     if ($stmt = $mysqli->prepare("SELECT studentFirstName, studentLastName FROM studentProfile WHERE studentID = ?"))
     {
@@ -205,8 +205,8 @@ function getStudentInfo($classID, $studentID, $materialID, $mysqli)
             echo '
                         <td>' . $studentFirstName . '</td>
                         <td>' . $studentLastName . '</td>
-                        <td> '; echo generateFormInput("number", "materialPointsScored", getMaterialPointsScored($studentID, $materialID, $mysqli), NULL, NULL, $materialPointsPossible); echo '</td>
-                        <td>' . '/ ' . $materialPointsPossible . '</td>
+                        <td> '; echo generateFormInput("number", "materialPointsScored", getMaterialPointsScored($materialID, $classID, $studentID, $mysqli), NULL, NULL, $materialPointsPossible); echo '</td>
+                        <td>' . '/ '; echo  getMaterialPointsPossible($materialID, $mysqli); echo  '</td>
                         <td>'; echo generateFormButton("applyChangesButton", "Apply Changes"); echo '</td>
                 ';
                         generateFormEnd();
@@ -218,32 +218,6 @@ function getStudentInfo($classID, $studentID, $materialID, $mysqli)
     else
     {
         return;
-    }
-}
-
-function getMaterialPointsScored($studentID, $materialID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT gradeMaterialPointsScored FROM grades WHERE gradeMaterialID = ? AND gradeStudentID = ?"))
-    {
-        $stmt->bind_param('ii', $materialID, $studentID);
-        $stmt->execute();
-        $stmt->bind_result($materialPointsScored);
-        $stmt->store_result();
-
-        $stmt->fetch();
-
-        if ($stmt->num_rows > 0)
-        {
-            return $materialPointsScored;
-        }
-        else
-        {
-            return "0";
-        }
-    }
-    else
-    {
-        return "0";
     }
 }
 
@@ -263,25 +237,6 @@ function getMaterialName($materialID, $mysqli)
     else
     {
         return "NULL";
-    }
-}
-
-function getMaterialPointsPossible($materialID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT materialPointsPossible FROM materials WHERE materialID = ?"))
-    {
-        $stmt->bind_param('i', $materialID);
-        $stmt->execute();
-        $stmt->bind_result($materialPointsPossible);
-        $stmt->store_result();
-
-        $stmt->fetch();
-
-        return $materialPointsPossible;
-    }
-    else
-    {
-        return;
     }
 }
 
