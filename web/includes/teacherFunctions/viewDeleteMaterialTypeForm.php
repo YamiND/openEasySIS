@@ -143,10 +143,11 @@ function getClassForm($mysqli)
 function getClassList($mysqli)
 {
     $teacherID = $_SESSION['userID'];
+	$yearID = getClassYearID($mysqli);
 
-    if ($stmt = $mysqli->prepare("SELECT classID, className FROM classes WHERE classTeacherID = ?"))
+    if ($stmt = $mysqli->prepare("SELECT classID, className FROM classes WHERE classTeacherID = ? AND schoolYearID = ?"))
     {
-        $stmt->bind_param('i', $teacherID);
+        $stmt->bind_param('ii', $teacherID, $yearID);
         $stmt->execute();
         $stmt->bind_result($classID, $className);
         $stmt->store_result();

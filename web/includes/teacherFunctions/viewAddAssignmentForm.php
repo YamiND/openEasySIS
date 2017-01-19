@@ -87,9 +87,11 @@ function displayClassAssignmentForm($mysqli)
     $teacherID = $_SESSION['userID'];
     $classID = $_SESSION['classID'];
 
-    if ($stmt = $mysqli->prepare("SELECT className FROM classes WHERE classTeacherID = ? AND classID = ?"))
+	$yearID = getClassYearID($mysqli);
+
+    if ($stmt = $mysqli->prepare("SELECT className FROM classes WHERE classTeacherID = ? AND classID = ? AND schoolYearID = ?"))
     {
-        $stmt->bind_param('ii', $teacherID, $classID);
+        $stmt->bind_param('iii', $teacherID, $classID, $yearID);
 
         $stmt->execute();
         $stmt->bind_result($className);
