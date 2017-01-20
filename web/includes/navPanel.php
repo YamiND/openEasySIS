@@ -175,6 +175,9 @@ if (login_check($mysqli) == true)
                         <a href="viewStudentList">View Student List</a>
                     </li>
                     <li>
+                        <a href="viewGradeForStudent">View Grades for Student</a>
+                    </li>
+                    <li>
                         <a href="teacherGradebook">Gradebook</a>
                     </li>
                 </ul>   
@@ -236,7 +239,7 @@ if (login_check($mysqli) == true)
             <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Grades <span class="fa arrow"></span></a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="viewStudentClassGrades">TODO: View all Class Grades</a>
+                    <a href="viewStudentClassGrades">View all Class Grades</a>
                 </li>
             </ul>   
             </li>
