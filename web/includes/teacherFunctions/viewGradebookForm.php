@@ -19,6 +19,7 @@ if (isset($_POST['changeClass']))
     unset($_SESSION['classID']);
     unset($_SESSION['materialID']);
 }
+
 //TODO: Test this after adding multiple students to a class
 function checkPermissions($mysqli)
 {

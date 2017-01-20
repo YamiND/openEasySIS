@@ -1,4 +1,8 @@
 <?php
+//include("./functions.php");
+//include("./dbConnect.php");
+
+//getClassGrade(5, 1, $mysqli);
 
 function getClassYearID($mysqli)
 {
@@ -25,7 +29,6 @@ function getClassYearID($mysqli)
 
 function getClassGrade($studentID, $classID, $mysqli)
 {
-
 	// General Equation for Weighted Grading
 	// type1 * (type1Weight) + type2 * (type2Weight) + type3 * (type3Weight)
 	// = a % then multiply by 100
@@ -37,12 +40,14 @@ function getClassGrade($studentID, $classID, $mysqli)
         $stmt->bind_result($materialTypeID, $materialWeight);
         $stmt->store_result();
 
+		$score = 0;
+		
 		while ($stmt->fetch())
 		{
-			$score += getScoreByMaterialType($materialTypeID, $materialWeight, $mysqli);
-
+			// Score should be adding as a percentage
+			$score += getScoreByMaterialType($materialTypeID, $materialWeight, $studentID, $classID, $mysqli);
 		}
-		return $score;
+		return ($score * 100);
 	}
 }
 
@@ -55,9 +60,16 @@ function getMaterialPointsScored($materialID, $classID, $studentID, $mysqli)
         $stmt->bind_result($gradeMaterialPointsScored);
         $stmt->store_result();
 
-		while ($stmt->fetch())
+		if ($stmt->num_rows > 0)
 		{
-			return $gradeMaterialPointsScored;
+			while ($stmt->fetch())
+			{
+				return $gradeMaterialPointsScored;
+			}
+		}
+		else
+		{
+			return "0";
 		}
 	}
 }
@@ -78,7 +90,7 @@ function getMaterialPointsPossible($materialID, $mysqli)
 	} 
 }
 
-function getScoreByMaterialType($materialTypeID, $materialWeight, $mysqli)
+function getScoreByMaterialType($materialTypeID, $materialWeight, $studentID, $classID, $mysqli)
 {
 	if ($stmt = $mysqli->prepare("SELECT materialID FROM materials WHERE materialTypeID = ?"))
 	{
@@ -87,40 +99,42 @@ function getScoreByMaterialType($materialTypeID, $materialWeight, $mysqli)
         $stmt->bind_result($materialID);
         $stmt->store_result();
 
-		while ($stmt->fetch())
+		$totalMPS = 0;
+		$totalMPP = 0;
+		
+		if ($stmt->num_rows > 0)
 		{
-			$materialPointsPossible = getMaterialPointsPossible($materialID, $mysqli);
-			$materialPointsScored = getMaterialPointsScored($materialID, $classID, $studentID, $mysqli);	
+			while ($stmt->fetch())
+			{
+				$materialPointsPossible = getMaterialPointsPossible($materialID, $mysqli);
+				$materialPointsScored = getMaterialPointsScored($materialID, $classID, $studentID, $mysqli);	
 
-			$tempScore = $materialPointsScored / $materialPointsPossible ;
-	
-			$score += $tempScore;	
+				$totalMPS += $materialPointsScored;
+				$totalMPP += $materialPointsPossible;
+			}			
+
+			if ($totalMPP != 0)
+			{
+				$totalScore = (($totalMPS / $totalMPP) * ($materialWeight * 0.01));
+			}
+			else
+			{
+				$totalScore = 0;
+			}
 		}
-	
-		if ($materialWeight != 0)
+		else
 		{
-			// Factor Weight into the score
-			$score = $score * ($materialWeight * 0.10);
+			$totalScore = $materialWeight * 0.01;
 		}
 
-		return $score;
+		return $totalScore;
 	}
+	else
+	{
+		$totalScore = $materialWeight * 0.01;
+	}
+
+	return $totalScore;
 }
-// Test studentID = 5
-// Test ClassID = 1
-/*    if ($stmt = $mysqli->prepare("SELECT gradeRefID, gradeMaterialID, gradeMaterialPointsScored FROM grades WHERE gradeStudentID = ? AND gradeClassID = ?"))
-    {
-		$stmt->bind_param('ii', $studentID, $classID);
-        $stmt->execute();
-        $stmt->bind_result($gradeRefID, $gradeMaterialID, $gradeMaterialPointsScored);
-        $stmt->store_result();
-
-		while ($stmt->fetch())
-		{
-			$materialPointsPossible = getMaterialPointsPossible($gradeMaterialID, $mysqli);
-		}
-	}*/
-//}
-
 
 ?>

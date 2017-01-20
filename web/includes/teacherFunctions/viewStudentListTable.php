@@ -47,6 +47,7 @@ function viewStudentList($mysqli)
                                                     <th>First Name</th>
                                                     <th>Last Name</th>
                                                     <th>Email</th>
+													<th>Grade</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -95,7 +96,7 @@ function getStudentID($classID, $mysqli)
 
 		while($stmt->fetch())
 		{
-            getStudentInfo($studentID, $mysqli);       
+            getStudentInfo($studentID, $classID, $mysqli);       
 		}			
 	}
 	else
@@ -105,7 +106,7 @@ function getStudentID($classID, $mysqli)
 	}
 }
 
-function getStudentInfo($studentID, $mysqli)
+function getStudentInfo($studentID, $classID, $mysqli)
 {
     if ($stmt = $mysqli->prepare("SELECT studentFirstName, studentLastName, studentEmail FROM studentProfile WHERE studentID = ?"))
     {
@@ -114,6 +115,8 @@ function getStudentInfo($studentID, $mysqli)
         $stmt->bind_result($studentFirstName, $studentLastName, $studentEmail);
         $stmt->store_result();
 
+		$studentGrade = getClassGrade($studentID, $classID, $mysqli);
+
         while($stmt->fetch())
         {       
             echo '
@@ -121,6 +124,7 @@ function getStudentInfo($studentID, $mysqli)
                         <td>' . $studentFirstName . '</td>
                         <td>' . $studentLastName . '</td>
                         <td>' . $studentEmail . '</td>
+						<td>' . $studentGrade . '%</td>
                     </tr>
                 ';
         }           

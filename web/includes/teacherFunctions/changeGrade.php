@@ -81,7 +81,7 @@ function checkAssignmentExists($studentID, $materialID, $mysqli)
 
         $stmt->fetch();
 
-        if ($stmt->num_rows == 1)
+        if ($stmt->num_rows >= 1)
         {
             return true;
         }
@@ -90,6 +90,10 @@ function checkAssignmentExists($studentID, $materialID, $mysqli)
             return false;
         }
     }
+	else
+	{
+		return false;
+	}
 }
 
 ?>
