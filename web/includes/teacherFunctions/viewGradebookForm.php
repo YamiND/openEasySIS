@@ -106,7 +106,7 @@ echo '
                                     echo "<br>";
                                 }
 
-                                if ((getClassNumber($mysqli) > 1) && isset($_SESSION['classID']))
+                                if ((getClassNumber($mysqli) > 1) || isset($_SESSION['classID']))
                                 {
                                     generateFormStart("", "post");
                                         generateFormButton("changeClass", "Change Class");
