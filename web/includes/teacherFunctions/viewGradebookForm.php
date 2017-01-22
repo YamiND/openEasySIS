@@ -58,7 +58,7 @@ echo '
                             <!-- Tab panes -->
                             <div class="tab-content">';
 
-                                if ((getClassNumber($mysqli) > 1) && (!isset($_SESSION['classID'])))
+                                if ((getClassNumber($mysqli) > 1) && (!isset($_SESSION['classID'])) && (!empty($_SESSION['classID'])))
                                 {
                                     echo "<h4>Select Class</h4>";
                                 }
@@ -76,11 +76,11 @@ echo '
                                 <div class="tab-pane fade in active" id="selectAssignment">';
 
                             
-                               if ((getClassNumber($mysqli) > 1) && (!isset($_SESSION['classID'])))
+                               if ((getClassNumber($mysqli) > 1) && (!isset($_SESSION['classID'])) && !empty($_SESSION['classID']))
                                 {
                                     getClassForm($mysqli);
                                 }
-                                else if (getClassNumber($mysqli) < 1)
+                                else if (getClassNumber($mysqli) < 2)
                                 {
                                     $_SESSION['classID'] = getClassID($mysqli);
                                 }
@@ -329,11 +329,12 @@ function getClassNumber($mysqli)
 
 function getClassID($mysqli)
 {
+	$yearID = getClassYearID($mysqli);
     $teacherID = $_SESSION['userID'];
 
-    if ($stmt = $mysqli->prepare("SELECT classID FROM classes WHERE classTeacherID = ?"))
+    if ($stmt = $mysqli->prepare("SELECT classID FROM classes WHERE classTeacherID = ? AND schoolYearID = ? LIMIT 1"))
     {
-        $stmt->bind_param('i', $teacherID);
+        $stmt->bind_param('ii', $teacherID, $yearID);
         $stmt->execute();
         $stmt->bind_result($classID);
         $stmt->store_result();
