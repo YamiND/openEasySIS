@@ -4,20 +4,20 @@ if (isset($_POST['classID']))
     $_SESSION['classID'] = $_POST['classID'];
 }
 
-if (isset($_POST['materialID']))
+if (isset($_POST['studentID']))
 {
-    $_SESSION['materialID'] = $_POST['materialID'];
+    $_SESSION['studentID'] = $_POST['studentID'];
 }
 
-if (isset($_POST['changeAssignment']))
+if (isset($_POST['changeStudent']))
 {
-    unset($_SESSION['materialID']);
+    unset($_SESSION['studentID']);
 }
 
 if (isset($_POST['changeClass']))
 {
     unset($_SESSION['classID']);
-    unset($_SESSION['materialID']);
+    unset($_SESSION['studentID']);
 }
 
 //TODO: Test this after adding multiple students to a class
@@ -25,7 +25,7 @@ function checkPermissions($mysqli)
 {
     if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
     {
-        viewGradebookForm($mysqli);
+        viewGradeForStudentTable($mysqli);
     }
     else
     {
@@ -35,23 +35,23 @@ function checkPermissions($mysqli)
     }
 }
 
-function viewGradebookForm($mysqli)
+function viewGradeForStudentTable($mysqli)
 {
 	echo '
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
 	     ';
 						// Call Session Message code and Panel Heading here
-                        displayPanelHeading("Student Gradebook");
+                        displayPanelHeading("View Grade for Student");
 echo '
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs">
-                                <li class="active"><a href="#addMaterialType" data-toggle="tab">Student Gradebook</a>
+                                <li class="active"><a href="#addMaterialType" data-toggle="tab">Student Grades</a>
                                 </li>
                             </ul>
 
@@ -62,13 +62,13 @@ echo '
                                 {
                                     echo "<h4>Select Class</h4>";
                                 }
-                                else if (isset($_SESSION['materialID']))
+                                else if (isset($_SESSION['studentID']))
                                 {
-                                    echo '<h4>Assignment Name: ' . getMaterialName($_SESSION['materialID'], $mysqli) . '</h4>';
+                                    echo '<h4>' .  getStudentName($_SESSION['studentID'], $mysqli) . '    -----  Grade: ' . getClassGrade($_SESSION['studentID'], $_SESSION['classID'], $mysqli) . '%</h4>';
                                 }
                                 else
                                 {
-                                    echo '<h4>Select Assignment</h4>';
+                                    echo '<h4>Select Student</h4>';
                                 }
 
                             echo '
@@ -83,25 +83,26 @@ echo '
                                 else if (getClassNumber($mysqli) < 2)
                                 {
                                     $_SESSION['classID'] = getClassID($mysqli);
+			
                                 }
 
-                                if ((isset($_SESSION['classID'])) && (!isset($_SESSION['materialID'])))
+                                if ((isset($_SESSION['classID'])) && (!isset($_SESSION['studentID'])))
                                 {
-                                    chooseAssignmentForm($_SESSION['classID'], $mysqli);
+                                    chooseStudentForm($_SESSION['classID'], $mysqli);
                                 }
 
-                                if (isset($_SESSION['materialID']))
+                                if (isset($_SESSION['studentID']))
                                 {
-                                    viewGradebook($_SESSION['classID'], $_SESSION['materialID'], $mysqli);
+                                    viewStudentGrades($_SESSION['studentID'], $_SESSION['classID'], $mysqli);
                                 }
 echo '
                                 </div>
                 ';
 
-                                if (isset($_SESSION['materialID']))
+                                if (isset($_SESSION['studentID']))
                                 {
                                     generateFormStart("", "post");
-                                        generateFormButton("changeAssignment", "Change Assignment");
+                                        generateFormButton("changeStudent", "Change Student");
                                     generateFormEnd();
                                     echo "<br>";
                                 }
@@ -124,27 +125,25 @@ echo '
 
 }
 
-function viewGradebook($classID, $materialID, $mysqli)
+function viewStudentGrades($studentID, $classID, $mysqli)
 {
-    $materialName = getMaterialName($materialID, $mysqli);
-
     echo '
            
-                                <table width="100%" class="table table-striped table-bordered table-hover" id="' . $materialID . '">
+                                <table width="100%" class="table table-striped table-bordered table-hover" id="' . $studentID . '">
                                     <thead>
-
                                         <tr>
-                                            <th>First Name</th>
-                                            <th>Last Name</th>
-                                            <th>Points Earned</th>
+                                            <th>Assignment Name</th>
+                                            <th>Assignment Due Date</th>
+                                            <th>Assigment Type</th>
+                                            <th>Points Scored</th>
                                             <th>Points Possible</th>
-                                            <th>Submit Changes</th>
+                                            <th>Assignment Grade</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     
         ';          
-                                        getStudentID($classID, $materialID, $mysqli);
+			getAssignmentsForStudentClass($studentID, $classID, $mysqli);
     echo ' 
                                     </tbody>
                                 </table>
@@ -153,7 +152,7 @@ function viewGradebook($classID, $materialID, $mysqli)
                 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
                 <script>
                 $(document).ready(function() {
-                    $(\'#' . $materialID . '\').DataTable({
+                    $(\'#' . $studentID . '\').DataTable({
                         responsive: true
                     });
                 });
@@ -162,7 +161,61 @@ function viewGradebook($classID, $materialID, $mysqli)
 
 }
 
-function getStudentID($classID, $materialID, $mysqli)
+function getAssignmentsForStudentClass($studentID, $classID, $mysqli)
+{
+    if ($stmt = $mysqli->prepare("SELECT materialID, materialName, materialPointsPossible, materialDueDate, materialTypeID FROM materials WHERE materialClassID = ?"))
+    {
+        $stmt->bind_param('i', $classID);
+        $stmt->execute();
+        $stmt->bind_result($materialID, $materialName, $materialPointsPossible, $materialDueDate, $materialTypeID);
+        $stmt->store_result();
+
+		while ($stmt->fetch())
+		{
+			$materialPointsScored = getMaterialPointsScored($materialID, $classID, $studentID, $mysqli);
+
+			$materialTotalPoints = ($materialPointsScored / $materialPointsPossible) * 100;
+
+			 echo '
+                    <tr class="gradeA">
+                        <td>' . $materialName. '</td>
+                        <td>' . $materialDueDate . '</td>
+                        <td>' . getMaterialTypeName($materialTypeID, $mysqli) . '</td>
+                        <td>' . $materialPointsScored . '</td>
+                        <td> /' . $materialPointsPossible . '</td>
+                        <td>' . $materialTotalPoints . '%</td>
+                    </tr>
+                ';
+		
+		}
+    }
+}
+
+function getMaterialTypeName($materialTypeID, $mysqli)
+{
+    if ($stmt = $mysqli->prepare("SELECT materialName FROM materialType WHERE materialTypeID = ?"))
+    {   
+        $stmt->bind_param('i', $materialTypeID);
+        $stmt->execute();
+        $stmt->bind_result($materialTypeNameResult);
+        $stmt->store_result();
+
+    if ($stmt->num_rows > 0)
+    {   
+        while ($stmt->fetch())
+        {   
+            return $materialTypeNameResult;
+        }   
+    }   
+    else
+    {   
+        return "No Assignment Types";
+    }   
+
+    }   
+}
+
+function chooseStudentForm($classID, $mysqli)
 {
     if ($stmt = $mysqli->prepare("SELECT studentID FROM studentClassIDs WHERE classID = ?"))
     {
@@ -171,10 +224,15 @@ function getStudentID($classID, $materialID, $mysqli)
         $stmt->bind_result($studentID);
         $stmt->store_result();
 
+        generateFormStart("", "post");
+        	generateFormStartSelectDiv(NULL, "studentID");
         while($stmt->fetch())
         {
-            getStudentInfo($classID, $studentID, $materialID, $mysqli);       
+            getStudentInfo($classID, $studentID, $mysqli);       
         }           
+		    generateFormEndSelectDiv();
+            generateFormButton("selectStudent", "Select Student");
+        generateFormEnd();
     }
     else
     {
@@ -183,10 +241,8 @@ function getStudentID($classID, $materialID, $mysqli)
     }
 }
 
-function getStudentInfo($classID, $studentID, $materialID, $mysqli)
+function getStudentInfo($classID, $studentID, $mysqli)
 {
-    getMaterialPointsPossible($materialID, $mysqli);
-
     if ($stmt = $mysqli->prepare("SELECT studentFirstName, studentLastName FROM studentProfile WHERE studentID = ?"))
     {
         $stmt->bind_param('i', $studentID);
@@ -196,24 +252,7 @@ function getStudentInfo($classID, $studentID, $materialID, $mysqli)
 
         while($stmt->fetch())
         {       
-            echo '
-                    <tr class="gradeA">
-                ';
-                    generateFormStart("../includes/teacherFunctions/changeGrade", "post");
-                        generateFormHiddenInput("classID", $classID);
-                        generateFormHiddenInput("studentID", $studentID);
-                        generateFormHiddenInput("materialID", $materialID);         
-            echo '
-                        <td>' . $studentFirstName . '</td>
-                        <td>' . $studentLastName . '</td>
-                        <td> '; echo generateFormInput("number", "materialPointsScored", getMaterialPointsScored($materialID, $classID, $studentID, $mysqli), NULL, NULL, $materialPointsPossible); echo '</td>
-                        <td>' . '/ '; echo  getMaterialPointsPossible($materialID, $mysqli); echo  '</td>
-                        <td>'; echo generateFormButton("applyChangesButton", "Apply Changes"); echo '</td>
-                ';
-                        generateFormEnd();
-            echo '
-                    </tr>
-                ';
+        	generateFormOption($studentID, "$studentLastName, $studentFirstName");
         }           
     }
     else
@@ -222,51 +261,19 @@ function getStudentInfo($classID, $studentID, $materialID, $mysqli)
     }
 }
 
-function getMaterialName($materialID, $mysqli)
+function getStudentName($studentID, $mysqli)
 {
-    if ($stmt = $mysqli->prepare("SELECT materialName FROM materials WHERE materialID = ?"))
+    if ($stmt = $mysqli->prepare("SELECT studentFirstName, studentLastName FROM studentProfile WHERE studentID = ?"))
     {
-        $stmt->bind_param('i', $materialID);
+        $stmt->bind_param('i', $studentID);
         $stmt->execute();
-        $stmt->bind_result($materialName);
+        $stmt->bind_result($studentFirstName, $studentLastName);
         $stmt->store_result();
 
-        $stmt->fetch();
-
-        return $materialName;
-    }
-    else
-    {
-        return "NULL";
-    }
-}
-
-function chooseAssignmentForm($classID, $mysqli)
-{
-    generateFormStart("", "post");
-        generateFormHiddenInput("classID", $classID);       
-        generateFormStartSelectDiv("Assignment", "materialID");
-            getAssignmentList($classID, $mysqli);
-        generateFormEndSelectDiv();
-        generateFormButton("selectAssignmentButton", "Select Assignment");
-    generateFormEnd();
-    echo "<br>";
-}
-
-function getAssignmentList($classID, $mysqli)
-{
-    
-    if ($stmt = $mysqli->prepare("SELECT materialID, materialName FROM materials WHERE materialClassID = ?"))
-    {
-        $stmt->bind_param('i', $classID);
-        $stmt->execute();
-        $stmt->bind_result($materialID, $materialName);
-        $stmt->store_result();
-
-        while ($stmt->fetch())
-        {
-            generateFormOption($materialID, $materialName);
-        }
+        while($stmt->fetch())
+        {       
+			return "$studentLastName, $studentFirstName";
+        }           
     }
     else
     {
@@ -278,31 +285,25 @@ function getClassForm($mysqli)
 {
     generateFormStart("", "post");      
         generateFormStartSelectDiv(NULL, "classID");
-            getClassList($mysqli);
+    		$teacherID = $_SESSION['userID'];
+			$yearID = getClassYearID($mysqli);
+
+		    if ($stmt = $mysqli->prepare("SELECT classID, className FROM classes WHERE classTeacherID = ? AND schoolYearID = ?"))
+		    {
+		        $stmt->bind_param('ii', $teacherID, $yearID);
+		        $stmt->execute();
+       		 	$stmt->bind_result($classID, $className);
+		        $stmt->store_result();
+
+		        while($stmt->fetch())
+       			{
+		            generateFormOption($classID, $className);
+   			    }
+		    }
         generateFormEndSelectDiv();
         generateFormButton("selectClassButton", "Select Class");
     generateFormEnd();
     echo "<br>";
-}
-
-function getClassList($mysqli)
-{
-    $teacherID = $_SESSION['userID'];
-
-	$yearID = getClassYearID($mysqli);
-
-    if ($stmt = $mysqli->prepare("SELECT classID, className FROM classes WHERE classTeacherID = ? AND schoolYearID = ?"))
-    {
-        $stmt->bind_param('ii', $teacherID, $yearID);
-        $stmt->execute();
-        $stmt->bind_result($classID, $className);
-        $stmt->store_result();
-
-        while($stmt->fetch())
-        {
-            generateFormOption($classID, $className);
-        }
-    }
 }
 
 function getClassNumber($mysqli)
