@@ -107,6 +107,9 @@ if (login_check($mysqli) == true)
     				<li>
     					<a href="viewUserTables">View All Users</a>
     				</li>
+    				<li>
+    					<a href="viewStudentTranscript">View Student Transcript</a>
+    				</li>
     			</ul>	
             </li>
             <li>
@@ -222,8 +225,21 @@ if (login_check($mysqli) == true)
     {
     echo '
             <li>
-                <a href="parentDashboard"><i class="fa fa-dashboard fa-fw"></i> Parent</a>
+                <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="parentDashboard">Overview</a>
+                    </li>
+                </ul>   
             </li>
+			<li>
+	            <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Student <span class="fa arrow"></span></a>
+   		         <ul class="nav nav-second-level">
+       		         <li>
+           		         <a href="viewParentStudentGrades">View all Class Grades</a>
+               		 </li>
+	            </ul>   
+			</li>
     	';
     }
     else if (roleID_check($mysqli) == 5)
