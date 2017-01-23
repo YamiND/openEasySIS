@@ -135,7 +135,7 @@ function getTeacherProfile($userID, $mysqli)
 
         $stmt->execute();
 
-        $stmt->bind_result($teacherFirstName, $teacherFirstName, $teacherEmail);
+        $stmt->bind_result($teacherFirstName, $teacherLastName, $teacherEmail);
         
         $stmt->store_result();
         
