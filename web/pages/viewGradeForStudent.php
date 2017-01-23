@@ -40,7 +40,7 @@
             <!-- /.row -->
 
 			<?php
-				viewGradesForStudentTable($mysqli)
+				checkPermissions($mysqli)
 			?>
             <!-- /.row -->
                                 </tbody>
