@@ -16,7 +16,6 @@ function checkPermissions($mysqli)
 
 function viewStudentGradesTable($mysqli)
 {
-
     $studentID = $_SESSION['userID'];
 	$yearID = getClassYearID($mysqli);
 
@@ -80,7 +79,7 @@ function viewStudentGradesTable($mysqli)
     }
     else
     {
-        echo "You are not a teacher!";
+        echo "You are not a student!";
         return;
     }   
 }
