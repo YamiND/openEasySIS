@@ -56,10 +56,18 @@ function adminChangePassword($userEmail, $password, $hashedPassword, $randomSalt
     if ($stmt = $mysqli->prepare("UPDATE users SET userPassword = ?, userSalt = ? WHERE userEmail = ?"))
 	{
     	$stmt->bind_param('sss', $hashedPassword, $randomSalt, $userEmail);  // Bind "$email" to parameter.
-	    $stmt->execute();    // Execute the prepared query.
-
-		$_SESSION['success'] = "Password Reset Succeeded - Password for $userEmail is $password";
-   		header('Location: ../../pages/adminPasswordReset');
+	    if ($stmt->execute())    // Execute the prepared query.
+		{
+			appendLog("passwordReset.txt", "Email: $userEmail password reset by admin");
+			$_SESSION['success'] = "Password Reset Succeeded - Password for $userEmail is $password";
+	   		header('Location: ../../pages/adminPasswordReset');
+		}
+		else
+		{
+			appendLog("passwordReset.txt", "Email: $userEmail password could not be reset");
+			$_SESSION['fail'] = "Password could not be reset";
+	   		header('Location: ../../pages/adminPasswordReset');
+		}
 	}
 }
 

@@ -1,0 +1,2 @@
+School year could not be added, year already exists
+School yeare added

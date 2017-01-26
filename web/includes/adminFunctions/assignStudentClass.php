@@ -26,10 +26,18 @@ function assignStudentClass($mysqli)
 	    if ($stmt = $mysqli->prepare("INSERT INTO studentClassIDs (studentID, classID) VALUES (?, ?)"))
 			{
 	    		$stmt->bind_param('ii', $studentID, $classID); 
-		    	$stmt->execute();    // Execute the prepared query
-
-				$_SESSION['success'] = "Student added to Class";
-	   	   		header('Location: ../../pages/assignStudent');
+		    	if ($stmt->execute())    // Execute the prepared query
+				{
+					appendLog("classes.txt", "Student: $studentID added to Class: $classID");
+					$_SESSION['success'] = "Student added to Class";
+	   	   			header('Location: ../../pages/assignStudent');
+				}
+				else
+				{
+					appendLog("classes.txt", "Student: $studentID could not be added to Class: $classID, $stmt->error");
+	    			$_SESSION['fail'] = 'Student could not be added to Class';
+	   	   			header('Location: ../../pages/assignStudent');
+				}
 			}
 			else
 			{

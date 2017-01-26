@@ -4,6 +4,7 @@ include_once '../includes/functions.php';
 include_once '../includes/panelSessionMessages.php';
 include_once '../includes/formTemplate.php';
 include_once '../includes/classFunctionsTemplate.php';
+include_once '../includes/parentFunctionsTemplate.php';
 
 sec_session_start();
 
@@ -154,10 +155,24 @@ if (login_check($mysqli) == true)
     else if (roleID_check($mysqli) == 2)
     {
     echo '
-                        
             <li>
-                <a href="schoolAdminDashboard"><i class="fa fa-dashboard fa-fw"></i> School Administrator</a>
+                <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="schoolAdminDashboard">Overview</a>
+                    </li>
+                </ul>   
             </li>
+          	<a href="#"><i class="fa fa-wrench fa-fw"></i> Report Generation <span class="fa arrow"></span></a>
+    			<ul class="nav nav-second-level">
+    				<li>
+    					<a href="generateTranscript">Generate Transcript</a>
+    				</li>
+    				<li>
+    					<a href="generateReportCard">Generate Report Card</a>
+    				</li>
+    			</ul>	
+            </li>  
         ';
     }
     else if (roleID_check($mysqli) == 3)
@@ -237,6 +252,9 @@ if (login_check($mysqli) == true)
    		         <ul class="nav nav-second-level">
        		         <li>
            		         <a href="viewParentStudentGrades">View all Class Grades</a>
+               		 </li>
+       		         <li>
+           		         <a href="viewParentStudentAllAssignments">View all Student Assignments</a>
                		 </li>
 	            </ul>   
 			</li>
