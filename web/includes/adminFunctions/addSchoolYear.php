@@ -1,6 +1,7 @@
 <?php
 include_once '../dbConnect.php';
 include_once '../functions.php';
+include_once '../logTemplate.php';
 
 //TODO: I need to comment my code (and then need to redo the error checking)
 // For example:
@@ -65,6 +66,7 @@ function addSchoolYear($mysqli)
 
 				if (($tempSchoolYearEnd == $tempDbSchoolYearEnd) || ($tempSchoolYearEnd < $tempDbSchoolYearEnd) || ($tempSchoolYearStart < $tempSchoolYearEnd))
 				{
+					appendLog("schoolyear.txt", "School year could not be added, year already exists");
    					$_SESSION['fail'] = 'School Year could not be added, year already exists';
 				   	header('Location: ../../pages/addSchoolYear');
 				}
@@ -73,15 +75,23 @@ function addSchoolYear($mysqli)
 			if ($stmt = $mysqli->prepare("INSERT INTO schoolYear (fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd, quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, schoolYearStart, schoolYearEnd) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
 			{
     			$stmt->bind_param('ssssssssssss', $fallSemesterStart, $fallSemesterEnd, $springSemesterStart, $springSemesterEnd, $quarterOneStart, $quarterOneEnd, $quarterTwoStart, $quarterTwoEnd, $quarterThreeStart, $quarterThreeEnd, $schoolYearStart, $schoolYearEnd); 
-	    		$stmt->execute();    // Execute the prepared query.
+	    		if ($stmt->execute())    // Execute the prepared query.
+				{
+					appendLog("schoolyear.txt", "School yeare added");
+					$_SESSION['success'] = "School Year Added";
+   	   				header('Location: ../../pages/addSchoolYear');
+				}
+				else
+				{
+					appendLog("schoolyear.txt", "School year could not be added, year already exists");
+    				$_SESSION['fail'] = 'School Year could not be added to database';
+				}
 
-				$_SESSION['success'] = "School Year Added";
-   	   			header('Location: ../../pages/addSchoolYear');
 			}
 			else
 			{
     			// The correct POST variables were not sent to this page.
-    			$_SESSION['success'] = 'School Year could not be added to database';
+    			$_SESSION['fail'] = 'School Year could not be added to database';
    	   			header('Location: ../../pages/addSchoolYear');
 			}
 		}
