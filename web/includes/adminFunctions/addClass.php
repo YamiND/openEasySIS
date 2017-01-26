@@ -2,6 +2,7 @@
 include_once '../dbConnect.php';
 include_once '../functions.php';
 include_once '../classFunctionsTemplate.php';
+include_once '../logTemplate.php';
 
 sec_session_start(); // Our custom secure way of starting a PHP session.
 
@@ -37,6 +38,7 @@ function addClass($mysqli)
             {
                 if (($className == $dbClassName) && ($classGradeLevel == $dbClassGrade))
                 {
+					appendLog("classes.txt", "Grade: $classGradeLevel Class: $className could not be added, already exists");
    	                $_SESSION['fail'] = 'Class can not have same name';
                    	header('Location: ../../pages/addClass');
 
@@ -48,9 +50,16 @@ function addClass($mysqli)
     	if ($stmt = $mysqli->prepare("INSERT INTO classes (classGrade, className, classTeacherID, schoolYearID) VALUES (?, ?, ?, ?)"))
 		{
     		$stmt->bind_param('isii', $classGradeLevel, $className, $classTeacherID, $classYearID); 
-	    	$stmt->execute();    // Execute the prepared query.
-			$_SESSION['success'] = "Class Added";
-   	   		header('Location: ../../pages/addClass');
+	    	if ($stmt->execute())
+			{
+				appendLog("classes.txt", "Grade: $classGradeLevel Class: $className added successfully");
+				$_SESSION['success'] = "Class Added";
+   	   			header('Location: ../../pages/addClass');
+			}
+			else
+			{
+				appendLog("classes.txt", "$stmt->error");
+			}
 		}
 		else
 		{
