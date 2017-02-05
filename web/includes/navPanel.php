@@ -109,7 +109,10 @@ if (login_check($mysqli) == true)
     					<a href="viewUserTables">View All Users</a>
     				</li>
     				<li>
-    					<a href="viewStudentTranscript">View Student Transcript</a>
+    					<a href="viewStudentReportCard">View Student Report Card(TODO)</a>
+    				</li>
+    				<li>
+    					<a href="viewStudentTranscript">View Student Transcript(TODO)</a>
     				</li>
     			</ul>	
             </li>
@@ -163,6 +166,7 @@ if (login_check($mysqli) == true)
                     </li>
                 </ul>   
             </li>
+			<li>
           	<a href="#"><i class="fa fa-wrench fa-fw"></i> Report Generation <span class="fa arrow"></span></a>
     			<ul class="nav nav-second-level">
     				<li>

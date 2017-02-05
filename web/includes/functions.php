@@ -1,6 +1,5 @@
 <?php
 include_once 'dbConfig.php';
-include_once '../logTemplate.php';
  
 function sec_session_start() 
 {

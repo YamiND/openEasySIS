@@ -130,7 +130,7 @@ function getStudentListTable($classID, $mysqli)
         while($stmt->fetch())
         {
             
-                                                getStudentID($classID, $mysqli);
+                                                getStudentIDByClass($classID, $mysqli);
             echo ' 
                                             </tbody>
                                         </table>
@@ -211,7 +211,7 @@ function getGradeLevelForm()
     generateFormEnd();
 }
 
-function getStudentID($classID, $mysqli)
+function getStudentIDByClass($classID, $mysqli)
 {
 	if ($stmt = $mysqli->prepare("SELECT studentID FROM studentClassIDs WHERE classID = ?"))
 	{

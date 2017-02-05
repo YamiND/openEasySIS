@@ -152,24 +152,6 @@ function assignStudentForm($classID, $gradeID, $mysqli)
     }
 }
 
-function getStudentName($studentID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT studentFirstName, studentLastName FROM studentProfile WHERE studentID = ?"))
-    {
-        $stmt->bind_param('i', $studentID);
-        $stmt->execute();
-        $stmt->bind_result($studentLastName, $studentFirstName);
-        $stmt->store_result();
-
-        $stmt->fetch();
-        
-        if ($stmt->num_rows > 0)
-        {        
-            generateFormOption($studentID, "$studentLastName, $studentFirstName");
-        }
-    }
-}
-
 function getGradeLevelForm()
 {
     generateFormStart("", "post"); 

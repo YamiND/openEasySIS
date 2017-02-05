@@ -498,24 +498,4 @@ function getStudentList($userID, $mysqli)
     }
 }
 
-function getStudentName($studentID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT studentFirstName, studentLastName FROM studentProfile WHERE studentID = ?"))
-    {   
-        // Query database for announcement details to be modified
-        $stmt->bind_param('i', $studentID);
-
-        $stmt->execute();
-
-        $stmt->bind_result($studentFirstName, $studentLastName);
-        
-        $stmt->store_result();
-        
-        while ($stmt->fetch())
-        {
-            generateFormOption("studentName", "$studentLastName, $studentFirstName");
-        }
-    }
-}
-
 ?>
