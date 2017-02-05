@@ -1,6 +1,8 @@
 <?php
 include_once '../dbConnect.php';
 include_once '../functions.php';
+include_once '../classFunctionsTemplate.php';
+include_once '../parentFunctionsTemplate.php';
 
 sec_session_start(); // Our custom secure way of starting a PHP session.
 
@@ -41,6 +43,8 @@ function generateChoice($mysqli)
    	   			header('Location: ../../pages/generateReportCard');
 
 		}
+		$_SESSION['success'] = 'Report Card should be generated, check the file';
+   	   	header('Location: ../../pages/generateReportCard');
   	}
 	else
 	{
@@ -90,20 +94,142 @@ function generateAll($mysqli)
 
 function generateReportCard($studentID, $mysqli)
 {
+	$fp = fopen("/tmp/$studentID.txt", 'a');//opens file in append mode  
 	// Get grades that occur for each quarter
 	// Calculate grade for Quarter
 	// Calculate Total Grade
 	$yearID = getClassYearID($mysqli);
 
-	if ($stmt = $mysqli->prepare("SELECT quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd WHERE schoolYearID = ?"))
+	$studentName = getStudentName($studentID, $mysqli);
+	
+	fwrite($fp, "$studentName".PHP_EOL);  
+	fwrite($fp, "Class Name, Q1, Q2, Q3".PHP_EOL);  
+
+	if ($stmt = $mysqli->prepare("SELECT quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd FROM schoolYear WHERE schoolYearID = ?"))
 	{
-		$stmt->bind_param('i', $schoolYearID);
+		$stmt->bind_param('i', $yearID);
 
 		if ($stmt->execute())
 		{
-			$stmt->bind_result($quarterOneStart, $quarterOneEnd, $quarterTwoStart, $quarterTwoEnd, $quarterThreeStart, quarterThreeEnd, fallSemesterStart, fallSemesterEnd, springSemesterStart, sp    ringSemesterEnd);
+			$stmt->bind_result($quarterOneStart, $quarterOneEnd, $quarterTwoStart, $quarterTwoEnd, $quarterThreeStart, $quarterThreeEnd, $fallSemesterStart, $fallSemesterEnd, $springSemesterStart, $springSemesterEnd);
+
+			$stmt->store_result();
+
+			$stmt->fetch();
 		}
 	}
+				if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, classes.className FROM studentClassIDs INNER JOIN (classes) ON (classes.classID = studentClassIDs.classID AND studentClassIDs.studentID = ?)"))
+				{
+					$stmt->bind_param('i', $studentID);
+					$stmt->execute();
+					$stmt->bind_result($classID, $className);
+					$stmt->store_result();
+					while ($stmt->fetch())
+					{
+						$quarterOneGrade = getClassGradeForRange($fp, $studentID, $classID, $quarterOneStart, $quarterOneEnd, $mysqli);
+						$quarterTwoGrade = getClassGradeForRange($fp, $studentID, $classID, $quarterOneStart, $quarterTwoEnd, $mysqli);
+						$quarterThreeGrade = getClassGradeForRange($fp, $studentID, $classID, $quarterOneStart, $quarterThreeEnd, $mysqli);
+
+		//				fwrite($fp, "$className, $quarterOneGrade, $quarterTwoGrade, $quarterThreeGrade".PHP_EOL);  
+						fwrite($fp, "$className, $quarterOneGrade, $quarterTwoGrade, $quarterThreeGrade".PHP_EOL);  
+
+					//	$combined = "$className, $quarterOneGrade%, $quarterTwoGrade%, $quarterThreeGrade%";
+						// Output will be: Class Name, Q1, Q2, Q3
+					}
+				}
+	fclose($fp);  
+}
+
+function getClassGradeForRange($fp, $studentID, $classID, $startDate, $endDate, $mysqli)
+{
+	// General Equation for Weighted Grading
+    // type1 * (type1Weight) + type2 * (type2Weight) + type3 * (type3Weight)
+    // = a % then multiply by 100
+
+    if ($stmt = $mysqli->prepare("SELECT materialTypeID, materialWeight FROM materialType WHERE classID = ?"))
+    {   
+        $stmt->bind_param('i', $classID);
+        $stmt->execute();
+        $stmt->bind_result($materialTypeID, $materialWeight);
+        $stmt->store_result();
+
+        $score = 0;
+   
+	if ($stmt->num_rows > 0)
+	{ 
+        	while ($stmt->fetch())
+        	{   
+            	// Score should be adding as a percentage
+	            	$score += getScoreByMaterialTypeRange($materialTypeID, $materialWeight, $studentID, $classID, $startDate, $endDate, $mysqli);
+        	}   
+
+		if ($score < 0)
+		{
+			// Scores should only be negative if there's no assignments in the range
+			return "N/A";
+		}
+		else
+		{
+        		return ($score * 100) . "%";
+		}
+	}
+	else
+	{
+		return "N/A";
+	}
+    }  
+    else
+    {
+	return "N/A";
+    } 
+}
+
+function getScoreByMaterialTypeRange($materialTypeID, $materialWeight, $studentID, $classID, $startDate, $endDate, $mysqli)
+{
+    if ($stmt = $mysqli->prepare("SELECT materialID FROM materials WHERE materialClassID = ? AND materialTypeID = ? AND materialDueDate BETWEEN '{$startDate}' AND '{$endDate}'"))
+    {
+        $stmt->bind_param('ii', $classID, $materialTypeID);
+        $stmt->execute();
+        $stmt->bind_result($materialID);
+        $stmt->store_result();
+
+        $totalMPS = 0;
+        $totalMPP = 0;
+
+        if ($stmt->num_rows > 0)
+        {
+            while ($stmt->fetch())
+            {
+                $materialPointsPossible = getMaterialPointsPossible($materialID, $mysqli);
+                $materialPointsScored = getMaterialPointsScored($materialID, $classID, $studentID, $mysqli);
+
+                $totalMPS += $materialPointsScored;
+                $totalMPP += $materialPointsPossible;
+            }
+
+            if ($totalMPP != 0)
+            {
+                $totalScore = (($totalMPS / $totalMPP) * ($materialWeight * 0.01));
+            }
+            else
+            {
+                $totalScore = 0;
+            }
+        }
+        else
+        {
+//            $totalScore = $materialWeight * 0.01;
+		$totalScore = "-1";
+        }
+
+        return $totalScore;
+    }
+    else
+    {
+        $totalScore = NULL;
+    }
+
+    return $totalScore;
 }
 
 ?>
