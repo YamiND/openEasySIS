@@ -138,6 +138,221 @@ function login_check($mysqli)
     }
 }
 
+function isAdmin($mysqli)
+{
+	if (isset($_SESSION['userID']) && !empty($_SESSION['userID']))
+	{
+		$userID = $_SESSION['userID'];
+
+		if ($stmt = $mysqli->prepare("SELECT isAdmin FROM users WHERE userID = ? LIMIT 1"))
+		{
+			$stmt->bind_param('i', $userID);
+
+			if ($stmt->execute())
+			{
+				$stmt->store_result();
+
+				if ($stmt->num_rows == 1)
+				{
+					$stmt->bind_result($isAdmin);
+
+					$stmt->fetch();
+
+					return $isAdmin;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function isSchoolAdmin($mysqli)
+{
+	if (isset($_SESSION['userID']) && !empty($_SESSION['userID']))
+	{
+		$userID = $_SESSION['userID'];
+
+		if ($stmt = $mysqli->prepare("SELECT isSchoolAdmin FROM users WHERE userID = ? LIMIT 1"))
+		{
+			$stmt->bind_param('i', $userID);
+
+			if ($stmt->execute())
+			{
+				$stmt->store_result();
+
+				if ($stmt->num_rows == 1)
+				{
+					$stmt->bind_result($isSchoolAdmin);
+
+					$stmt->fetch();
+
+					return $isSchoolAdmin;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function isTeacher($mysqli)
+{
+	if (isset($_SESSION['userID']) && !empty($_SESSION['userID']))
+	{
+		$userID = $_SESSION['userID'];
+
+		if ($stmt = $mysqli->prepare("SELECT isTeacher FROM users WHERE userID = ? LIMIT 1"))
+		{
+			$stmt->bind_param('i', $userID);
+
+			if ($stmt->execute())
+			{
+				$stmt->store_result();
+
+				if ($stmt->num_rows == 1)
+				{
+					$stmt->bind_result($isTeacher);
+
+					$stmt->fetch();
+
+					return $isTeacher;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function isParent($mysqli)
+{
+	if (isset($_SESSION['userID']) && !empty($_SESSION['userID']))
+	{
+		$userID = $_SESSION['userID'];
+
+		if ($stmt = $mysqli->prepare("SELECT isParent FROM users WHERE userID = ? LIMIT 1"))
+		{
+			$stmt->bind_param('i', $userID);
+
+			if ($stmt->execute())
+			{
+				$stmt->store_result();
+
+				if ($stmt->num_rows == 1)
+				{
+					$stmt->bind_result($isParent);
+
+					$stmt->fetch();
+
+					return $isParent;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function isStudent($mysqli)
+{
+	if (isset($_SESSION['userID']) && !empty($_SESSION['userID']))
+	{
+		$userID = $_SESSION['userID'];
+
+		if ($stmt = $mysqli->prepare("SELECT isStudent FROM users WHERE userID = ? LIMIT 1"))
+		{
+			$stmt->bind_param('i', $userID);
+
+			if ($stmt->execute())
+			{
+				$stmt->store_result();
+
+				if ($stmt->num_rows == 1)
+				{
+					$stmt->bind_result($isStudent);
+
+					$stmt->fetch();
+
+					return $isStudent;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
 function roleID_check($mysqli) 
 {
 	if (isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail']))
