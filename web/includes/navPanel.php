@@ -51,7 +51,8 @@ if (login_check($mysqli) == true)
                         <ul class="nav" id="side-menu">
     ';
 
-    if (roleID_check($mysqli) == 1)
+//    if (roleID_check($mysqli) == 1)
+	if (isAdmin($mysqli))
     {
     echo '
             <li>
@@ -155,7 +156,8 @@ if (login_check($mysqli) == true)
             </li>  
         ';
     }
-    else if (roleID_check($mysqli) == 2)
+//    else if (roleID_check($mysqli) == 2)
+	if (isSchoolAdmin($mysqli))
     {
     echo '
             <li>
@@ -179,7 +181,8 @@ if (login_check($mysqli) == true)
             </li>  
         ';
     }
-    else if (roleID_check($mysqli) == 3)
+//    else if (roleID_check($mysqli) == 3)
+	if (isTeacher($mysqli))
     {
     echo '
             <li>
@@ -240,7 +243,8 @@ if (login_check($mysqli) == true)
             </li>
     	';
     }
-    else if (roleID_check($mysqli) == 4)
+//    else if (roleID_check($mysqli) == 4)
+	if (isParent($mysqli))
     {
     echo '
             <li>
@@ -264,7 +268,8 @@ if (login_check($mysqli) == true)
 			</li>
     	';
     }
-    else if (roleID_check($mysqli) == 5)
+//  else if (roleID_check($mysqli) == 5)
+	if (isStudent($mysqli))
     {
     echo '
             <li>
