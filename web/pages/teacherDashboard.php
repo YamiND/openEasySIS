@@ -25,7 +25,7 @@
             <!-- /.row -->
             <div class="row">
 	<?php 
-		if (roleID_check($mysqli) == 3):
+		if (isTeacher($mysqli)):
 	?>
 
 			<?php

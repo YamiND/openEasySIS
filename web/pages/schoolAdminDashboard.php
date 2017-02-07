@@ -24,7 +24,7 @@
             <!-- /.row -->
             <div class="row">
 <?php 
-if (roleID_check($mysqli) == 2):
+if (isSchoolAdmin($mysqli)):
 ?>
 
                 <div class="col-lg-3 col-md-6">
