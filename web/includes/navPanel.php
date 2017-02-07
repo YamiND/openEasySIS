@@ -49,20 +49,19 @@ if (login_check($mysqli) == true)
                 <div class="navbar-default sidebar" role="navigation">
                     <div class="sidebar-nav navbar-collapse">
                         <ul class="nav" id="side-menu">
+            				<li>
+				                <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard <span class="fa arrow"></span></a>
+    							<ul class="nav nav-second-level">
+				    				<li>
+    									<a href="dashboard">My Dashboard</a>
+    								</li>
+				    			</ul>	
+           					 </li>
     ';
 
-//    if (roleID_check($mysqli) == 1)
 	if (isAdmin($mysqli))
     {
     echo '
-            <li>
-                <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard <span class="fa arrow"></span></a>
-    			<ul class="nav nav-second-level">
-    				<li>
-    					<a href="adminDashboard">Overview</a>
-    				</li>
-    			</ul>	
-            </li>
             <li>
                 <a href="#"><i class="fa fa-bullhorn fa-fw"></i> Announcements <span class="fa arrow"></span></a>
     			<ul class="nav nav-second-level">
@@ -156,18 +155,9 @@ if (login_check($mysqli) == true)
             </li>  
         ';
     }
-//    else if (roleID_check($mysqli) == 2)
 	if (isSchoolAdmin($mysqli))
     {
     echo '
-            <li>
-                <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li>
-                        <a href="schoolAdminDashboard">Overview</a>
-                    </li>
-                </ul>   
-            </li>
 			<li>
           	<a href="#"><i class="fa fa-wrench fa-fw"></i> Report Generation <span class="fa arrow"></span></a>
     			<ul class="nav nav-second-level">
@@ -181,18 +171,9 @@ if (login_check($mysqli) == true)
             </li>  
         ';
     }
-//    else if (roleID_check($mysqli) == 3)
 	if (isTeacher($mysqli))
     {
     echo '
-            <li>
-                <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li>
-                        <a href="teacherDashboard">Overview</a>
-                    </li>
-                </ul>   
-            </li>
             <li>
                 <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> My Classes <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
@@ -243,18 +224,9 @@ if (login_check($mysqli) == true)
             </li>
     	';
     }
-//    else if (roleID_check($mysqli) == 4)
 	if (isParent($mysqli))
     {
     echo '
-            <li>
-                <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li>
-                        <a href="parentDashboard">Overview</a>
-                    </li>
-                </ul>   
-            </li>
 			<li>
 	            <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Student <span class="fa arrow"></span></a>
    		         <ul class="nav nav-second-level">
@@ -268,13 +240,9 @@ if (login_check($mysqli) == true)
 			</li>
     	';
     }
-//  else if (roleID_check($mysqli) == 5)
 	if (isStudent($mysqli))
     {
     echo '
-            <li>
-                <a href="studentDashboard"><i class="fa fa-dashboard fa-fw"></i>Student</a>
-            </li>
             <li>
                     <a href="viewProfile">My Profile</a>
             </li>
