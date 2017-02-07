@@ -14,32 +14,8 @@ if (isset($_POST['userEmail'], $_POST['password']))
 
     if (login($userEmail, $password, $mysqli) == true)
     {
-        // Login success, check role ID to determine page to land at
-		if (roleID_check($mysqli) == 1)
-		{
-			// Display Admin Dashboard
-        	header('Location: ../pages/adminDashboard');
-		}
-		else if (roleID_check($mysqli) == 2)
-		{
-			// Display schoolAdmin Dashboard
-        	header('Location: ../pages/schoolAdminDashboard');
-		}
-		else if (roleID_check($mysqli) == 3)
-		{
-			// Display Teacher Dashboard
-        	header('Location: ../pages/teacherDashboard');
-		}
-		else if (roleID_check($mysqli) == 4)
-		{
-			// Display Parent Dashboard
-        	header('Location: ../pages/parentDashboard');
-		}
-		else if (roleID_check($mysqli) == 5)
-		{
-			// Display Student Dashboard
-        	header('Location: ../pages/studentDashboard');
-		}
+		// Go to our dashboard for the users
+    	header('Location: ../pages/dashboard');
     }
     else
     {
