@@ -353,46 +353,4 @@ function isStudent($mysqli)
 	}
 }
 
-function roleID_check($mysqli) 
-{
-	if (isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail']))
-	{
-		$userID = $_SESSION['userID'];
-		$roleID = $_SESSION['roleID'];
-		if ($stmt = $mysqli->prepare("SELECT roleID FROM users where userID = ? LIMIT 1"))
-		{
-			$stmt->bind_param('i', $userID);
-			$stmt->execute();
-			$stmt->store_result();
-				
-			if ($stmt->num_rows == 1)
-			{
-				$stmt->bind_result($dbRoleID);
-				$stmt->fetch();
-
-
-				if ($roleID == $dbRoleID)
-				{	
-					return $roleID;
-				}
-				else
-				{
-					return -1;
-				}
-			}	
-			else
-			{
-				return -1;
-			}
-		}
-		else 
-		{
-			return -1;
-		}
-	}
-	else
-	{
-		return -1;
-	}
-}
-
+?>

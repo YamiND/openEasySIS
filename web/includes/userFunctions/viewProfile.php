@@ -54,26 +54,32 @@ function viewProfile($mysqli)
 
 function getUserInfoForm($userID, $mysqli)
 {
-    $roleID = roleID_check($mysqli);
+	// TODO: Adapt this for multiple profile showings....
 
-    switch ($roleID)
-    {
-        case 1:
-            getAdminProfile($userID, $mysqli);
-            break;
-        case 2:
-            getSchoolAdminProfile($userID, $mysqli);
-            break;
-        case 3:
-            getTeacherProfile($userID, $mysqli);
-            break;
-        case 4:
-            getParentProfile($userID, $mysqli);
-            break;
-        case 5:
-            getStudentProfile($userID, $mysqli);
-            break;
-    }
+	if (isAdmin($mysqli))
+	{
+    	getAdminProfile($userID, $mysqli);
+	}
+
+	if (isSchoolAdmin($mysqli))
+	{
+    	getSchoolAdminProfile($userID, $mysqli);
+	}
+	
+	if (isTeacher($mysqli))
+	{
+    	getTeacherProfile($userID, $mysqli);
+	}
+
+	if (isParent($mysqli))
+	{
+    	getParentProfile($userID, $mysqli);
+	}
+
+	if (isStudent($mysqli))
+	{
+    	getStudentProfile($userID, $mysqli);
+	}
 }
 
 function getAdminProfile($userID, $mysqli)
