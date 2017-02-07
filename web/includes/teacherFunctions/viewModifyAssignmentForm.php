@@ -23,7 +23,7 @@ if (isset($_POST['changeMaterial']))
 
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
+    if ((login_check($mysqli) == true) && (isTeacher($mysqli)))
     {
         viewModifyAssignmentForm($mysqli);
     }

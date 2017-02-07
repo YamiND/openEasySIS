@@ -23,7 +23,7 @@ if (isset($_POST['changeClass']))
 //TODO: Test this after adding multiple students to a class
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
+    if ((login_check($mysqli) == true) && (isTeacher($mysqli)))
     {
         viewGradeForStudentTable($mysqli);
     }
@@ -253,26 +253,6 @@ function getStudentInfo($classID, $studentID, $mysqli)
         while($stmt->fetch())
         {       
         	generateFormOption($studentID, "$studentLastName, $studentFirstName");
-        }           
-    }
-    else
-    {
-        return;
-    }
-}
-
-function getStudentName($studentID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT studentFirstName, studentLastName FROM studentProfile WHERE studentID = ?"))
-    {
-        $stmt->bind_param('i', $studentID);
-        $stmt->execute();
-        $stmt->bind_result($studentFirstName, $studentLastName);
-        $stmt->store_result();
-
-        while($stmt->fetch())
-        {       
-			return "$studentLastName, $studentFirstName";
         }           
     }
     else

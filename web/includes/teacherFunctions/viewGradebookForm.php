@@ -23,7 +23,7 @@ if (isset($_POST['changeClass']))
 //TODO: Test this after adding multiple students to a class
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
+    if ((login_check($mysqli) == true) && (isTeacher($mysqli)))
     {
         viewGradebookForm($mysqli);
     }
@@ -58,7 +58,7 @@ echo '
                             <!-- Tab panes -->
                             <div class="tab-content">';
 
-                                if ((getClassNumber($mysqli) > 1) && (!isset($_SESSION['classID'])) && (!empty($_SESSION['classID'])))
+                                if ((getClassNumber($mysqli) > 1) && (!isset($_SESSION['classID'])) && (empty($_SESSION['classID'])))
                                 {
                                     echo "<h4>Select Class</h4>";
                                 }
@@ -76,7 +76,7 @@ echo '
                                 <div class="tab-pane fade in active" id="selectAssignment">';
 
                             
-                               if ((getClassNumber($mysqli) > 1) && (!isset($_SESSION['classID'])) && !empty($_SESSION['classID']))
+                               if ((getClassNumber($mysqli) > 1) && (!isset($_SESSION['classID'])) && empty($_SESSION['classID']))
                                 {
                                     getClassForm($mysqli);
                                 }
@@ -144,7 +144,7 @@ function viewGradebook($classID, $materialID, $mysqli)
                                     <tbody>
                                     
         ';          
-                                        getStudentID($classID, $materialID, $mysqli);
+                                        getClassStudentID($classID, $materialID, $mysqli);
     echo ' 
                                     </tbody>
                                 </table>
@@ -162,7 +162,7 @@ function viewGradebook($classID, $materialID, $mysqli)
 
 }
 
-function getStudentID($classID, $materialID, $mysqli)
+function getClassStudentID($classID, $materialID, $mysqli)
 {
     if ($stmt = $mysqli->prepare("SELECT studentID FROM studentClassIDs WHERE classID = ?"))
     {

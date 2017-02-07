@@ -4,7 +4,7 @@
 
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
+    if ((login_check($mysqli) == true) && (isAdmin($mysqli)))
     {
         viewModifySchoolYearForm($mysqli);
     }

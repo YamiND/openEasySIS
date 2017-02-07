@@ -2,7 +2,7 @@
 //TODO: Test this after adding multiple students to a class
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 5))
+    if ((login_check($mysqli) == true) && (isStudent($mysqli)))
     {
         viewStudentDueAssignmentsTable($mysqli);
     }

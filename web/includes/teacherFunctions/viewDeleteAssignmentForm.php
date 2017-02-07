@@ -13,7 +13,7 @@ if (isset($_POST['changeClass']))
 
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 3))
+    if ((login_check($mysqli) == true) && (isTeacher($mysqli)))
     {
         viewDeleteAssignmentForm($mysqli);
     }

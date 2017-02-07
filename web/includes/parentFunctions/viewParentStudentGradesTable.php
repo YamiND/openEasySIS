@@ -4,7 +4,7 @@
 
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 4))
+    if ((login_check($mysqli) == true) && (isParent($mysqli)))
     {
         getStudentIDs($mysqli);
     }

@@ -2,9 +2,9 @@
 
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (isTeacher($mysqli)))
+    if ((login_check($mysqli) == true) && (isStudent($mysqli)))
     {
-        viewMaterialTypesTable($mysqli);
+        viewStudentGradesTablePrint($mysqli);
     }
     else
     {
@@ -14,14 +14,15 @@ function checkPermissions($mysqli)
     }
 }
 
-function viewMaterialTypesTable($mysqli)
+function viewStudentGradesTablePrint($mysqli)
 {
 
-    $teacherID = $_SESSION['userID'];
+    $studentID = $_SESSION['userID'];
+	$yearID = getClassYearID($mysqli);
 
-    if ($stmt = $mysqli->prepare("SELECT classID, className FROM classes WHERE classTeacherID = ?"))
+    if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, className FROM studentClassIDs, classes WHERE studentID = ? AND schoolYearID = ?"))
     {
-        $stmt->bind_param('i', $teacherID);
+        $stmt->bind_param('ii', $studentID, $yearID);
 
         $stmt->execute();
         $stmt->bind_result($classID, $className);
@@ -30,27 +31,29 @@ function viewMaterialTypesTable($mysqli)
 
         while($stmt->fetch())
         {
+	    $classGrade = getClassGrade($studentID, $classID, $mysqli);	
             echo '
                     <!-- /.row -->
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="panel panel-default">
-                                    <div class="panel-heading" id="'. $className . '"> 
-                                        Class Name: ' . $className . '
+                                    <div class="panel-heading" id="grades"> 
+                                        Class Grades
                                     </div>
                                     <!-- /.panel-heading -->
                                     <div class="panel-body">
-                                        <table width="100%" class="table table-striped table-bordered table-hover" id="' . $classID . '">
+                                        <table width="100%" class="table table-striped table-bordered table-hover" id="' . $studentID . '">
                                             <thead>
                                                 <tr>
-                                                    <th>Assignment Type</th>
-                                                    <th>Assignment Weight</th>
+                                                    <th>Class Name</th>
+                                                    <th>Grade</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                ';
-                                                getMaterialInfo($classID, $mysqli);
-            echo ' 
+                    			<tr class="gradeA">
+		                        <td>' . $className . '</td>
+		                       <td>' . $classGrade . '%</td>
+		                    		</tr>
                                             </tbody>
                                         </table>
                                         <!-- /.table-responsive -->
@@ -67,7 +70,7 @@ function viewMaterialTypesTable($mysqli)
                         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
                         <script>
                         $(document).ready(function() {
-                            $(\'#' . $classID . '\').DataTable({
+                            $(\'#' . $studentID . '\').DataTable({
                                 responsive: true
                             });
                         });
@@ -80,31 +83,6 @@ function viewMaterialTypesTable($mysqli)
         echo "You are not a teacher!";
         return;
     }   
-}
-
-function getMaterialInfo($classID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT materialName, materialWeight FROM materialType WHERE classID = ?"))
-    {
-        $stmt->bind_param('i', $classID);
-        $stmt->execute();
-        $stmt->bind_result($materialName, $materialWeight);
-        $stmt->store_result();
-
-        while($stmt->fetch())
-        {       
-            echo '
-                    <tr class="gradeA">
-                        <td>' . $materialName . '</td>
-                        <td>' . $materialWeight . '</td>
-                    </tr>
-                ';
-        }           
-    }
-    else
-    {
-        return;
-    }
 }
 
 ?>

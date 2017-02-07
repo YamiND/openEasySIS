@@ -1,11 +1,21 @@
 <?php
 
+if (isset($_POST['studentID']) && !empty($_POST['studentID']))
+{
+	$_SESSION['studentID'] = $_POST['studentID'];
+}
+
+if (isset($_POST['changeStudent']))
+{
+	unset($_SESSION['studentID']);
+}
+
 //TODO: Test this after adding multiple students to a class
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (isStudent($mysqli)))
+    if ((login_check($mysqli) == true) && (isParent($mysqli)))
     {
-        viewGradeForStudentTable($mysqli);
+        viewAssignmentsForStudentTable($mysqli);
     }
     else
     {
@@ -15,7 +25,7 @@ function checkPermissions($mysqli)
     }
 }
 
-function viewGradeForStudentTable($mysqli)
+function viewAssignmentsForStudentTable($mysqli)
 {
 	echo '
             <div class="row">
@@ -24,23 +34,40 @@ function viewGradeForStudentTable($mysqli)
                         <div class="panel-heading">
 	     ';
 						// Call Session Message code and Panel Heading here
-                        displayPanelHeading("View Grade for Student");
+                        displayPanelHeading("View All Assignments for Student");
 echo '
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs">
-                                <li class="active"><a href="#addMaterialType" data-toggle="tab">Student Grades</a>
+                                <li class="active"><a href="#addMaterialType" data-toggle="tab">Student Assignments</a>
                                 </li>
                             </ul>
 
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="selectAssignment">';
+                           		if ((getStudentCount($_SESSION['userID'], $mysqli) > 1) && (!isset($_SESSION['studentID'])))
+								{
+									chooseStudentForm($_SESSION['userID'], $mysqli);
+								}
+								else if (getStudentCount($_SESSION['userID'], $mysqli) == 1)
+								{
+									$_SESSION['studentID'] = getStudentID($_SESSION['userID'], $mysqli);
 
-                            
-                                    viewStudentAssignments($_SESSION['userID'], $mysqli);
+								}
+								if ((isset($_SESSION['studentID']) && (!empty($_SESSION['studentID']))))
+								{
+                                    viewStudentAssignments($_SESSION['studentID'], $mysqli);
+								}
+
+								if ((isset($_SESSION['studentID'])) && (getStudentCount($_SESSION['userID']) > 1))
+								{
+									generateFormStart("", "post");
+            							generateFormButton("changeStudent", "Change Student");
+						        	generateFormEnd();
+								}
 echo '
                                 </div>
                 ';
@@ -56,9 +83,57 @@ echo '
 
 }
 
+function chooseStudentForm($parentID, $mysqli)
+{
+	if ($stmt = $mysqli->prepare("SELECT studentID FROM studentParentIDs WHERE parentID = ?"))
+    {
+        $stmt->bind_param('i', $parentID);
+        $stmt->execute();
+        $stmt->bind_result($studentID);
+
+        if ($stmt->num_rows > 0)
+        {
+			generateFormStart("", "post");
+            	generateFormStartSelectDiv(NULL, "studentID");
+            	while ($stmt->fetch())
+            	{
+            		getStudentInfo($studentID, $mysqli);    
+            	}
+            	generateFormEndSelectDiv();
+            	generateFormButton("selectStudent", "Select Student");
+        	generateFormEnd();
+        }
+        else
+        {
+            return 0;
+        }
+	}
+}
+
+function getStudentInfo($studentID, $mysqli)
+{
+    if ($stmt = $mysqli->prepare("SELECT studentFirstName, studentLastName FROM studentProfile WHERE studentID = ?"))
+    {
+        $stmt->bind_param('i', $studentID);
+        $stmt->execute();
+        $stmt->bind_result($studentFirstName, $studentLastName);
+        $stmt->store_result();
+
+        while($stmt->fetch())
+        {
+            generateFormOption($studentID, "$studentLastName, $studentFirstName");
+        }
+    }
+    else
+    {
+        return;
+    }
+}
+
 function viewStudentAssignments($studentID, $mysqli)
 {
 	$yearID = getClassYearID($mysqli);
+	$studentName = getStudentName($studentID, $mysqli);
 
 	if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, className FROM studentClassIDs, classes WHERE studentID = ? AND schoolYearID = ?"))
 	{
@@ -67,11 +142,12 @@ function viewStudentAssignments($studentID, $mysqli)
         $stmt->bind_result($classID, $className);
         $stmt->store_result();
 
+		echo '<h4> Student Name: ' . $studentName . ' </h4> <br>';
 
 		while ($stmt->fetch())
 		{
 			echo '
-				<h4> ' . $className . ' </h4>
+				<h4> Class Name: ' . $className . ' </h4>
                                 <table width="100%" class="table table-striped table-bordered table-hover" id="' . $studentID . '">
                                     <thead>
                                         <tr>

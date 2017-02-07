@@ -17,7 +17,7 @@ function randomString($length = 8)
 	return $str;
 }
 
-if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
+if ((login_check($mysqli) == true) && (isAdmin($mysqli)))
 {
 	if (isset($_POST['userEmail']) && !empty($_POST['userEmail']))
 	{

@@ -4,7 +4,7 @@ include_once '../functions.php';
 
 sec_session_start();
 
-if ((login_check($mysqli) == true) && (roleID_check($mysqli) == 1))
+if ((login_check($mysqli) == true) && (isAdmin($mysqli)))
 {
 	modifyClass($mysqli);
 }
