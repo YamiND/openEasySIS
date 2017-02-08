@@ -6,6 +6,12 @@ include_once '../parentFunctionsTemplate.php';
 
 sec_session_start(); // Our custom secure way of starting a PHP session.
 
+
+// Error Testing
+error_reporting(E_ALL);
+ini_set('display_startup_errors',1);
+ini_set('display_errors',1);
+
 if ((login_check($mysqli) == true) && (isSchoolAdmin($mysqli)))
 {
 	generateChoice($mysqli);
@@ -22,6 +28,8 @@ function generateChoice($mysqli)
 {
 	if (isset($_POST['generateChoice']) && !empty($_POST['generateChoice']))
   	{
+//		global $dataOutput = array();
+
 		$reportCardChoice = $_POST['generateChoice'];
 
 		switch($reportCardChoice)
@@ -43,8 +51,9 @@ function generateChoice($mysqli)
    	   			header('Location: ../../pages/generateReportCard');
 
 		}
+
 		$_SESSION['success'] = 'Report Card should be generated, check the file';
-   	   	header('Location: ../../pages/generateReportCard');
+   	   //	header('Location: ../../pages/generateReportCard');
   	}
 	else
 	{
@@ -118,6 +127,10 @@ function generateReportCard($studentID, $mysqli)
 			$stmt->fetch();
 		}
 	}
+
+	$dataOutput = array();
+		// Setting our array tracker
+//		$i = 0;
 				if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, classes.className FROM studentClassIDs INNER JOIN (classes) ON (classes.classID = studentClassIDs.classID AND studentClassIDs.studentID = ?)"))
 				{
 					$stmt->bind_param('i', $studentID);
@@ -132,11 +145,17 @@ function generateReportCard($studentID, $mysqli)
 
 		//				fwrite($fp, "$className, $quarterOneGrade, $quarterTwoGrade, $quarterThreeGrade".PHP_EOL);  
 						fwrite($fp, "$className, $quarterOneGrade, $quarterTwoGrade, $quarterThreeGrade".PHP_EOL);  
+						
+						$dataOutput[] = array('classname' => $className, 'q1' => $quarterOneGrade, 'q2' => $quarterThreeGrade, 'q3' => $quarterThreeGrade);
 
 					//	$combined = "$className, $quarterOneGrade%, $quarterTwoGrade%, $quarterThreeGrade%";
 						// Output will be: Class Name, Q1, Q2, Q3
 					}
 				}
+		ExportFile($studentName, $dataOutput);
+			$filename = "output.xls";		 
+            header("Content-Type: application/vnd.ms-excel");
+			header("Content-Disposition: attachment; filename=\"$filename\"");
 	fclose($fp);  
 }
 
@@ -230,6 +249,26 @@ function getScoreByMaterialTypeRange($materialTypeID, $materialWeight, $studentI
     }
 
     return $totalScore;
+}
+
+function ExportFile($studentName, $records) 
+{
+	$heading = false;
+	if(!empty($records))
+	{
+		//echo implode("\t", $studentName . "\n";
+		foreach($records as $row) 
+		{
+			if(!$heading) 
+			{
+				$arrayHeader = array('Class Name', 'Q1', 'Q2', 'Q3');
+			  // display field/column names as a first row
+			  echo implode("\t", array_values($arrayHeader)) . "\n";
+			  $heading = true;
+			}
+			echo implode("\t", array_values($row)) . "\n";
+		}
+	}
 }
 
 ?>

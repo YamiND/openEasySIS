@@ -31,7 +31,7 @@ function sec_session_start()
 function login($userEmail, $password, $mysqli) 
 {
     // Using prepared statements means that SQL injection is not possible. 
-    if ($stmt = $mysqli->prepare("SELECT userID, userPassword, roleID, userSalt 
+    if ($stmt = $mysqli->prepare("SELECT userID, userPassword, userSalt 
         FROM users WHERE userEmail = ? LIMIT 1")) 
     {
         $stmt->bind_param('s', $userEmail);  // Bind "$email" to parameter.
@@ -39,7 +39,7 @@ function login($userEmail, $password, $mysqli)
         $stmt->store_result();
  
         // get variables from result.
-        $stmt->bind_result($userID, $dbPassword, $roleID, $userSalt);
+        $stmt->bind_result($userID, $dbPassword, $userSalt);
         $stmt->fetch();
 	
 		$tempPassword = $password;  // This value is the hashed passwodr passed in
@@ -57,8 +57,6 @@ function login($userEmail, $password, $mysqli)
                     $userID = preg_replace("/[^0-9]+/", "", $userID);
                     $_SESSION['userID'] = $userID;
 					
-                    $roleID = preg_replace("/[^0-9]+/", "", $roleID);
-                    $_SESSION['roleID'] = $roleID;
                     // XSS protection as we might print this value
 		    		$_SESSION['userEmail'] = $userEmail;
                     $_SESSION['login_string'] = hash('sha512', 
@@ -84,17 +82,16 @@ function login($userEmail, $password, $mysqli)
 function login_check($mysqli) 
 {
     // Check if all session variables are set 
-    if (isset($_SESSION['userID'], $_SESSION['userEmail'], $_SESSION['roleID'], $_SESSION['login_string'])) 
+    if (isset($_SESSION['userID'], $_SESSION['userEmail'], $_SESSION['login_string'])) 
     {
         $userID = $_SESSION['userID'];
         $login_string = $_SESSION['login_string'];
 		$userEmail = $_SESSION['userEmail'];
-		$roleID = $_SESSION['roleID'];
  
         // Get the user-agent string of the user.
         $user_browser = $_SERVER['HTTP_USER_AGENT'];
 
-        if ($stmt = $mysqli->prepare("SELECT userPassword, roleID FROM users WHERE userID = ? LIMIT 1")) 
+        if ($stmt = $mysqli->prepare("SELECT userPassword FROM users WHERE userID = ? LIMIT 1")) 
 		{
             // Bind "$user_id" to parameter. 
             $stmt->bind_param('i', $userID);
@@ -104,7 +101,7 @@ function login_check($mysqli)
             if ($stmt->num_rows == 1) 
 	    	{
                 // If the user exists get variables from result.
-                $stmt->bind_result($password, $roleID);
+                $stmt->bind_result($password);
                 $stmt->fetch();
                 $login_check = hash('sha512', $password . $user_browser);
 		
