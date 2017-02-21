@@ -26,14 +26,15 @@ if ((login_check($mysqli) == true) && (isAdmin($mysqli)))
 
 		$randomSalt = hash('sha512', uniqid(mt_rand(1, mt_getrandmax()), true));
 		$hashedPassword = hash("sha512", $password . $randomSalt);
-		if(!empty($userEmail))
+
+		if ($_SESSION['userEmail'] == $_POST['userEmail'])
 		{
-			adminChangePassword($userEmail, $password, $hashedPassword, $randomSalt, $mysqli);
+    		$_SESSION['fail'] = 'Password Reset Failed, please go through settings to change your password';
+        	header('Location: ../../pages/adminPasswordReset');
 		}
 		else
 		{
-    		$_SESSION['fail'] = 'Password Reset Failed';
-        	header('Location: ../../pages/adminPasswordReset');
+			adminChangePassword($userEmail, $password, $hashedPassword, $randomSalt, $mysqli);
 		}
     }
 	else
@@ -58,16 +59,19 @@ function adminChangePassword($userEmail, $password, $hashedPassword, $randomSalt
     	$stmt->bind_param('sss', $hashedPassword, $randomSalt, $userEmail);  // Bind "$email" to parameter.
 	    if ($stmt->execute())    // Execute the prepared query.
 		{
-			appendLog("passwordReset.txt", "Email: $userEmail password reset by admin");
 			$_SESSION['success'] = "Password Reset Succeeded - Password for $userEmail is $password";
 	   		header('Location: ../../pages/adminPasswordReset');
 		}
 		else
 		{
-			appendLog("passwordReset.txt", "Email: $userEmail password could not be reset");
-			$_SESSION['fail'] = "Password could not be reset";
-	   		header('Location: ../../pages/adminPasswordReset');
+			$_SESSION['fail'] = "No user email or database update failed";
+	  		header('Location: ../../pages/adminPasswordReset');
 		}
+	}
+	else
+	{
+		$_SESSION['fail'] = "No user email or database update failed";
+	  	header('Location: ../../pages/adminPasswordReset');
 	}
 }
 
