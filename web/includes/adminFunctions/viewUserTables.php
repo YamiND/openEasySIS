@@ -31,12 +31,7 @@ function generateUserTable($mysqli)
             <div class="row">
                 <div class="col-lg-12">
         ';
-                getUserTable($mysqli, "Administrators", "isAdmin");
-                getUserTable($mysqli, "School Administrators", "isSchoolAdmin");
-                getUserTable($mysqli, "Teachers", "isTeacher");
-                getUserTable($mysqli, "Parents", "parentFirstName", "parentLastName", "parentEmail", "parentProfile");
-                getUserTable($mysqli, "Students", "studentFirstName", "studentLastName", "studentEmail", "studentProfile");
-
+                getUserTable($mysqli);
 
         echo '      
                 </div>
@@ -46,16 +41,16 @@ function generateUserTable($mysqli)
     ';
 }
 
-function getUserTable($mysqli, $userGroup, $firstName, $lastName, $email, $profileName)
+function getUserTable($mysqli)
 {
     echo '
         <div class="panel panel-default">
-                        <div class="panel-heading" id="'. $userGroup . '"> 
-                            ' . $userGroup . '
+                        <div class="panel-heading" id="users"> 
+                        	Users
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <table width="100%" class="table table-striped table-bordered table-hover" id="'. $profileName . '">
+                            <table width="100%" class="table table-striped table-bordered table-hover" id="userTable">
                                 <thead>
                                     <tr>
                                         <th>First Name</th>
@@ -66,20 +61,22 @@ function getUserTable($mysqli, $userGroup, $firstName, $lastName, $email, $profi
                                 <tbody>
         ';
         
-	if ($stmt = $mysqli->prepare("SELECT $firstName, $lastName, $email FROM $profileName"))
+	if ($stmt = $mysqli->prepare("SELECT userFirstName, userLastName, userEmail FROM users"))
 	{
-		$stmt->execute();
-		$stmt->bind_result($dbFirstName, $dbLastName, $dbEmail);
-		$stmt->store_result();
-
-		while($stmt->fetch())
+		if($stmt->execute())
 		{
+			$stmt->bind_result($dbFirstName, $dbLastName, $dbEmail);
+			$stmt->store_result();
+
+			while($stmt->fetch())
+			{
         		echo '<tr class="gradeA">
-  			<td>' . $dbFirstName . '</td>
-  			<td>' . $dbLastName . '</td>
-  			<td>' . $dbEmail . '</td>
-            		</tr>';
-		}			
+  						<td>' . $dbFirstName . '</td>
+			  			<td>' . $dbLastName . '</td>
+  						<td>' . $dbEmail . '</td>
+            	   	</tr>';
+			}			
+		}
 	}
 	else
 	{
@@ -97,7 +94,7 @@ function getUserTable($mysqli, $userGroup, $firstName, $lastName, $email, $profi
 
     <script>
     $(document).ready(function() {
-        $(\'#' . $profileName . '\').DataTable({
+        $(\'#userTable\').DataTable({
             responsive: true
         });
     });

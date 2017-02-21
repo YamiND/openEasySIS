@@ -20,7 +20,6 @@ function parseCSV($mysqli)
 	$filename = "usersCreated.csv";
 	$fp = fopen('php://output', 'w');
 
-	$_SESSION['success'] = 'User Accounts Created';
 	header('Content-type: application/csv');
 	header('Content-Disposition: attachment; filename='.$filename);
 
@@ -37,6 +36,9 @@ function parseCSV($mysqli)
 			$userCSV = array_map('str_getcsv', file($tmpName));
 			foreach($userCSV as $i => $data)
 			{
+				// CSV Format
+				// email,firstName,lastName,modProfile,modClassList,viewAllGrades,isAdmin,isSchoolAdmin,isTeacher,isParent,isStudent,gradeLevel,birthdate,gender,graduationYear,gpa,phone,altEmail,address,city,state,zip
+
 				$userEmail = $userCSV[$i][0];
 				$userFirstName  = $userCSV[$i][1];
 				$userLastName = $userCSV[$i][2];
@@ -64,7 +66,6 @@ function parseCSV($mysqli)
 
 				createUserAccount($userEmail, $password, $userFirstName, $userLastName,  $modProfile, $modClassList, $viewAllGrades, $isAdmin, $isSchoolAdmin, $isTeacher, $isParent, $isStudent, $mysqli);
 		
-
 				if ($isParent)
 				{
 					createParentProfile($userEmail, $userFirstName, $userLastName, $phone, $altEmail, $address, $city, $state, $zip, $mysqli);
@@ -101,10 +102,17 @@ function createUserAccount($userEmail, $password, $userFirstName, $userLastName,
 			}
 			else
 			{
-				if ($stmt = $mysqli->prepare("INSERT INTO users (userEmail, userPassword, userFirstName, userLastName  modProfile, modClassList, viewAllGrades, userSalt, isAdmin, isSchoolAdmin, isTeacher, isParent, isStudent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
+				if ($stmt = $mysqli->prepare("INSERT INTO users (userEmail, userPassword, userFirstName, userLastName,  modProfile, modClassList, viewAllGrades, userSalt, isAdmin, isSchoolAdmin, isTeacher, isParent, isStudent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
 				{
     				$stmt->bind_param('ssssiiisiiiii', $userEmail, $hashedPassword, $userFirstName, $userLastName, $modProfile, $modClassList, $viewAllGrades, $randomSalt, $isAdmin, $isSchoolAdmin, $isTeacher, $isParent, $isStudent); 
-	    			$stmt->execute();    // Execute the prepared query.
+	    			if($stmt->execute())    // Execute the prepared query.
+					{
+						$_SESSION['success'] = 'User Accounts Created';
+					}
+					else
+					{
+    					$_SESSION['fail'] = 'Account Creation Failed, data could not be inserted into the database';
+					}
 				}
 				else
 				{
@@ -126,7 +134,7 @@ function createUserAccount($userEmail, $password, $userFirstName, $userLastName,
 function createParentProfile($userEmail, $userFirstName, $userLastName, $phone=NULL, $altEmail=NULL, $address, $city, $state, $zip, $mysqli)
 {
 
-	if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ?")
+	if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ?"))
 	{
 		$stmt->bind_param('s', $userEmail);
 
@@ -148,7 +156,7 @@ function createParentProfile($userEmail, $userFirstName, $userLastName, $phone=N
 
 function createStudentProfile($userEmail, $userFirstName, $userLastName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli)
 {
-	if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ?")
+	if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ?"))
 	{
 		$stmt->bind_param('s', $userEmail);
 
