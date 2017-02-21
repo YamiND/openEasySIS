@@ -31,9 +31,9 @@ function generateUserTable($mysqli)
             <div class="row">
                 <div class="col-lg-12">
         ';
-                getUserTable($mysqli, "Administrators", "adminFirstName", "adminLastName", "adminEmail", "adminProfile");
-                getUserTable($mysqli, "School Administrators", "schoolAdminFirstName", "schoolAdminLastName", "schoolAdminEmail", "schoolAdminProfile");
-                getUserTable($mysqli, "Teachers", "teacherFirstName", "teacherLastName", "teacherEmail", "teacherProfile");
+                getUserTable($mysqli, "Administrators", "isAdmin");
+                getUserTable($mysqli, "School Administrators", "isSchoolAdmin");
+                getUserTable($mysqli, "Teachers", "isTeacher");
                 getUserTable($mysqli, "Parents", "parentFirstName", "parentLastName", "parentEmail", "parentProfile");
                 getUserTable($mysqli, "Students", "studentFirstName", "studentLastName", "studentEmail", "studentProfile");
 

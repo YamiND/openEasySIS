@@ -64,7 +64,7 @@ function getAddClassForm($mysqli)
             }
         generateFormEndSelectDiv();
         generateFormStartSelectDiv("Class Teacher", "classTeacherID");
-            if ($stmt = $mysqli->prepare("SELECT teacherID, teacherFirstName, teacherLastName FROM teacherProfile"))
+            if ($stmt = $mysqli->prepare("SELECT userID, userFirstName, userLastName FROM users WHERE isTeacher"))
             {
                 $stmt->execute();
                 $stmt->bind_result($teacherID, $teacherFirstName, $teacherLastName);

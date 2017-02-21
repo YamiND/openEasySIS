@@ -200,32 +200,8 @@ function getStudentListInfo($gradeID, $mysqli)
 function getRoleLevelForm($mysqli)
 {
     generateFormStart("", "post"); 
-        generateFormStartSelectDiv("Role Type", "selectRoleID");
-        if ($stmt = $mysqli->prepare("SELECT roleID, roleName FROM roles"))
-        {   
-            // Query database for announcement details to be modified
-            $stmt->execute();
-
-            $stmt->bind_result($roleID, $roleName);
-            
-            $stmt->store_result();
-            
-            if ($stmt->num_rows > 0)
-            {
-                while ($stmt->fetch())
-                {
-                    generateFormOption($roleID, $roleName);
-                }
-            }
-            else
-            {
-                generateFormOption(NULL, "No roles available", "disabled", "selected");
-            }
-        }
-        else
-        {
-            generateFormOption(NULL, "No roles available", "disabled", "selected");
-        }
+        generateFormStartSelectDiv("Role Type", "roleType");
+                    generateFormOption("isAdmin", "Administrator");
         generateFormEndSelectDiv();
         generateFormButton("roleButton", "Select Role Level");
     generateFormEnd();
@@ -256,44 +232,7 @@ function getUserListForm($roleID, $mysqli)
 
 function getUserName($userID, $roleID, $mysqli)
 {
-    switch ($roleID)
-    {
-        case 1:
-            $profile = "adminProfile";
-            $fName = "adminFirstName";
-            $lName = "adminLastName";
-            $id = "adminID";
-            //getAdminProfile($userID, $mysqli);
-            break;
-        case 2:
-            $profile = "schoolAdminProfile";
-            $fName = "schoolAdminFirstName";
-            $lName = "schoolAdminLastName";
-            $id = "schoolAdminID";
-            //getSchoolAdminProfile($userID, $mysqli);
-            break;
-        case 3:
-            $profile = "teacherProfile"; 
-            $fName = "teacherFirstName";
-            $lName = "teacherLastName";
-            $id = "teacherID";
-            //getTeacherProfile($userID, $mysqli);
-            break;
-        case 4:
-            $profile = "parentProfile";
-            $fName = "parentFirstName";
-            $lName = "parentLastName";
-            $id = "parentID";
-            //getParentProfile($userID, $mysqli);
-            break;
-        case 5:
-            $profile = "studentProfile";
-            $fName = "studentFirstName";
-            $lName = "studentLastName";
-            $id = "studentID";
-            //getStudentProfile($userID, $mysqli);
-            break;
-    }
+	getUserProfile($userID, $mysqli);
 
     if ($stmt = $mysqli->prepare("SELECT $id, $fName, $lName FROM $profile"))
     {   
@@ -322,177 +261,26 @@ function getUserName($userID, $roleID, $mysqli)
     }
 }
 
-function getAdminProfile($userID, $mysqli)
+function getUserProfile($userID, $mysqli)
 {
-    if ($stmt = $mysqli->prepare("SELECT adminFirstName, adminLastName, adminEmail FROM adminProfile WHERE adminID = ?"))
+    if ($stmt = $mysqli->prepare("SELECT userFirstName, userLastName, userEmail FROM users WHERE userID = ?"))
     {   
         // Query database for announcement details to be modified
         $stmt->bind_param('i', $userID);
 
         $stmt->execute();
 
-        $stmt->bind_result($adminFirstName, $adminLastName, $adminEmail);
+        $stmt->bind_result($userFirstName, $userLastName, $userEmail);
         
         $stmt->store_result();
         
         while ($stmt->fetch())
         {
             generateFormStart("../includes/adminFunctions/editProfile", "post");
-                generateFormInputDiv("First Name", "text", "adminFirstName", $adminFirstName);
-                generateFormInputDiv("Last Name", "text", "adminLastName", $adminLastName);
-                generateFormInputDiv("Email", "email", "adminEmail", $adminEmail);
-				generateFormButton(NULL, "Edit Profile");
+                generateFormInputDiv("First Name", "text", "userFirstName", $userFirstName);
+                generateFormInputDiv("Last Name", "text", "userLastName", $userLastName);
+                generateFormInputDiv("Email", "email", "userEmail", $userEmail);
             generateFormEnd();
-        }
-    }
-}
-
-function getSchoolAdminProfile($userID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT schoolAdminFirstName, schoolAdminLastName, schoolAdminEmail FROM schoolAdminProfile WHERE schoolAdminID = ?"))
-    {   
-        // Query database for announcement details to be modified
-        $stmt->bind_param('i', $userID);
-
-        $stmt->execute();
-
-        $stmt->bind_result($schoolAdminFirstName, $schoolAdminLastName, $schoolAdminEmail);
-        
-        $stmt->store_result();
-        
-        while ($stmt->fetch())
-        {
-			generateFormStart("../includes/adminFunctions/editProfile", "post");
-                generateFormInputDiv("First Name", "text", "schoolAdminFirstName", $schoolAdminFirstName);
-                generateFormInputDiv("Last Name", "text", "schoolAdminLastName", $schoolAdminLastName);
-                generateFormInputDiv("Email", "email", "schoolAdminEmail", $schoolAdminEmail);
-				generateFormButton(NULL, "Edit Profile");
-            generateFormEnd();
-        }
-    }
-}
-
-function getTeacherProfile($userID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT teacherFirstName, teacherLastName, teacherEmail FROM teacherProfile WHERE teacherID = ?"))
-    {   
-        // Query database for announcement details to be modified
-        $stmt->bind_param('i', $userID);
-
-        $stmt->execute();
-
-        $stmt->bind_result($teacherFirstName, $teacherFirstName, $teacherEmail);
-        
-        $stmt->store_result();
-        
-        while ($stmt->fetch())
-        {
-			generateFormStart("../includes/adminFunctions/editProfile", "post");
-                generateFormInputDiv("First Name", "text", "teacherFirstName", $teacherFirstName);
-                generateFormInputDiv("Last Name", "text", "teacherLastName", $teacherLastName);
-                generateFormInputDiv("Email", "email", "teacherEmail", $teacherEmail);
-				generateFormButton(NULL, "Edit Profile");
-            generateFormEnd();
-        }
-    }
-}
-
-function getParentProfile($userID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT parentFirstName, parentLastName, parentEmail, parentPhoneNumber, parentAltEmail, parentAddress, parentCity, parentState, parentZip FROM parentProfile WHERE parentID = ?"))
-    {   
-        // Query database for announcement details to be modified
-        $stmt->bind_param('i', $userID);
-
-        $stmt->execute();
-
-        $stmt->bind_result($parentFirstName, $parentLastName, $parentEmail, $parentPhoneNumber, $parentAltEmail, $parentAddress, $parentCity, $parentState, $parentZip);
-        
-        $stmt->store_result();
-        
-        while ($stmt->fetch())
-        {
-				generateFormStart("../includes/adminFunctions/editProfile", "post");
-                    generateFormInputDiv("First Name", "text", "parentFirstName", $parentFirstName);
-                    generateFormInputDiv("Last Name", "text", "parentLastName", $parentLastName);
-                    generateFormInputDiv("Email", "email", "parentEmail", $parentEmail);
-
-                    if (!empty($parentPhoneNumber))
-                    {
-                        generateFormInputDiv("Phone Number", "tel", "parentPhoneNumber", $parentPhoneNumber, "disabled");
-                    }
-
-                    if (!empty($parentAltEmail))
-                    {
-                        generateFormInputDiv("Alt Email", "email", "parentAltEmail", $parentAltEmail, "disabled");
-                    }
-
-                    generateFormInputDiv("Address", "text", "parentAddress", $parentAddress, "disabled");
-                    generateFormInputDiv("City", "text", "parentCity", $parentCity, "disabled");
-                    generateFormInputDiv("State", "text", "parentState", $parentState, "disabled");
-                    generateFormInputDiv("Zip", "number", "parentZip", $parentZip, "disabled");
-
-
-                    generateFormStartSelectDiv("Students", "students");
-                        getStudentList($userID, $mysqli);
-                    generateFormEndSelectDiv();
-
-				generateFormButton(NULL, "Edit Profile");
-                generateFormEnd();
-        }
-    }
-}
-
-function getStudentProfile($userID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT studentFirstName, studentLastName, studentEmail, studentBirthdate, studentGender, studentGradYear, studentGPA, studentGradeLevel FROM studentProfile WHERE studentID = ?"))
-    {   
-        // Query database for announcement details to be modified
-        $stmt->bind_param('i', $userID);
-
-        $stmt->execute();
-
-        $stmt->bind_result($studentFirstName, $studentLastName, $studentEmail, $studentBirthdate, $studentGender, $studentGradYear, $studentGPA, $studentGradeLevel);
-        
-        $stmt->store_result();
-        
-        while ($stmt->fetch())
-        {
-
-            generateFormStart();
-
-                generateFormInputDiv("First Name", "text", "studentFirstName", $studentFirstName, "disabled");
-                generateFormInputDiv("Last Name", "text", "studentLastName", $studentLastName, "disabled");
-                generateFormInputDiv("Email", "email", "studentEmail", $studentEmail, "disabled");
-                generateFormInputDiv("Birthdate", "text", "studentBirthdate", $studentBirthdate, "disabled");
-                generateFormInputDiv("Gender", "text", "studentGender", $studentGender, "disabled");
-                generateFormInputDiv("Graduation Year", "number", "studentGradYear", $studentGradYear, "disabled");
-                generateFormInputDiv("GPA", "number", "studentGPA", $studentGPA, "disabled");
-                generateFormInputDiv("Grade Level", "number", "studentGradeLevel", $studentGradeLevel, "disabled");
-
-				generateFormButton(NULL, "Edit Profile");
-            generateFormEnd();
-        }
-    }
-}
-
-
-function getStudentList($userID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT studentID FROM studentParentIDs WHERE parentID = ?"))
-    {   
-        // Query database for announcement details to be modified
-        $stmt->bind_param('i', $userID);
-
-        $stmt->execute();
-
-        $stmt->bind_result($studentID);
-        
-        $stmt->store_result();
-        
-        while ($stmt->fetch())
-        {
-            getStudentName($studentID, $mysqli);
         }
     }
 }

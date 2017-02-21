@@ -58,17 +58,17 @@ function getUserInfoForm($userID, $mysqli)
 
 	if (isAdmin($mysqli))
 	{
-    	getAdminProfile($userID, $mysqli);
+		getUserProfile($userID, $mysqli);
 	}
 
 	if (isSchoolAdmin($mysqli))
 	{
-    	getSchoolAdminProfile($userID, $mysqli);
+		getUserProfile($userID, $mysqli);
 	}
 	
 	if (isTeacher($mysqli))
 	{
-    	getTeacherProfile($userID, $mysqli);
+		getUserProfile($userID, $mysqli);
 	}
 
 	if (isParent($mysqli))
@@ -82,78 +82,25 @@ function getUserInfoForm($userID, $mysqli)
 	}
 }
 
-function getAdminProfile($userID, $mysqli)
+function getUserProfile($userID, $mysqli)
 {
-    if ($stmt = $mysqli->prepare("SELECT adminFirstName, adminLastName, adminEmail FROM adminProfile WHERE adminID = ?"))
+    if ($stmt = $mysqli->prepare("SELECT userFirstName, userLastName, userEmail FROM users WHERE userID = ?"))
     {   
         // Query database for announcement details to be modified
         $stmt->bind_param('i', $userID);
 
         $stmt->execute();
 
-        $stmt->bind_result($adminFirstName, $adminLastName, $adminEmail);
+        $stmt->bind_result($userFirstName, $userLastName, $userEmail);
         
         $stmt->store_result();
         
         while ($stmt->fetch())
         {
             generateFormStart();
-                generateFormInputDiv("First Name", "text", "adminFirstName", $adminFirstName, "disabled");
-                generateFormInputDiv("Last Name", "text", "adminLastName", $adminLastName, "disabled");
-                generateFormInputDiv("Email", "email", "adminEmail", $adminEmail, "disabled");
-            generateFormEnd();
-        }
-    }
-}
-
-function getSchoolAdminProfile($userID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT schoolAdminFirstName, schoolAdminLastName, schoolAdminEmail FROM schoolAdminProfile WHERE schoolAdminID = ?"))
-    {   
-        // Query database for announcement details to be modified
-        $stmt->bind_param('i', $userID);
-
-        $stmt->execute();
-
-        $stmt->bind_result($schoolAdminFirstName, $schoolAdminLastName, $schoolAdminEmail);
-        
-        $stmt->store_result();
-        
-        while ($stmt->fetch())
-        {
-            generateFormStart();
-
-                generateFormInputDiv("First Name", "text", "schoolAdminFirstName", $schoolAdminFirstName, "disabled");
-                generateFormInputDiv("Last Name", "text", "schoolAdminLastName", $schoolAdminLastName, "disabled");
-                generateFormInputDiv("Email", "email", "schoolAdminEmail", $schoolAdminEmail, "disabled");
-                
-            generateFormEnd();
-        }
-    }
-}
-
-function getTeacherProfile($userID, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("SELECT teacherFirstName, teacherLastName, teacherEmail FROM teacherProfile WHERE teacherID = ?"))
-    {   
-        // Query database for announcement details to be modified
-        $stmt->bind_param('i', $userID);
-
-        $stmt->execute();
-
-        $stmt->bind_result($teacherFirstName, $teacherLastName, $teacherEmail);
-        
-        $stmt->store_result();
-        
-        while ($stmt->fetch())
-        {
-
-            generateFormStart();
-
-                generateFormInputDiv("First Name", "text", "teacherFirstName", $teacherFirstName, "disabled");
-                generateFormInputDiv("Last Name", "text", "teacherLastName", $teacherLastName, "disabled");
-                generateFormInputDiv("Email", "email", "teacherEmail", $teacherEmail, "disabled");
-
+                generateFormInputDiv("First Name", "text", "userFirstName", $userFirstName, "disabled");
+                generateFormInputDiv("Last Name", "text", "userLastName", $userLastName, "disabled");
+                generateFormInputDiv("Email", "email", "userEmail", $userEmail, "disabled");
             generateFormEnd();
         }
     }
@@ -236,7 +183,6 @@ function getStudentProfile($userID, $mysqli)
         }
     }
 }
-
 
 function getStudentList($userID, $mysqli)
 {

@@ -4,6 +4,7 @@ include_once '../functions.php';
 
 sec_session_start(); // Our custom secure way of starting a PHP session.
 
+//TODO Test this
 if ((login_check($mysqli) == true) && (isAdmin($mysqli)))
 {
 	parseCSV($mysqli);
@@ -36,306 +37,133 @@ function parseCSV($mysqli)
 			$userCSV = array_map('str_getcsv', file($tmpName));
 			foreach($userCSV as $i => $data)
 			{
-				$roleID = $userCSV[$i][0];
-				$userEmail = $userCSV[$i][1];
-				$userFirstName  = $userCSV[$i][2];
-				$userLastName = $userCSV[$i][3];
-				$gradeLevel  = $userCSV[$i][4];
-				$birthdate = $userCSV[$i][5];
-				$gender = $userCSV[$i][6];
-				$graduationYear = $userCSV[$i][7];
-				$gpa = $userCSV[$i][8];
-				$phone = $userCSV[$i][9];
-				$altEmail = $userCSV[$i][10];
-				$address = $userCSV[$i][11];
-				$city = $userCSV[$i][12];
-				$state = $userCSV[$i][13];
-				$zip = $userCSV[$i][14];
-				$modProfile = $userCSV[$i][15];
-				$modClassList = $userCSV[$i][16];
-				$viewAllGrades = $userCSV[$i][17];
-				$isParent = $userCSV[$i][18];
+				$userEmail = $userCSV[$i][0];
+				$userFirstName  = $userCSV[$i][1];
+				$userLastName = $userCSV[$i][2];
+				$modProfile = $userCSV[$i][3];
+				$modClassList = $userCSV[$i][4];
+				$viewAllGrades = $userCSV[$i][5];
+				$isAdmin = $userCSV[$i][6];
+				$isSchoolAdmin = $userCSV[$i][7];
+				$isTeacher = $userCSV[$i][8];
+				$isParent = $userCSV[$i][9];
+				$isStudent = $userCSV[$i][10];
+				$gradeLevel  = $userCSV[$i][11];
+				$birthdate = $userCSV[$i][12];
+				$gender = $userCSV[$i][13];
+				$graduationYear = $userCSV[$i][14];
+				$gpa = $userCSV[$i][15];
+				$phone = $userCSV[$i][16];
+				$altEmail = $userCSV[$i][17];
+				$address = $userCSV[$i][18];
+				$city = $userCSV[$i][19];
+				$state = $userCSV[$i][20];
+				$zip = $userCSV[$i][21];
 
-				if (!empty($roleID))
+				$password = randomString();	
+
+				createUserAccount($userEmail, $password, $userFirstName, $userLastName,  $modProfile, $modClassList, $viewAllGrades, $isAdmin, $isSchoolAdmin, $isTeacher, $isParent, $isStudent, $mysqli);
+		
+
+				if ($isParent)
 				{
-					switch ($roleID)
-					{
-						case 1:
-							$value = createAdminAccount($roleID, $userEmail, $userFirstName, $userLastName, $isParent, $mysqli);
-							break;
-						case 2:
-							$value = createSchoolAdminAccount($roleID, $userEmail, $userFirstName, $userLastName, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
-							break;
-						case 3:
-							$value = createTeacherAccount($roleID, $userEmail, $userFirstName, $userLastName, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
-							break;
-						case 4:
-							$value = createParentAccount($roleID, $userEmail, $userFirstName, $userLastName, $phone, $altEmail, $address, $city, $state, $zip, $isParent, $mysqli);
-							break;
-						case 5:
-							$value = createStudentAccount($roleID, $userEmail, $userFirstName, $userLastName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli);
-							break;
-						default:
-							break;
-					}
-					$row = explode(',', $value);
-					fputcsv($fp, $row);
+					createParentProfile($userEmail, $userFirstName, $userLastName, $phone, $altEmail, $address, $city, $state, $zip, $mysqli);
 				}
+				
+				if ($isStudent)
+				{
+	    			createStudentProfile($userEmail, $userFirstName, $userLastName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli);
+				}
+
+				// Add email and password to output csv
+				fputcsv($fp, array($userEmail, $password));
 			}
     	}
 	}
 }
 
-function createAdminAccount($roleID, $userEmail, $userFirstName, $userLastName, $isParent = 0, $mysqli)
-{
-	if (!empty($roleID) && !empty($userEmail) && !empty($userFirstName) && !empty($userLastName)) 
-	{
-		$modProfile = 1;
-		$modClassList = 1;
-		$viewAllGrades = 1;
-
-		$password = randomString();	
-
-		$value = createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
-
-		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
-		{
-			$stmt->bind_param('s', $userEmail);
-			$stmt->execute();
-			$stmt->store_result();
-			
-			if ($stmt->num_rows == 1)
-			{
-				$stmt->bind_result($userID);
-				$stmt->fetch();
-			}
-		}
-		createAdminProfile($userID, $userFirstName, $userLastName, $userEmail, $mysqli);
-
-		return $value;
-    }
-	else
-	{
-    	$_SESSION['fail'] = 'Account Creation Failed, data not entered correctly';
-	}
-}
-
-function createSchoolAdminAccount($roleID, $userEmail, $userFirstName, $userLastName, $modProifle, $modClassList, $viewAllGrades, $isParent, $mysqli)
-{
-	if (!empty($roleID) && !empty($userEmail) && !empty($userFirstName) && !empty($userLastName))
-	{
-		$password = randomString();	
-		$value = createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
-
-		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
-		{
-			$stmt->bind_param('s', $userEmail);
-			$stmt->execute();
-			$stmt->store_result();
-			
-			if ($stmt->num_rows == 1)
-			{
-				$stmt->bind_result($schoolAdminID);
-				$stmt->fetch();
-			}
-		}
-		createSchoolAdminProfile($schoolAdminID, $userFirstName, $userLastName, $userEmail, $mysqli);
-	
-		return $value;
-    }
-	else
-	{
-    	$_SESSION['fail'] = 'Account Creation Failed, data not entered correctly';
-	}
-}
-
-function createTeacherAccount($roleID, $userEmail, $userFirstName, $userLastName, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli)
-{
-	if (!empty($roleID) && !empty($userEmail) && !empty($userFirstName) && !empty($userLastName))
-	{
-		$password = randomString();	
-		$value = createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
-
-		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
-		{
-			$stmt->bind_param('s', $userEmail);
-			$stmt->execute();
-			$stmt->store_result();
-			
-			if ($stmt->num_rows == 1)
-			{
-				$stmt->bind_result($teacherID);
-				$stmt->fetch();
-			}
-		}
-		createTeacherProfile($teacherID, $userFirstName, $userLastName, $userEmail, $mysqli);
-
-		return $value;
-    }
-	else
-	{
-    	$_SESSION['fail'] = 'Account Creation Failed, data not entered correctly';
-	}
-}
-
-function createParentAccount($roleID, $userEmail, $userFirstName, $userLastName, $phone, $altEmail, $address, $city, $state, $zip, $isParent, $mysqli)
-{
-	if (!empty($roleID) && !empty($userEmail) && !empty($userFirstName) && !empty($userLastName) && !empty($address) && !empty($city) && !empty($state) && !empty($zip)) 
-	{
-		$modProfile = 0;
-		$modClassList = 0;
-		$viewAllGrades = 0;
-
-		$password = randomString();	
-
-		$value = createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
-
-		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
-		{
-			$stmt->bind_param('s', $userEmail);
-			$stmt->execute();
-			$stmt->store_result();
-			
-			if ($stmt->num_rows == 1)
-			{
-				$stmt->bind_result($parentID);
-				$stmt->fetch();
-			}
-		}
-		createParentProfile($parentID, $userEmail, $userFirstName, $userLastName, $phone, $altEmail, $address, $city, $state, $zip, $mysqli);
-
-		return $value;
-    }
-	else
-	{
-    	$_SESSION['fail'] = 'Account Creation Failed';
-	}
-}
-
-function createStudentAccount($roleID, $userEmail, $userFirstName, $userLastName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli)
-{
-	if (!empty($roleID) && !empty($userEmail) && !empty($userFirstName) && !empty($userLastName) && !empty($gradeLevel)) 
-	{
-		$modProfile = 0;
-		$modClassList = 0;
-		$viewAllGrades = 0;
-		$isParent = 0;
-
-		$password = randomString();	
-
-		$value = createUserAccount($userEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $isParent, $mysqli);
-
-		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
-		{
-			$stmt->bind_param('s', $userEmail);
-			$stmt->execute();
-			$stmt->store_result();
-			
-			if ($stmt->num_rows == 1)
-			{
-				$stmt->bind_result($studentID);
-				$stmt->fetch();
-			}
-		}
-
-	    createStudentProfile($studentID, $userEmail, $userFirstName, $userLastName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli);
-		
-		return $value;
-    }
-	else
-	{
-    	$_SESSION['fail'] = 'Account Creation Failed';
-	}
-}
-
-
-function createUserAccount($userEmail, $password, $roleID, $modProfile = 0, $modClassList = 0, $viewAllGrades = 0, $isParent = 0, $mysqli)
+function createUserAccount($userEmail, $password, $userFirstName, $userLastName,  $modProfile, $modClassList, $viewAllGrades, $isAdmin, $isSchoolAdmin, $isTeacher, $isParent, $isStudent, $mysqli)
 {
 	$randomSalt = hash('sha512', uniqid(mt_rand(1, mt_getrandmax()), true));
 	$hashedPassword = hash("sha512", $password . $randomSalt);
 
-	if (empty($isParent))
-	{
-		$isParent = 0;
-	}
-	if (empty($viewAllGrades))
-	{
-		$viewAllGrades = 0;
-	}
-	if (empty($modClassList))
-	{
-		$modClassList = 0;
-	}
-	if (empty($modProfile))
-	{
-		$modProfile = 0;
-	}
-	
 	if ($stmt = $mysqli->prepare("SELECT userEmail FROM users where userEmail = ?"))
 	{
 		$stmt->bind_param('s', $userEmail);
 
-		$stmt->execute();
-		$stmt->store_result();
-
-		if ($stmt->num_rows > 0)
+		if($stmt->execute())
 		{
-    		$_SESSION['fail'] = 'Account Creation Failed, Account already exists';
+			$stmt->store_result();
+
+			if ($stmt->num_rows > 0)
+			{
+    			$_SESSION['fail'] = 'Account Creation Failed, Account already exists';
+			}
+			else
+			{
+				if ($stmt = $mysqli->prepare("INSERT INTO users (userEmail, userPassword, userFirstName, userLastName  modProfile, modClassList, viewAllGrades, userSalt, isAdmin, isSchoolAdmin, isTeacher, isParent, isStudent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
+				{
+    				$stmt->bind_param('ssssiiisiiiii', $userEmail, $hashedPassword, $userFirstName, $userLastName, $modProfile, $modClassList, $viewAllGrades, $randomSalt, $isAdmin, $isSchoolAdmin, $isTeacher, $isParent, $isStudent); 
+	    			$stmt->execute();    // Execute the prepared query.
+				}
+				else
+				{
+    				$_SESSION['fail'] = 'Account Creation Failed, data could not be inserted into the database';
+				}
+			}
 		}
 		else
 		{
-			if ($stmt = $mysqli->prepare("INSERT INTO users (userEmail, userPassword, roleID, modProfile, modClassList, viewAllGrades, userSalt, isParent) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"))
-			{
-    			$stmt->bind_param('ssiiiisi', $userEmail, $hashedPassword, $roleID, $modProfile, $modClassList, $viewAllGrades, $randomSalt, $isParent); 
-	    		$stmt->execute();    // Execute the prepared query.
-
-				return "$userEmail, $password";
-			}
+    		$_SESSION['fail'] = 'Account Creation Failed, database query failed';
 		}
 	}
-}
-
-function createAdminProfile($adminID, $adminFirstName, $adminLastName, $adminEmail, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("INSERT INTO adminProfile (adminID, adminFirstName, adminLastName, adminEmail) VALUES (?, ?, ?, ?)"))
+	else
 	{
-    	$stmt->bind_param('isss', $adminID, $adminFirstName, $adminLastName, $adminEmail); 
-	    $stmt->execute();    // Execute the prepared query.
+    	$_SESSION['fail'] = 'Account Creation Failed, database query failed';
 	}
 }
 
-function createSchoolAdminProfile($schoolAdminID, $schoolAdminFirstName, $schoolAdminLastName, $schoolAdminEmail, $mysqli)
+function createParentProfile($userEmail, $userFirstName, $userLastName, $phone=NULL, $altEmail=NULL, $address, $city, $state, $zip, $mysqli)
 {
-    if ($stmt = $mysqli->prepare("INSERT INTO schoolAdminProfile (schoolAdminID, schoolAdminFirstName, schoolAdminLastName, schoolAdminEmail) VALUES (?, ?, ?, ?)"))
-	{
-    	$stmt->bind_param('isss', $schoolAdminID, $schoolAdminFirstName, $schoolAdminLastName, $schoolAdminEmail); 
-	    $stmt->execute();    // Execute the prepared query.
-	}
-}
 
-function createTeacherProfile($teacherID, $teacherFirstName, $teacherLastName, $teacherEmail, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("INSERT INTO teacherProfile (teacherID, teacherFirstName, teacherLastName, teacherEmail) VALUES (?, ?, ?, ?)"))
+	if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ?")
 	{
-    	$stmt->bind_param('isss', $teacherID, $teacherFirstName, $teacherLastName, $teacherEmail); 
-	    $stmt->execute();    // Execute the prepared query.
-	}
-}
+		$stmt->bind_param('s', $userEmail);
 
-function createParentProfile($parentID, $userEmail, $userFirstName, $userLastName, $phone=NULL, $altEmail=NULL, $address, $city, $state, $zip, $mysqli)
-{
+		if ($stmt->execute())
+		{
+			$stmt->bind_result($userID);
+			$stmt->store_result();
+
+			$stmt->fetch();
+		}
+	}
+
     if ($stmt = $mysqli->prepare("INSERT INTO parentProfile (parentID, parentFirstName, parentLastName, parentEmail, parentAddress, parentCity, parentState, parentZip, parentAltEmail, parentPhoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
 	{
-    	$stmt->bind_param('isssssssss', $parentID, $userFirstName, $userLastName, $userEmail, $address, $city, $state, $zip, $altEmail, $phone); 
+    	$stmt->bind_param('isssssssss', $userID, $userFirstName, $userLastName, $userEmail, $address, $city, $state, $zip, $altEmail, $phone); 
 	    $stmt->execute();    // Execute the prepared query.
 	}
 }
 
-function createStudentProfile($studentID, $userEmail, $userFirstName, $userLastName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli)
+function createStudentProfile($userEmail, $userFirstName, $userLastName, $gradeLevel, $birthdate, $gender, $graduationYear, $gpa, $mysqli)
 {
+	if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ?")
+	{
+		$stmt->bind_param('s', $userEmail);
+
+		if ($stmt->execute())
+		{
+			$stmt->bind_result($userID);
+			$stmt->store_result();
+
+			$stmt->fetch();
+		}
+	}
+
     if ($stmt = $mysqli->prepare("INSERT INTO studentProfile (studentID, studentFirstName, studentLastName, studentBirthdate, studentGender, studentGradYear, studentGPA, studentGradeLevel, studentEmail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"))
 	{
-    	$stmt->bind_param('issssdiis', $studentID, $userFirstName, $userLastName, $birthdate, $gender, $graduationYear, $gpa, $gradeLevel, $userEmail); 
+    	$stmt->bind_param('issssdiis', $userID, $userFirstName, $userLastName, $birthdate, $gender, $graduationYear, $gpa, $gradeLevel, $userEmail); 
 	    $stmt->execute();    // Execute the prepared query.
 	}
 }

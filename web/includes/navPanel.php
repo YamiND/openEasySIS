@@ -108,12 +108,6 @@ if (login_check($mysqli) == true)
     				<li>
     					<a href="viewUserTables">View All Users</a>
     				</li>
-    				<li>
-    					<a href="viewStudentReportCard">View Student Report Card(TODO)</a>
-    				</li>
-    				<li>
-    					<a href="viewStudentTranscript">View Student Transcript(TODO)</a>
-    				</li>
     			</ul>	
             </li>
             <li>
@@ -155,7 +149,7 @@ if (login_check($mysqli) == true)
             </li>  
         ';
     }
-	if (isSchoolAdmin($mysqli))
+	if (isSchoolAdmin($mysqli) || isAdmin($mysqli))
     {
     echo '
 			<li>
@@ -240,6 +234,7 @@ if (login_check($mysqli) == true)
 			</li>
     	';
     }
+
 	if (isStudent($mysqli))
     {
     echo '

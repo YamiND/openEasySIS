@@ -28,7 +28,7 @@ if (isset($_POST['changeGrade']))
 
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (isSchoolAdmin($mysqli)))
+    if ((login_check($mysqli) == true) && (isSchoolAdmin($mysqli) || isAdmin($mysqli)))
     {
         viewGenerateReportCardForm($mysqli);
     }

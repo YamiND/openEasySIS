@@ -1,55 +1,21 @@
 <?php
 include_once '../dbConnect.php';
 include_once '../functions.php';
+// TODO: This does not currently work
+// I need to work with ahmed to make a better page
 
 sec_session_start(); // Our custom secure way of starting a PHP session.
 
 if ((login_check($mysqli) == true) && (isAdmin($mysqli)))
 {
-	determineAccountType($mysqli);
+	createUserAccount($mysqli);
 }
 else
 {
-   	$_SESSION['fail'] = 'Account Creations Failed';
+   	$_SESSION['fail'] = 'Account Creations Failed, invalid permissions';
    	header('Location: ../../pages/createUser');
 
 	return;
-}
-
-function determineAccountType($mysqli)
-{
-	if (!empty($_POST['roleID']))
-	{
-		$roleID = $_POST['roleID'];
-
-		if ($roleID == 1)
-		{
-			createAdminAccount($mysqli);
-		}
-		else if ($roleID == 2)
-		{
-			createSchoolAdminAccount($mysqli);
-		}
-		else if ($roleID == 3)
-		{
-			createTeacherAccount($mysqli);
-		}
-		else if ($roleID == 4)
-		{
-			createParentAccount($mysqli);
-		}
-		else if ($roleID == 5) 
-		{
-			createStudentAccount($mysqli);
-		}
-		else
-		{
-   			$_SESSION['fail'] = 'Account Creations Failed, improper permissions';
-		   	header('Location: ../../pages/createUser');
-
-			return;
-		}
-	}
 }
 
 function createAdminAccount($mysqli)

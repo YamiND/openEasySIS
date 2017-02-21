@@ -57,6 +57,10 @@ echo '
 									$_SESSION['studentID'] = getStudentID($_SESSION['userID'], $mysqli);
 
 								}
+								else
+								{
+									echo "<br><p>No student assigned to account</p>";	
+								}
 								if ((isset($_SESSION['studentID']) && (!empty($_SESSION['studentID']))))
 								{
                                     viewStudentAssignments($_SESSION['studentID'], $mysqli);

@@ -79,7 +79,7 @@ function getClassesTableData($mysqli)
 
 		while($stmt->fetch())
 		{
-			if($stmt2 = $mysqli->prepare("SELECT teacherEmail FROM teacherProfile WHERE teacherID = ?"))
+			if($stmt2 = $mysqli->prepare("SELECT userEmail FROM users WHERE userID = ?"))
 			{	
 				$stmt2->bind_param('s', $dbClassTeacherID);
 				$stmt2->bind_result($dbTeacherEmail);

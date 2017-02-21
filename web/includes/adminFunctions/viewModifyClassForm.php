@@ -187,7 +187,7 @@ function getClassInfo($classID, $mysqli)
 
 function getTeacherList($selected = NULL, $mysqli)
 {
-    if ($stmt = $mysqli->prepare("SELECT teacherID, teacherFirstName, teacherLastName FROM teacherProfile"))
+    if ($stmt = $mysqli->prepare("SELECT userID, userFirstName, userLastName FROM users WHERE isTeacher"))
     {
         $stmt->execute();
         $stmt->bind_result($dbTeacherID, $dbTeacherFirstName, $dbTeacherLastName);

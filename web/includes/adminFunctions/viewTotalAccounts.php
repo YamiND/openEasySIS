@@ -1,6 +1,6 @@
 <?php
 
-function viewTotalUsers($mysqli, $userGroup, $profileName)
+function viewTotalUsers($mysqli, $userGroup, $isOption)
 {
 	// This function generates the HTML to show the number of users.
 	// $userGroup is the name of the the type of user
@@ -15,7 +15,7 @@ function viewTotalUsers($mysqli, $userGroup, $profileName)
                                     <i class="fa fa-users fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">' . getTotalUsers($mysqli, $profileName) . ' </div>
+                                    <div class="huge">' . getTotalUsers($mysqli, $isOption) . ' </div>
                                     <div>' . $userGroup . '</div>
                                 </div>
                             </div>
@@ -34,10 +34,10 @@ function viewTotalUsers($mysqli, $userGroup, $profileName)
 }
 
 
-function getTotalUsers($mysqli, $profileName)
+function getTotalUsers($mysqli, $isOption)
 {
     // This function gets the number of users depending on what string paramter is passed to it
-        if ($stmt = $mysqli->prepare("SELECT * FROM $profileName"))
+        if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE $isOption"))
         {
             $stmt->execute();
             $stmt->store_result();

@@ -12,7 +12,7 @@ error_reporting(E_ALL);
 ini_set('display_startup_errors',1);
 ini_set('display_errors',1);
 
-if ((login_check($mysqli) == true) && (isSchoolAdmin($mysqli)))
+if ((login_check($mysqli) == true) && (isSchoolAdmin($mysqli) || isAdmin($mysqli)))
 {
 	generateChoice($mysqli);
 }
@@ -261,8 +261,9 @@ function ExportFile($studentName, $records)
 		{
 			if(!$heading) 
 			{
-				$arrayHeader = array('Class Name', 'Q1', 'Q2', 'Q3');
-			  // display field/column names as a first row
+			  
+				// display field/column names as a first row
+			  $arrayHeader = array('Class Name', 'Q1', 'Q2', 'Q3');
 			  echo implode("\t", array_values($arrayHeader)) . "\n";
 			  $heading = true;
 			}

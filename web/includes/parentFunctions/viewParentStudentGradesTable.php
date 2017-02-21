@@ -30,15 +30,32 @@ function getStudentIDs($mysqli)
 	if ($stmt = $mysqli->prepare("SELECT studentID FROM studentParentIDs WHERE parentID = ?"))
 	{
 		$stmt->bind_param('i', $parentID);
-		$stmt->execute();
-		$stmt->bind_result($studentID);
-
-		$stmt->store_result();
-
-		while ($stmt->fetch())
+		if ($stmt->execute())
 		{
-			getGradesForStudent($studentID, $mysqli);
-		}		
+			$stmt->bind_result($studentID);
+
+			$stmt->store_result();
+
+			if ($stmt->num_rows > 0)
+			{
+				while ($stmt->fetch())
+				{
+					getGradesForStudent($studentID, $mysqli);
+				}		
+			}
+			else
+			{
+				echo "<p>No students assigned to account</p>";
+			}
+		}
+		else
+		{
+			echo "<p>No students assigned to account</p>";
+		}
+	}
+	else
+	{
+		echo "<p>No students assigned to account</p>";
 	}
 }
 
