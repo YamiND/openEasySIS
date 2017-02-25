@@ -3,9 +3,11 @@ include_once '../dbConnect.php';
 include_once '../functions.php';
 include_once '../classFunctionsTemplate.php';
 include_once '../parentFunctionsTemplate.php';
+include_once '../studentFunctionsTemplate.php';
 
 sec_session_start(); // Our custom secure way of starting a PHP session.
 
+date_default_timezone_set('America/New_York');
 
 // Error Testing
 error_reporting(E_ALL);
@@ -26,6 +28,9 @@ else
 
 function generateChoice($mysqli)
 {
+	// Delete all files in the report card directory
+	array_map('unlink', glob("../../../reportCardOutputs/*"));
+
 	if (isset($_POST['generateChoice']) && !empty($_POST['generateChoice']))
   	{
 //		global $dataOutput = array();
@@ -52,8 +57,24 @@ function generateChoice($mysqli)
 
 		}
 
+		// After the functions have been ran, zip the directory and output the file to the browser
+		apache_setenv('no-gzip', 1);
+		ini_set('zlib.output_compression', 0);
+
+		$day = date("Y-m-d");
+		$outputFile = basename("../../../reportCards-$day.zip");
+
+		Zip("../../../reportCardOutputs/", "$outputFile");
+
 		$_SESSION['success'] = 'Report Card should be generated, check the file';
-   	   //	header('Location: ../../pages/generateReportCard');
+
+		header("Content-Type: application/zip");
+//        header("Content-Transfer-Encoding: Binary");
+        header("Content-Length: ".filesize($outputFile));
+        header("Content-Disposition: attachment; filename=$outputFile");
+        readfile($outputFile);
+		exit;
+//  	   	header('Location: ../../pages/generateReportCard');
   	}
 	else
 	{
@@ -61,6 +82,51 @@ function generateChoice($mysqli)
     	$_SESSION['fail'] = 'Report Card could not be generated, data not sent or incomplete';
    	   	header('Location: ../../pages/generateReportCard');
 	}
+}
+
+function Zip($source, $destination)
+{
+    if (!extension_loaded('zip') || !file_exists($source)) {
+        return false;
+    }
+
+    $zip = new ZipArchive();
+    if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
+        return false;
+    }
+
+    $source = str_replace('\\', '/', realpath($source));
+
+    if (is_dir($source) === true)
+    {
+        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+
+        foreach ($files as $file)
+        {
+            $file = str_replace('\\', '/', $file);
+
+            // Ignore "." and ".." folders
+            if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
+                continue;
+
+            $file = realpath($file);
+
+            if (is_dir($file) === true)
+            {
+                $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+            }
+            else if (is_file($file) === true)
+            {
+                $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+            }
+        }
+    }
+    else if (is_file($source) === true)
+    {
+        $zip->addFromString(basename($source), file_get_contents($source));
+    }
+
+    return $zip->close();
 }
 
 function generateSingle($studentID, $mysqli)
@@ -103,16 +169,15 @@ function generateAll($mysqli)
 
 function generateReportCard($studentID, $mysqli)
 {
-	$fp = fopen("/tmp/$studentID.txt", 'a');//opens file in append mode  
+	$tblBody = "";
 	// Get grades that occur for each quarter
 	// Calculate grade for Quarter
 	// Calculate Total Grade
 	$yearID = getClassYearID($mysqli);
 
 	$studentName = getStudentName($studentID, $mysqli);
-	
-	fwrite($fp, "$studentName".PHP_EOL);  
-	fwrite($fp, "Class Name, Q1, Q2, Q3".PHP_EOL);  
+	$studentGradeLevel = getStudentGradeByID($studentID, $mysqli);
+	$academicYear = getAcademicYear($yearID, $mysqli);	
 
 	if ($stmt = $mysqli->prepare("SELECT quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd FROM schoolYear WHERE schoolYearID = ?"))
 	{
@@ -128,38 +193,153 @@ function generateReportCard($studentID, $mysqli)
 		}
 	}
 
-	$dataOutput = array();
-		// Setting our array tracker
-//		$i = 0;
-				if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, classes.className FROM studentClassIDs INNER JOIN (classes) ON (classes.classID = studentClassIDs.classID AND studentClassIDs.studentID = ?)"))
-				{
-					$stmt->bind_param('i', $studentID);
-					$stmt->execute();
-					$stmt->bind_result($classID, $className);
-					$stmt->store_result();
-					while ($stmt->fetch())
-					{
-						$quarterOneGrade = getClassGradeForRange($fp, $studentID, $classID, $quarterOneStart, $quarterOneEnd, $mysqli);
-						$quarterTwoGrade = getClassGradeForRange($fp, $studentID, $classID, $quarterOneStart, $quarterTwoEnd, $mysqli);
-						$quarterThreeGrade = getClassGradeForRange($fp, $studentID, $classID, $quarterOneStart, $quarterThreeEnd, $mysqli);
+	if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, classes.className FROM studentClassIDs INNER JOIN (classes) ON (classes.classID = studentClassIDs.classID AND studentClassIDs.studentID = ?)"))
+	{
+		$stmt->bind_param('i', $studentID);
+		$stmt->execute();
+		$stmt->bind_result($classID, $className);
+		$stmt->store_result();
 
-		//				fwrite($fp, "$className, $quarterOneGrade, $quarterTwoGrade, $quarterThreeGrade".PHP_EOL);  
-						fwrite($fp, "$className, $quarterOneGrade, $quarterTwoGrade, $quarterThreeGrade".PHP_EOL);  
+		while ($stmt->fetch())
+		{
+			$quarterOneGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterOneEnd, $mysqli);
+			$quarterTwoGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterTwoEnd, $mysqli);
+			$quarterThreeGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterThreeEnd, $mysqli);
+			$teacherName = getTeacherNameByClassID($classID, $mysqli);
+
+			$tblBody .= "
+				<tr style=\"background-color:white;color:black; font-size: 16px; padding: 5px;;\">
+			 		<td width=\"140\" align=\"left\"> $className </td>
+				 	<td width=\"140\" align=\"left\"> $teacherName </td>
+					<td width=\"45\" align=\"left\"> $quarterOneGrade </td>
+					<td width=\"45\" align=\"left\"> $quarterTwoGrade </td>
+					<td width=\"45\" align=\"left\"> $quarterThreeGrade </td>
+				</tr>
+			";
 						
-						$dataOutput[] = array('classname' => $className, 'q1' => $quarterOneGrade, 'q2' => $quarterThreeGrade, 'q3' => $quarterThreeGrade);
-
-					//	$combined = "$className, $quarterOneGrade%, $quarterTwoGrade%, $quarterThreeGrade%";
-						// Output will be: Class Name, Q1, Q2, Q3
-					}
-				}
-		ExportFile($studentName, $dataOutput);
-			$filename = "output.xls";		 
-            header("Content-Type: application/vnd.ms-excel");
-			header("Content-Disposition: attachment; filename=\"$filename\"");
-	fclose($fp);  
+		}
+	}
+	// Generate a PDF for the student
+	writeReportCardPDF($studentName, $studentGradeLevel, $academicYear, $tblBody);  
 }
 
-function getClassGradeForRange($fp, $studentID, $classID, $startDate, $endDate, $mysqli)
+function getTeacherNameByClassID($classID, $mysqli)
+{
+	if ($stmt = $mysqli->prepare("SELECT classTeacherID FROM classes WHERE classID = ?"))
+	{
+		$stmt->bind_param('i', $classID);
+		$stmt->execute();
+		$stmt->bind_result($classTeacherID);
+		$stmt->store_result();
+
+		$stmt->fetch();
+	}
+
+	if ($stmt = $mysqli->prepare("SELECT userFirstName, userLastName FROM users WHERE userID = ?"))
+	{
+		$stmt->bind_param('i', $classTeacherID);
+		$stmt->execute();
+		$stmt->bind_result($userFirstName, $userLastName);
+		$stmt->store_result();
+
+		$stmt->fetch();
+
+		return "$userLastName,$userFirstName";
+	}
+}
+
+function writeReportCardPDF($studentName, $studentGradeLevel, $academicYear, $tblBody)
+{
+// Include the main TCPDF library (search for installation path).
+require_once('../../fpdf181/TCPDF-master/examples/tcpdf_include.php');
+// create new PDF document
+$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+// set document information
+$pdf->SetCreator(PDF_CREATOR);
+$pdf->SetAuthor('MBA');
+$pdf->SetTitle('Maplewood Baptist Academy');
+$pdf->SetSubject('3255 West M-80 Kinross, MI 49752');
+$pdf->SetKeywords('MBA, Report Card, Maplewood');
+
+// set default header data
+$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE , PDF_HEADER_STRING);
+
+// set header and footer fonts
+$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+// set default monospaced font
+$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+// set margins
+$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+// set auto page breaks
+$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+// set image scale factor
+$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+// set some language-dependent strings (optional)
+if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+	require_once(dirname(__FILE__).'/lang/eng.php');
+	$pdf->setLanguageArray($l);
+}
+
+// ---------------------------------------------------------
+
+// set font
+$pdf->SetFont('helvetica', 'B', 20);
+
+// add a page
+$pdf->AddPage();
+
+$pdf->Write(0, 'Report Card', '', 0, 'L', true, 0, false, false, 0);
+$pdf->SetFont('helvetica', '', 8);
+$pdf->Cell(0,8,'Student Name: '. $studentName,0,1);
+$pdf->Cell(0,8,'Grade: '.$studentGradeLevel,0,1);
+$pdf->Cell(0,8,'Academic Year: '.$academicYear,0,1);
+$pdf->SetFont('helvetica', '', 8);
+
+// -----------------------------------------------------------------------------
+// Table with rowspans and THEAD
+$tbl = <<<EOD
+<table border="1">
+<thead>
+ <tr style="background-color:white;color:black; font-size: 24px;">
+  <td width="140" align="center"><b>Class</b></td>
+  <td width="140" align="center"><b>Teacher</b></td>
+  <td width="45" align="center"><b>Q1</b></td>
+  <td width="45" align="center"> <b>Q2</b></td>
+  <td width="45" align="center"><b>Q3</b></td>
+ </tr>
+</thead>
+	$tblBody
+</table>
+EOD;
+
+$pdf->writeHTML($tbl, true, false, false, false, '');
+//New table with new Academic Year for multiple tables like Transcript
+//$pdf->Cell(0,8,'Academic Year: '.$i,0,1);
+//$pdf->writeHTML($tbl, true, false, false, false, '');
+
+//Close and output PDF document to the browser
+//$pdf->Output("$studentName-test.pdf", 'I');
+
+//Close and output PDF document to the filesystem
+$pdf->Output("/var/www/html/openEasySIS/reportCardOutputs/$studentName.pdf", 'F');
+
+//============================================================+
+// END OF FILE
+//============================================================+
+
+
+}
+
+function getClassGradeForRange($studentID, $classID, $startDate, $endDate, $mysqli)
 {
 	// General Equation for Weighted Grading
     // type1 * (type1Weight) + type2 * (type2Weight) + type3 * (type3Weight)
@@ -249,27 +429,6 @@ function getScoreByMaterialTypeRange($materialTypeID, $materialWeight, $studentI
     }
 
     return $totalScore;
-}
-
-function ExportFile($studentName, $records) 
-{
-	$heading = false;
-	if(!empty($records))
-	{
-		//echo implode("\t", $studentName . "\n";
-		foreach($records as $row) 
-		{
-			if(!$heading) 
-			{
-			  
-				// display field/column names as a first row
-			  $arrayHeader = array('Class Name', 'Q1', 'Q2', 'Q3');
-			  echo implode("\t", array_values($arrayHeader)) . "\n";
-			  $heading = true;
-			}
-			echo implode("\t", array_values($row)) . "\n";
-		}
-	}
 }
 
 ?>
