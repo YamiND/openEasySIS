@@ -215,7 +215,7 @@ function generateReportCard($studentID, $mysqli)
 			$teacherName = getTeacherNameByClassID($classID, $mysqli);
 
 			$tblBody .= "
-				<tr style=\"background-color:white;color:black; font-size: 16px; padding: 5px;;\">
+				<tr style=\"background-color:white;color:black; font-size: 14px; padding: 5px;;\">
 			 		<td width=\"140\" align=\"left\"> $className </td>
 				 	<td width=\"140\" align=\"left\"> $teacherName </td>
 					<td width=\"45\" align=\"left\"> $quarterOneGrade </td>
@@ -308,24 +308,24 @@ $pdf->SetFont('helvetica', 'B', 20);
 $pdf->AddPage();
 
 $pdf->Write(0, 'Report Card', '', 0, 'L', true, 0, false, false, 0);
-$pdf->SetFont('helvetica', '', 8);
+$pdf->SetFont('helvetica', '', 12);
 $pdf->Cell(0,8,'Student Name: '. $studentName,0,1);
 $pdf->Cell(0,8,'Grade: '.$studentGradeLevel,0,1);
 $pdf->Cell(0,8,'Academic Year: '.$academicYear,0,1);
-$pdf->SetFont('helvetica', '', 8);
+$pdf->SetFont('helvetica', '', 12);
 
 // -----------------------------------------------------------------------------
 // Table with rowspans and THEAD
 $tbl = <<<EOD
 <table border="1">
 <thead>
- <tr style="background-color:white;color:black; font-size: 24px;">
+ <tr style="background-color:white;color:black; font-size: 18px;">
   <td width="140" align="center"><b>Class</b></td>
   <td width="140" align="center"><b>Teacher</b></td>
   <td width="45" align="center"><b>Q1</b></td>
   <td width="45" align="center"> <b>Q2</b></td>
   <td width="45" align="center"><b>Q3</b></td>
-  <td width="60" align="center"><b>Q4</b></td>
+  <td width="45" align="center"><b>Q4</b></td>
   <td width="60" align="center"><b>S1</b></td>
   <td width="60" align="center"><b>S2</b></td>
  </tr>

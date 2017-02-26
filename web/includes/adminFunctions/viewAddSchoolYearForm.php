@@ -68,7 +68,8 @@ function getAddSchoolYearForm()
         generateFormInputDiv("Quarter Two End Date", "date", "quarterTwoEnd");
         generateFormInputDiv("Quarter Three Start Date", "date", "quarterThreeStart");
         generateFormInputDiv("Quarter Three End Date", "date", "quarterThreeEnd");
-
+        generateFormInputDiv("Quarter Four Start Date", "date", "quarterFourStart");
+        generateFormInputDiv("Quarter Four End Date", "date", "quarterFourEnd");
         generateFormButton("addSchoolYearButton", "Add School Year");
     generateFormEnd();
 }

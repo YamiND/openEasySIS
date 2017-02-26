@@ -37,7 +37,6 @@ function addClass($mysqli)
             {
                 if (($className == $dbClassName) && ($classGradeLevel == $dbClassGrade))
                 {
-					appendLog("classes.txt", "Grade: $classGradeLevel Class: $className could not be added, already exists");
    	                $_SESSION['fail'] = 'Class can not have same name';
                    	header('Location: ../../pages/addClass');
 
@@ -51,13 +50,13 @@ function addClass($mysqli)
     		$stmt->bind_param('isii', $classGradeLevel, $className, $classTeacherID, $classYearID); 
 	    	if ($stmt->execute())
 			{
-				appendLog("classes.txt", "Grade: $classGradeLevel Class: $className added successfully");
 				$_SESSION['success'] = "Class Added";
    	   			header('Location: ../../pages/addClass');
 			}
 			else
 			{
-				appendLog("classes.txt", "$stmt->error");
+				$_SESSION['fail'] = "Class could not be added, database insert failure";
+   	   			header('Location: ../../pages/addClass');
 			}
 		}
 		else

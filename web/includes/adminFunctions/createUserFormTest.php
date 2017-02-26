@@ -25,7 +25,30 @@ function viewCreateUserForm($mysqli)
                         <div class="panel-heading">
 	';
 						displayPanelHeading("Create User");
-echo 
+echo '
+                        <div id="Create" class="tabcontent">
+ <div id="Checkboxes1">
+  <input type="checkbox" id="schoolAdmin">
+  <label for="Checkbox1">School Admin</label>
+  <input type="checkbox" id="administrator">
+  <label for="Checkbox2">Admin</label>
+  <input type="checkbox" id="teacher">
+  <label for="Checkbox3">Teacher</label>
+  <input type="checkbox" id="parent">
+  <label for="Checkbox3">Parent</label>
+  <input type="checkbox" id="student">
+  <label for="Checkbox3">Student</label>
+<script type="text/javascript">
+$(function() {
+	$( "#Checkboxes1" ).buttonset(); 
+});
+</script>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane fade in active" id="administrator">
+                                    <br>
+            ';
                                     createAdminForm();
                                     
     echo '
@@ -62,6 +85,10 @@ echo
                     <!-- /.panel -->
                 </div>
 			</div>
+			</div>
+			</div>
+
+
 ';
 
 }

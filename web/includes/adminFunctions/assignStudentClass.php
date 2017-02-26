@@ -28,13 +28,11 @@ function assignStudentClass($mysqli)
 	    		$stmt->bind_param('ii', $studentID, $classID); 
 		    	if ($stmt->execute())    // Execute the prepared query
 				{
-					appendLog("classes.txt", "Student: $studentID added to Class: $classID");
 					$_SESSION['success'] = "Student added to Class";
 	   	   			header('Location: ../../pages/assignStudent');
 				}
 				else
 				{
-					appendLog("classes.txt", "Student: $studentID could not be added to Class: $classID, $stmt->error");
 	    			$_SESSION['fail'] = 'Student could not be added to Class';
 	   	   			header('Location: ../../pages/assignStudent');
 				}

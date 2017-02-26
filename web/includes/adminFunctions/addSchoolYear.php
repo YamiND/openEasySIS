@@ -1,7 +1,6 @@
 <?php
 include_once '../dbConnect.php';
 include_once '../functions.php';
-include_once '../logTemplate.php';
 
 //TODO: I need to comment my code (and then need to redo the error checking)
 // For example:
@@ -29,7 +28,7 @@ else
 
 function addSchoolYear($mysqli)
 {
-	if ((isset($_POST['schoolYearStart'], $_POST['schoolYearEnd'], $_POST['fallSemesterStart'], $_POST['fallSemesterEnd'], $_POST['springSemesterStart'], $_POST['springSemesterEnd'], $_POST['quarterOneStart'], $_POST['quarterOneEnd'], $_POST['quarterTwoStart'], $_POST['quarterTwoEnd'], $_POST['quarterThreeStart'], $_POST['quarterThreeEnd'])) && !empty($_POST['schoolYearStart']) && !empty($_POST['schoolYearEnd']) && !empty($_POST['fallSemesterStart']) && !empty($_POST['fallSemesterEnd']) && !empty($_POST['springSemesterStart']) && !empty($_POST['springSemesterEnd']) && !empty($_POST['quarterOneStart']) && !empty($_POST['quarterOneEnd']) && !empty($_POST['quarterTwoStart']) && !empty($_POST['quarterTwoEnd']) && !empty($_POST['quarterThreeStart']) && !empty($_POST['quarterThreeEnd'])) 
+	if ((isset($_POST['quarterFourStart'], $_POST['quarterFourEnd'], $_POST['schoolYearStart'], $_POST['schoolYearEnd'], $_POST['fallSemesterStart'], $_POST['fallSemesterEnd'], $_POST['springSemesterStart'], $_POST['springSemesterEnd'], $_POST['quarterOneStart'], $_POST['quarterOneEnd'], $_POST['quarterTwoStart'], $_POST['quarterTwoEnd'], $_POST['quarterThreeStart'], $_POST['quarterThreeEnd'])) && !empty($_POST['schoolYearStart']) && !empty($_POST['schoolYearEnd']) && !empty($_POST['fallSemesterStart']) && !empty($_POST['fallSemesterEnd']) && !empty($_POST['springSemesterStart']) && !empty($_POST['springSemesterEnd']) && !empty($_POST['quarterOneStart']) && !empty($_POST['quarterOneEnd']) && !empty($_POST['quarterTwoStart']) && !empty($_POST['quarterTwoEnd']) && !empty($_POST['quarterThreeStart']) && !empty($_POST['quarterThreeEnd']) && !empty($_POST['quarterFourStart']) && !empty($_POST['quarterFourEnd'])) 
 	{
 		$schoolYearStart = $_POST['schoolYearStart'];
 		$schoolYearEnd =  $_POST['schoolYearEnd']; 
@@ -43,11 +42,13 @@ function addSchoolYear($mysqli)
 		$quarterTwoEnd = $_POST['quarterTwoEnd']; 
 		$quarterThreeStart = $_POST['quarterThreeStart'];
 		$quarterThreeEnd = $_POST['quarterThreeEnd'];
+		$quarterThreeStart = $_POST['quarterFourStart'];
+		$quarterThreeEnd = $_POST['quarterFourEnd'];
 
-		if ($stmt = $mysqli->prepare("SELECT fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd, quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, schoolYearStart, schoolYearEnd FROM schoolYear"))
+		if ($stmt = $mysqli->prepare("SELECT fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd, quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, schoolYearStart, schoolYearEnd, quarterFourStart, quarterFourEnd FROM schoolYear"))
 		{
 			$stmt->execute();
-			$stmt->bind_result($dbFallSemesterStart, $dbFallSemesterEnd, $dbSpringSemesterStart, $dbSpringSemesterEnd, $dbQuarterOneStart, $dbQuarterOneEnd, $dbQuarterTwoStart, $dbQuarterTwoEnd, $dbQuarterThreeStart, $dbQuarterThreeEnd, $dbSchoolYearStart, $dbSchoolYearEnd);
+			$stmt->bind_result($dbFallSemesterStart, $dbFallSemesterEnd, $dbSpringSemesterStart, $dbSpringSemesterEnd, $dbQuarterOneStart, $dbQuarterOneEnd, $dbQuarterTwoStart, $dbQuarterTwoEnd, $dbQuarterThreeStart, $dbQuarterThreeEnd, $dbSchoolYearStart, $dbSchoolYearEnd, $quarterFourStart, $quarterFourEnd);
 			$stmt->store_result();
 
 			while($stmt->fetch())
@@ -66,27 +67,23 @@ function addSchoolYear($mysqli)
 
 				if (($tempSchoolYearEnd == $tempDbSchoolYearEnd) || ($tempSchoolYearEnd < $tempDbSchoolYearEnd) || ($tempSchoolYearStart < $tempSchoolYearEnd))
 				{
-					appendLog("schoolyear.txt", "School year could not be added, year already exists");
    					$_SESSION['fail'] = 'School Year could not be added, year already exists';
 				   	header('Location: ../../pages/addSchoolYear');
 				}
 			}
    
-			if ($stmt = $mysqli->prepare("INSERT INTO schoolYear (fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd, quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, schoolYearStart, schoolYearEnd) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
+			if ($stmt = $mysqli->prepare("INSERT INTO schoolYear (fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd, quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, schoolYearStart, schoolYearEnd, quarterFourStart, quarterFourEnd) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
 			{
-    			$stmt->bind_param('ssssssssssss', $fallSemesterStart, $fallSemesterEnd, $springSemesterStart, $springSemesterEnd, $quarterOneStart, $quarterOneEnd, $quarterTwoStart, $quarterTwoEnd, $quarterThreeStart, $quarterThreeEnd, $schoolYearStart, $schoolYearEnd); 
+    			$stmt->bind_param('ssssssssssssss', $fallSemesterStart, $fallSemesterEnd, $springSemesterStart, $springSemesterEnd, $quarterOneStart, $quarterOneEnd, $quarterTwoStart, $quarterTwoEnd, $quarterThreeStart, $quarterThreeEnd, $schoolYearStart, $schoolYearEnd, $quarterFourStart, $quarterFourEnd); 
 	    		if ($stmt->execute())    // Execute the prepared query.
 				{
-					appendLog("schoolyear.txt", "School yeare added");
 					$_SESSION['success'] = "School Year Added";
    	   				header('Location: ../../pages/addSchoolYear');
 				}
 				else
 				{
-					appendLog("schoolyear.txt", "School year could not be added, year already exists");
     				$_SESSION['fail'] = 'School Year could not be added to database';
 				}
-
 			}
 			else
 			{

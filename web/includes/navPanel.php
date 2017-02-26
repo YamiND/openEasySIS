@@ -87,12 +87,6 @@ if (login_check($mysqli) == true)
                     <li>
                         <a href="viewProfile">My Profile</a>
                     </li>
-                    <li>
-                        <a href="editProfile">Edit a Profile</a>
-                    </li>
-                    <li>
-                        <a href="lookupProfile">Lookup Profile</a>
-                    </li>
                 </ul>   
             </li>
             <li>

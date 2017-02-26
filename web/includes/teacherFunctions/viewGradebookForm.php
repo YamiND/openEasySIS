@@ -187,7 +187,7 @@ function getStudentInfo($classID, $studentID, $materialID, $mysqli)
 {
     getMaterialPointsPossible($materialID, $mysqli);
 
-    if ($stmt = $mysqli->prepare("SELECT studentFirstName, studentLastName FROM studentProfile WHERE studentID = ?"))
+    if ($stmt = $mysqli->prepare("SELECT userFirstName, userLastName FROM users WHERE userID = ?"))
     {
         $stmt->bind_param('i', $studentID);
         $stmt->execute();

@@ -57,15 +57,17 @@ function getAllSchoolYears($mysqli)
                             <th>Quarter Two End</th>
                             <th>Quarter Three Start</th>
                             <th>Quarter Three End</th>
+                            <th>Quarter Four Start</th>
+                            <th>Quarter Four End</th>
                         </tr>
                     </thead>
                     <tbody>
         ';
 
-    if ($stmt = $mysqli->prepare("SELECT fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd, quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, schoolYearStart, schoolYearEnd FROM schoolYear"))
+    if ($stmt = $mysqli->prepare("SELECT fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd, quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, schoolYearStart, schoolYearEnd, quarterFourStart, quarterFourEnd FROM schoolYear"))
         {
             $stmt->execute();
-            $stmt->bind_result($dbFallSemesterStart, $dbFallSemesterEnd, $dbSpringSemesterStart, $dbSpringSemesterEnd, $dbQuarterOneStart, $dbQuarterOneEnd, $dbQuarterTwoStart, $dbQuarterTwoEnd, $dbQuarterThreeStart, $dbQuarterThreeEnd, $dbSchoolYearStart, $dbSchoolYearEnd);
+            $stmt->bind_result($dbFallSemesterStart, $dbFallSemesterEnd, $dbSpringSemesterStart, $dbSpringSemesterEnd, $dbQuarterOneStart, $dbQuarterOneEnd, $dbQuarterTwoStart, $dbQuarterTwoEnd, $dbQuarterThreeStart, $dbQuarterThreeEnd, $dbSchoolYearStart, $dbSchoolYearEnd, $quarterFourStart, $quarterFourEnd);
             $stmt->store_result();
 
             
@@ -84,6 +86,8 @@ function getAllSchoolYears($mysqli)
                     echo "<td>" . $dbQuarterTwoEnd . "</td>";
                     echo "<td>" . $dbQuarterThreeStart . "</td>";
                     echo "<td>" . $dbQuarterThreeEnd . "</td>";
+                    echo "<td>" . $quarterFourStart . "</td>";
+                    echo "<td>" . $quarterFourEnd . "</td>";
                     echo "</tr>";
             }   
         }
