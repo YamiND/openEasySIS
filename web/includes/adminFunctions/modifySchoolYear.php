@@ -16,7 +16,7 @@ else
 
 function modifySchoolYear($mysqli)
 {
-	if (isset($_POST['schoolYearID'], $_POST['schoolYearStart'], $_POST['schoolYearEnd'], $_POST['fallSemesterStart'], $_POST['fallSemesterEnd'], $_POST['springSemesterStart'], $_POST['springSemesterEnd'], $_POST['quarterOneStart'], $_POST['quarterOneEnd'], $_POST['quarterTwoStart'], $_POST['quarterTwoEnd'], $_POST['quarterThreeStart'], $_POST['quarterThreeEnd'])) 
+	if ((isset($_POST['quarterFourStart'], $_POST['quarterFourEnd'], $_POST['schoolYearStart'], $_POST['schoolYearEnd'], $_POST['fallSemesterStart'], $_POST['fallSemesterEnd'], $_POST['springSemesterStart'], $_POST['springSemesterEnd'], $_POST['quarterOneStart'], $_POST['quarterOneEnd'], $_POST['quarterTwoStart'], $_POST['quarterTwoEnd'], $_POST['quarterThreeStart'], $_POST['quarterThreeEnd'])) && !empty($_POST['schoolYearStart']) && !empty($_POST['schoolYearEnd']) && !empty($_POST['fallSemesterStart']) && !empty($_POST['fallSemesterEnd']) && !empty($_POST['springSemesterStart']) && !empty($_POST['springSemesterEnd']) && !empty($_POST['quarterOneStart']) && !empty($_POST['quarterOneEnd']) && !empty($_POST['quarterTwoStart']) && !empty($_POST['quarterTwoEnd']) && !empty($_POST['quarterThreeStart']) && !empty($_POST['quarterThreeEnd']) && !empty($_POST['quarterFourStart']) && !empty($_POST['quarterFourEnd']))
     {
         $schoolYearID = $_POST['schoolYearID'];
         $schoolYearStart = $_POST['schoolYearStart'];
@@ -31,15 +31,23 @@ function modifySchoolYear($mysqli)
         $quarterTwoEnd = $_POST['quarterTwoEnd']; 
         $quarterThreeStart = $_POST['quarterThreeStart'];
         $quarterThreeEnd = $_POST['quarterThreeEnd'];
+        $quarterFourStart = $_POST['quarterFourStart'];
+        $quarterFourEnd = $_POST['quarterFourEnd'];
 
         //TODO: Need to add data sanitization comparisons checking code before this if statement
-        if ($stmt = $mysqli->prepare("UPDATE schoolYear SET fallSemesterStart = ?, fallSemesterEnd = ?, springSemesterStart = ?, springSemesterEnd = ?, quarterOneStart = ?, quarterOneEnd = ?, quarterTwoStart = ?, quarterTwoEnd = ?, quarterThreeStart = ?, quarterThreeEnd = ?, schoolYearStart = ?, schoolYearEnd = ? WHERE schoolYearID = ?"))
+        if ($stmt = $mysqli->prepare("UPDATE schoolYear SET fallSemesterStart = ?, fallSemesterEnd = ?, springSemesterStart = ?, springSemesterEnd = ?, quarterOneStart = ?, quarterOneEnd = ?, quarterTwoStart = ?, quarterTwoEnd = ?, quarterThreeStart = ?, quarterThreeEnd = ?, schoolYearStart = ?, schoolYearEnd = ?, quarterFourStart = ?, quarterFourEnd = ? WHERE schoolYearID = ?"))
         {
-            $stmt->bind_param('ssssssssssssi', $fallSemesterStart, $fallSemesterEnd, $springSemesterStart, $springSemesterEnd, $quarterOneStart, $quarterOneEnd, $quarterTwoStart, $quarterTwoEnd, $quarterThreeStart, $quarterThreeEnd, $schoolYearStart, $schoolYearEnd, $schoolYearID);
-            $stmt->execute();
-           
-            $_SESSION['success'] = "School Year Modified Successfully";
-            header('Location: ../../pages/modifySchoolYear');
+            $stmt->bind_param('ssssssssssssssi', $fallSemesterStart, $fallSemesterEnd, $springSemesterStart, $springSemesterEnd, $quarterOneStart, $quarterOneEnd, $quarterTwoStart, $quarterTwoEnd, $quarterThreeStart, $quarterThreeEnd, $schoolYearStart, $schoolYearEnd, $quarterFourStart, $quarterFourEnd, $schoolYearID);
+            if ($stmt->execute())
+			{
+            	$_SESSION['success'] = "School Year Modified Successfully";
+            	header('Location: ../../pages/modifySchoolYear');
+			}
+			else
+			{
+            	$_SESSION['fail'] = "School Year Modified Unsuccessfully, database could not be updated";
+            	header('Location: ../../pages/modifySchoolYear');
+			}
         }
     }
     else

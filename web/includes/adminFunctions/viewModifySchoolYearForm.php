@@ -57,29 +57,31 @@ function viewModifySchoolYearForm($mysqli)
 
 function getSchoolYearInfo($mysqli)
 {
-    if ($stmt = $mysqli->prepare("SELECT schoolYearID, fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd, quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, schoolYearStart, schoolYearEnd FROM schoolYear WHERE year(schoolYearStart) = year(curdate())"))
+    if ($stmt = $mysqli->prepare("SELECT schoolYearID, fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd, quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, schoolYearStart, schoolYearEnd, quarterFourStart, quarterFourEnd FROM schoolYear WHERE schoolYearStart <= CURDATE() AND schoolYearEnd >= CURDATE()"))
     {
         $stmt->execute();
         $stmt->store_result();
 
-        $stmt->bind_result($dbSchoolYearID, $dbFallSemesterStart, $dbFallSemesterEnd, $dbSpringSemesterStart, $dbSpringSemesterEnd, $dbQuarterOneStart, $dbQuarterOneEnd, $dbQuarterTwoStart, $dbQuarterTwoEnd, $dbQuarterThreeStart, $dbQuarterThreeEnd, $dbSchoolYearStart, $dbSchoolYearEnd);
+        $stmt->bind_result($dbSchoolYearID, $dbFallSemesterStart, $dbFallSemesterEnd, $dbSpringSemesterStart, $dbSpringSemesterEnd, $dbQuarterOneStart, $dbQuarterOneEnd, $dbQuarterTwoStart, $dbQuarterTwoEnd, $dbQuarterThreeStart, $dbQuarterThreeEnd, $dbSchoolYearStart, $dbSchoolYearEnd, $quarterFourStart, $quarterFourEnd);
          
         $stmt->fetch();
 
         generateFormStart("../includes/adminFunctions/modifySchoolYear", "post");
             generateFormHiddenInput("schoolYearID", $dbSchoolYearID);
-            generateFormInputDiv("School Year Start Date", "date", $dbSchoolYearStart);
-            generateFormInputDiv("School Year End Date", "date", $dbSchoolYearEnd);
-            generateFormInputDiv("Fall Semester Start Date", "date", $dbFallSemesterStart);
-            generateFormInputDiv("Fall Semester End Date", "date", $dbFallSemesterEnd);
-            generateFormInputDiv("Spring Semester Start Date", "date", $dbSpringSemesterStart);
-            generateFormInputDiv("Spring Semester End Date", "date", $dbSpringSemesterEnd);
-            generateFormInputDiv("Quarter One Start Date", "date", $dbQuarterOneStart);
-            generateFormInputDiv("Quarter One End Date", "date", $dbQuarterOneEnd);
-            generateFormInputDiv("Quarter Two Start Date", "date", $dbQuarterTwoStart);
-            generateFormInputDiv("Quarter Two End Date", "date", $dbQuarterTwoEnd);
-            generateFormInputDiv("Quarter Three Start Date", "date", $dbQuarterThreeStart);
-            generateFormInputDiv("Quarter Three End Date", "date", $dbQuarterThreeEnd);
+            generateFormInputDiv("School Year Start Date", "date", "schoolYearStart", $dbSchoolYearStart);
+            generateFormInputDiv("School Year End Date", "date", "schoolYearEnd", $dbSchoolYearEnd);
+            generateFormInputDiv("Fall Semester Start Date", "date", "fallSemesterStart", $dbFallSemesterStart);
+            generateFormInputDiv("Fall Semester End Date", "date", "fallSemesterEnd", $dbFallSemesterEnd);
+            generateFormInputDiv("Spring Semester Start Date", "date", "springSemesterStart", $dbSpringSemesterStart);
+            generateFormInputDiv("Spring Semester End Date", "date", "springSemesterEnd", $dbSpringSemesterEnd);
+            generateFormInputDiv("Quarter One Start Date", "date", "quarterOneStart", $dbQuarterOneStart);
+            generateFormInputDiv("Quarter One End Date", "date", "quarterOneEnd", $dbQuarterOneEnd);
+            generateFormInputDiv("Quarter Two Start Date", "date", "quarterTwoStart", $dbQuarterTwoStart);
+            generateFormInputDiv("Quarter Two End Date", "date", "quarterTwoEnd", $dbQuarterTwoEnd);
+            generateFormInputDiv("Quarter Three Start Date", "date", "quarterThreeStart", $dbQuarterThreeStart);
+            generateFormInputDiv("Quarter Three End Date", "date", "quarterThreeEnd", $dbQuarterThreeEnd);
+            generateFormInputDiv("Quarter Four Start Date", "date", "quarterFourStart", $quarterFourStart);
+            generateFormInputDiv("Quarter Four End Date", "date", "quarterFourEnd", $quarterFourEnd);
             generateFormButton("modifySchoolYearButton", "Modify School Year");
         generateFormEnd();
     }
