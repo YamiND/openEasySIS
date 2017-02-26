@@ -4,6 +4,7 @@ include_once '../functions.php';
 include_once '../classFunctionsTemplate.php';
 include_once '../parentFunctionsTemplate.php';
 include_once '../studentFunctionsTemplate.php';
+include_once '../userFunctionsTemplate.php';
 
 sec_session_start(); // Our custom secure way of starting a PHP session.
 
@@ -29,32 +30,29 @@ else
 function generateChoice($mysqli)
 {
 	// Delete all files in the report card directory
-	array_map('unlink', glob("../../../reportCardOutputs/*"));
+	shell_exec('rm -rf ../../../reportCardOutputs/*');
 
 	if (isset($_POST['generateChoice']) && !empty($_POST['generateChoice']))
   	{
-//		global $dataOutput = array();
-
 		$reportCardChoice = $_POST['generateChoice'];
 
 		switch($reportCardChoice)
 		{
-			case "generateSingle":
+			case 'generateSingle':
 				generateSingle($_POST['studentID'], $mysqli);
 				break;
 
-			case "generateForGrade":
+			case 'generateForGrade':
 				generateForGrade($_POST['gradeLevel'], $mysqli);
 				break;
 
-			case "generateAll":
+			case 'generateAll':
 				generateAll($mysqli);
 				break;
 
 			default:
     			$_SESSION['fail'] = 'Report Card could not be generated, data not sent or incomplete';
    	   			header('Location: ../../pages/generateReportCard');
-
 		}
 
 		// After the functions have been ran, zip the directory and output the file to the browser
@@ -64,14 +62,21 @@ function generateChoice($mysqli)
 		$day = date("Y-m-d");
 		$outputFile = basename("../../../reportCards-$day.zip");
 
+		if (file_exists("reportCards-$day.zip"))
+		{
+			shell_exec("rm -f reportCards-$day.zip");
+		}
+		
 		Zip("../../../reportCardOutputs/", "$outputFile");
 
 		$_SESSION['success'] = 'Report Card should be generated, check the file';
 
 		header("Content-Type: application/zip");
-//        header("Content-Transfer-Encoding: Binary");
+        header("Content-Transfer-Encoding: Binary");
         header("Content-Length: ".filesize($outputFile));
         header("Content-Disposition: attachment; filename=$outputFile");
+		ob_clean();
+	    flush();
         readfile($outputFile);
 		exit;
 //  	   	header('Location: ../../pages/generateReportCard');
@@ -136,7 +141,7 @@ function generateSingle($studentID, $mysqli)
 
 function generateForGrade($gradeLevel, $mysqli)
 {
-	if ($stmt = $mysqli->prepare("SELECT studentID FROM studentProfile WHERE studentGradeLevel = ?"))
+	if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE studentGradeLevel = ?"))
 	{
         $stmt->bind_param('i', $gradeLevel);
 
@@ -160,10 +165,6 @@ function generateAll($mysqli)
 	for ($i = 1; $i <= 12; $i++)
     {
 		generateForGrade($i, $mysqli);
-		// Call Function get get student list
-		// Generate Zip
-		// ????
-		// Profit
     }
 }
 
@@ -175,17 +176,18 @@ function generateReportCard($studentID, $mysqli)
 	// Calculate Total Grade
 	$yearID = getClassYearID($mysqli);
 
-	$studentName = getStudentName($studentID, $mysqli);
+	$studentName = getUserName($studentID, $mysqli);
 	$studentGradeLevel = getStudentGradeByID($studentID, $mysqli);
 	$academicYear = getAcademicYear($yearID, $mysqli);	
 
-	if ($stmt = $mysqli->prepare("SELECT quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd FROM schoolYear WHERE schoolYearID = ?"))
+
+	if ($stmt = $mysqli->prepare("SELECT quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd, quarterFourStart, quarterFourEnd FROM schoolYear WHERE schoolYearID = ?"))
 	{
 		$stmt->bind_param('i', $yearID);
 
 		if ($stmt->execute())
 		{
-			$stmt->bind_result($quarterOneStart, $quarterOneEnd, $quarterTwoStart, $quarterTwoEnd, $quarterThreeStart, $quarterThreeEnd, $fallSemesterStart, $fallSemesterEnd, $springSemesterStart, $springSemesterEnd);
+			$stmt->bind_result($quarterOneStart, $quarterOneEnd, $quarterTwoStart, $quarterTwoEnd, $quarterThreeStart, $quarterThreeEnd, $fallSemesterStart, $fallSemesterEnd, $springSemesterStart, $springSemesterEnd, $quarterFourStart, $quarterFourEnd);
 
 			$stmt->store_result();
 
@@ -205,6 +207,11 @@ function generateReportCard($studentID, $mysqli)
 			$quarterOneGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterOneEnd, $mysqli);
 			$quarterTwoGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterTwoEnd, $mysqli);
 			$quarterThreeGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterThreeEnd, $mysqli);
+			$quarterFourGrade = getClassGradeForRange($studentID, $classID, $quarterFourStart, $quarterFourEnd, $mysqli);
+
+			$semesterOneGrade = getClassGradeForRange($studentID, $classID, $fallSemesterStart, $fallSemesterEnd, $mysqli);
+			$semesterTwoGrade = getClassGradeForRange($studentID, $classID, $springSemesterStart, $springSemesterEnd, $mysqli);
+
 			$teacherName = getTeacherNameByClassID($classID, $mysqli);
 
 			$tblBody .= "
@@ -214,6 +221,9 @@ function generateReportCard($studentID, $mysqli)
 					<td width=\"45\" align=\"left\"> $quarterOneGrade </td>
 					<td width=\"45\" align=\"left\"> $quarterTwoGrade </td>
 					<td width=\"45\" align=\"left\"> $quarterThreeGrade </td>
+					<td width=\"45\" align=\"left\"> $quarterFourGrade </td>
+					<td width=\"60\" align=\"left\"> $semesterOneGrade </td>
+					<td width=\"60\" align=\"left\"> $semesterTwoGrade </td>
 				</tr>
 			";
 						
@@ -315,11 +325,15 @@ $tbl = <<<EOD
   <td width="45" align="center"><b>Q1</b></td>
   <td width="45" align="center"> <b>Q2</b></td>
   <td width="45" align="center"><b>Q3</b></td>
+  <td width="60" align="center"><b>Q4</b></td>
+  <td width="60" align="center"><b>S1</b></td>
+  <td width="60" align="center"><b>S2</b></td>
  </tr>
 </thead>
 	$tblBody
 </table>
 EOD;
+
 
 $pdf->writeHTML($tbl, true, false, false, false, '');
 //New table with new Academic Year for multiple tables like Transcript
@@ -330,8 +344,15 @@ $pdf->writeHTML($tbl, true, false, false, false, '');
 //$pdf->Output("$studentName-test.pdf", 'I');
 
 //Close and output PDF document to the filesystem
-$pdf->Output("/var/www/html/openEasySIS/reportCardOutputs/$studentName.pdf", 'F');
+//$pdf->Output(realpath("../../../reportCardOutputs/Grade\ $studentGradeLevel/$studentName.pdf"), 'F');
+	if (!is_dir("../../../reportCardOutputs/Grade\ $studentGradeLevel"))
+	{
+		shell_exec("mkdir ../../../reportCardOutputs/Grade\ $studentGradeLevel");
+	}
 
+	$outputFile = realpath("../../../reportCardOutputs/Grade $studentGradeLevel");
+	//$pdf->Output("/var/www/html/openEasySIS/reportCardOutputs/Grade $studentGradeLevel/$studentName.pdf", 'F');
+	$pdf->Output("$outputFile/$studentName.pdf", 'F');
 //============================================================+
 // END OF FILE
 //============================================================+
