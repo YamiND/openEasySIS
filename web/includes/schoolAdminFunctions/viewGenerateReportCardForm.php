@@ -156,7 +156,7 @@ function singleChooseStudentForm($mysqli)
 
 function getStudentList($gradeLevel, $mysqli)
 {
-	if ($stmt = $mysqli->prepare("SELECT studentID FROM studentProfile WHERE studentGradeLevel = ?"))
+	if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE studentGradeLevel = ?"))
 	{
 		$stmt->bind_param('i', $gradeLevel);
 		
@@ -169,7 +169,7 @@ function getStudentList($gradeLevel, $mysqli)
 			{
 				while ($stmt->fetch())
 				{
-	        		generateFormOption("$studentID", getStudentName($studentID, $mysqli));	
+	        		generateFormOption("$studentID", getUserName($studentID, $mysqli));	
 				}
 			}
 			else
@@ -203,7 +203,7 @@ function generateChoiceForm($mysqli)
 function generateForGradeForm($mysqli)
 {
     generateFormStart("../includes/schoolAdminFunctions/generateReportCard", "post"); 
-		generateFormHiddenInput("generateChoice", "generateForGrade");
+	generateFormHiddenInput("generateChoice", "generateForGrade");
         generateFormStartSelectDiv("Generate Report Card for Grade", "gradeLevel");
             for ($i = 1; $i <= 12; $i++)
             {
@@ -218,7 +218,7 @@ function generateAllForm($mysqli)
 {
 	echo "<h3>Confirm Generation of Report Cards for All Grades </h3>";
     generateFormStart("../includes/schoolAdminFunctions/generateReportCard", "post"); 
-		generateFormHiddenInput("generateChoice", "generateAll");
+	generateFormHiddenInput("generateChoice", "generateAll");
         generateFormButton("generateReportCardButton", "Generate Report Card for All Grades");
     generateFormEnd();
 }

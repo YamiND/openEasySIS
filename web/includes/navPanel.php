@@ -5,6 +5,8 @@ include_once '../includes/panelSessionMessages.php';
 include_once '../includes/formTemplate.php';
 include_once '../includes/classFunctionsTemplate.php';
 include_once '../includes/parentFunctionsTemplate.php';
+include_once '../includes/studentFunctionsTemplate.php';
+include_once '../includes/userFunctionsTemplate.php';
 
 sec_session_start();
 

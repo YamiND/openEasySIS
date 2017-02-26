@@ -428,7 +428,7 @@ function getStudentList($userID, $mysqli)
         
         while ($stmt->fetch())
         {
-            getStudentName($studentID, $mysqli);
+            getUserName($studentID, $mysqli);
         }
     }
 }

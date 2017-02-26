@@ -27,6 +27,21 @@ function getClassYearID($mysqli)
     }
 }
 
+function getAcademicYear($yearID, $mysqli)
+{
+    if ($stmt = $mysqli->prepare("SELECT YEAR(schoolYearStart), YEAR(schoolYearEnd) FROM schoolYear WHERE schoolYearID = ?"))
+    {   
+        $stmt->bind_param('i', $yearID);
+        $stmt->execute();
+        $stmt->bind_result($schoolYearStart, $schoolYearEnd);
+        $stmt->store_result();
+
+        $stmt->fetch();
+
+        return "$schoolYearStart - $schoolYearEnd";
+    }   
+}
+
 function getClassGrade($studentID, $classID, $mysqli)
 {
 	// General Equation for Weighted Grading

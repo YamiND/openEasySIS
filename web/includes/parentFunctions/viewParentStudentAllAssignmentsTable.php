@@ -137,7 +137,7 @@ function getStudentInfo($studentID, $mysqli)
 function viewStudentAssignments($studentID, $mysqli)
 {
 	$yearID = getClassYearID($mysqli);
-	$studentName = getStudentName($studentID, $mysqli);
+	$studentName = getUserName($studentID, $mysqli);
 
 	if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, className FROM studentClassIDs, classes WHERE studentID = ? AND schoolYearID = ?"))
 	{

@@ -139,7 +139,7 @@ function assignStudentForm($classID, $gradeID, $mysqli)
             {
                 while ($stmt->fetch())
                 {
-                    getStudentName($studentID, $mysqli); 
+                    getUserName($studentID, $mysqli); 
                 }
             }
             else

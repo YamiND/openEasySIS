@@ -83,7 +83,7 @@ function getGradesForStudent($studentID, $mysqli)
 		while ($stmt->fetch())
         {
             $classGrade = getClassGrade($studentID, $classID, $mysqli);
-			$studentName = getStudentName($studentID, $mysqli);
+			$studentName = getUserName($studentID, $mysqli);
 
             echo '
                     <!-- /.row -->
