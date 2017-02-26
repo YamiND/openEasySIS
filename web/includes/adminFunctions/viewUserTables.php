@@ -56,16 +56,22 @@ function getUserTable($mysqli)
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>Email</th>
+                                        <th>Admin</th>
+                                        <th>School Admin</th>
+                                        <th>Teacher</th>
+                                        <th>Parent</th>
+                                        <th>Student</th>
+			
                                     </tr>
                                 </thead>
                                 <tbody>
         ';
         
-	if ($stmt = $mysqli->prepare("SELECT userFirstName, userLastName, userEmail FROM users"))
+	if ($stmt = $mysqli->prepare("SELECT userFirstName, userLastName, userEmail, isAdmin, isSchoolAdmin, isTeacher, isParent, isStudent FROM users"))
 	{
 		if($stmt->execute())
 		{
-			$stmt->bind_result($dbFirstName, $dbLastName, $dbEmail);
+			$stmt->bind_result($dbFirstName, $dbLastName, $dbEmail, $isAdmin, $isSchoolAdmin, $isTeacher, $isParent, $isStudent);
 			$stmt->store_result();
 
 			while($stmt->fetch())
@@ -74,6 +80,11 @@ function getUserTable($mysqli)
   						<td>' . $dbFirstName . '</td>
 			  			<td>' . $dbLastName . '</td>
   						<td>' . $dbEmail . '</td>
+  						<td> <input type="checkbox" disabled ' . ($isAdmin ? 'checked' : '') . '></td>
+  						<td> <input type="checkbox" disabled ' . ($isSchoolAdmin ? 'checked' : '') . '></td>
+  						<td> <input type="checkbox" disabled ' . ($isTeacher ? 'checked' : '') . '></td>
+  						<td> <input type="checkbox" disabled ' . ($isParent ? 'checked' : '') . '></td>
+  						<td> <input type="checkbox" disabled ' . ($isStudent ? 'checked' : '') . '></td>
             	   	</tr>';
 			}			
 		}
