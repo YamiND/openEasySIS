@@ -65,7 +65,8 @@ function getGradesForStudent($studentID, $mysqli)
 
 	// selecting from the studentParentIDs table, and from their, selects which ever student
 	// correspondes with the given parentID.  
-    if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, className FROM studentClassIDs, classes WHERE studentClassIDs.studentID = ? AND schoolYearID = ?"))
+//    if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, className FROM studentClassIDs, classes WHERE studentClassIDs.studentID = ? AND schoolYearID = ?"))
+    if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, classes.className FROM studentClassIDs INNER JOIN (classes) ON (classes.classID = studentClassIDs.classID AND studentClassIDs.studentID = ?) AND schoolYearID = ?"))
     {
 
 	// searches using the parameters of both the parents and students ID's
@@ -78,12 +79,9 @@ function getGradesForStudent($studentID, $mysqli)
 
         $stmt->store_result();
 
+			$studentName = getUserName($studentID, $mysqli);
 // Porter, $stmt is mysqli, so instead you would do this:
 
-		while ($stmt->fetch())
-        {
-            $classGrade = getClassGrade($studentID, $classID, $mysqli);
-			$studentName = getUserName($studentID, $mysqli);
 
             echo '
                     <!-- /.row -->
@@ -102,11 +100,19 @@ function getGradesForStudent($studentID, $mysqli)
                                                     <th>Grade</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody>';
+		while ($stmt->fetch())
+        {
+            $classGrade = getClassGrade($studentID, $classID, $mysqli);
+
+			echo '
                                         <tr class="gradeA">
                                         <td>' . $className . '</td>
                                        <td>' . $classGrade . '%</td>
 					   </tr>
+				';
+		}
+						echo '
                                             </tbody>
                                         </table>
                                         <!-- /.table-responsive -->
@@ -129,7 +135,6 @@ function getGradesForStudent($studentID, $mysqli)
                         });
                         </script>
                 ';
-        }
     }
     else
  {
