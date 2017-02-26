@@ -138,7 +138,7 @@ function assignStudentForm($classID, $gradeID, $mysqli)
             {
                 while ($stmt->fetch())
                 {
-                    getUserName($studentID, $mysqli); 
+                    generateFormOption($studentID, getUserName($studentID, $mysqli)); 
                 }
             }
             else
