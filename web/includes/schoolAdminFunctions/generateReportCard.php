@@ -195,9 +195,9 @@ function generateReportCard($studentID, $mysqli)
 		}
 	}
 
-	if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, classes.className FROM studentClassIDs INNER JOIN (classes) ON (classes.classID = studentClassIDs.classID AND studentClassIDs.studentID = ?)"))
+	if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, classes.className FROM studentClassIDs INNER JOIN (classes) ON (classes.classID = studentClassIDs.classID AND studentClassIDs.studentID = ? AND classes.schoolYearID = ?)"))
 	{
-		$stmt->bind_param('i', $studentID);
+		$stmt->bind_param('ii', $studentID, $yearID);
 		$stmt->execute();
 		$stmt->bind_result($classID, $className);
 		$stmt->store_result();
