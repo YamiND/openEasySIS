@@ -71,31 +71,40 @@ function generateClassesTable($mysqli)
 
 function getClassesTableData($mysqli)
 {
-	if ($stmt = $mysqli->prepare("SELECT className, classGrade, classTeacherID FROM classes"))
+	$yearID = getClassYearID($mysqli);
+	if ($stmt = $mysqli->prepare("SELECT className, classGrade, classTeacherID FROM classes WHERE schoolYearID = ?"))
 	{
-		$stmt->execute();
-		$stmt->bind_result($dbClassName, $dbClassGrade, $dbClassTeacherID);
-		$stmt->store_result();
+		$stmt->bind_param('i', $yearID);
 
-		while($stmt->fetch())
+		if ($stmt->execute())
 		{
-			if($stmt2 = $mysqli->prepare("SELECT userEmail FROM users WHERE userID = ?"))
-			{	
-				$stmt2->bind_param('s', $dbClassTeacherID);
-				$stmt2->bind_result($dbTeacherEmail);
-				$stmt2->execute();
-				$stmt2->store_result();
+			$stmt->bind_result($dbClassName, $dbClassGrade, $dbClassTeacherID);
+			$stmt->store_result();
+
+			while($stmt->fetch())
+			{
+				if($stmt2 = $mysqli->prepare("SELECT userEmail FROM users WHERE userID = ?"))
+				{	
+					$stmt2->bind_param('s', $dbClassTeacherID);
+					$stmt2->bind_result($dbTeacherEmail);
+					$stmt2->execute();
+					$stmt2->store_result();
 				
-	        	while($stmt2->fetch()) 	
-				{
-					echo '<tr class="gradeA">
-	  				<td>' . $dbClassName . '</td>
-	  				<td>' . $dbClassGrade . '</td>
-	  				<td>' . $dbTeacherEmail . '</td>
+	        		while($stmt2->fetch()) 	
+					{
+						echo '<tr class="gradeA">
+	  					<td>' . $dbClassName . '</td>
+	  					<td>' . $dbClassGrade . '</td>
+	  					<td>' . $dbTeacherEmail . '</td>
 	            			</tr>';
+					}
 				}
-			}
-		}			
+			}			
+		}
+		else
+		{
+			echo "Could not look up tables, no classes exist for school year";
+		}
 	}
 	else
 	{
