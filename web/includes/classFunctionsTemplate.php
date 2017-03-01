@@ -62,7 +62,8 @@ function getClassGrade($studentID, $classID, $mysqli)
 			// Score should be adding as a percentage
 			$score += getScoreByMaterialType($materialTypeID, $materialWeight, $studentID, $classID, $mysqli);
 		}
-		return ($score * 100);
+		return number_format((float) ($score * 100), 1, '.', '');
+	//	return ($score * 100);
 	}
 }
 
