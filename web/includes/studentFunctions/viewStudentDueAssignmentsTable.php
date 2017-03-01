@@ -1,5 +1,6 @@
 <?php
-//TODO: Test this after adding multiple students to a class
+
+// TODO: Add some due assignments to test this
 function checkPermissions($mysqli)
 {
     if ((login_check($mysqli) == true) && (isStudent($mysqli)))
@@ -54,17 +55,18 @@ function viewStudentDueAssignmentsTable($mysqli)
 
 function viewDueAssignments($mysqli)
 {
-    if ($stmt = $mysqli->prepare("SELECT classID FROM studentClassIDs WHERE studentID = ?"))
+	$yearID = getClassYearID($mysqli);
+    if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, classes.className FROM studentClassIDs INNER JOIN (classes) ON (classes.classID = studentClassIDs.classID AND studentClassIDs.studentID = ? AND classes.schoolYearID = ?)"))
     {
-        $stmt->bind_param('i', $_SESSION['userID']);
+        $stmt->bind_param('ii', $_SESSION['userID'], $yearID);
         $stmt->execute();
-        $stmt->bind_result($classID);
+        $stmt->bind_result($classID, $className);
         $stmt->store_result();
 
         while($stmt->fetch())
         {   
             echo '
-                    <h4> Class Name: ' . getClassName($classID, $mysqli) . '</h4>
+                    <h4> Class Name: ' . $className . '</h4>
                     <br>
                     <table width="100%" class="table table-striped table-bordered table-hover" id="' . $classID . '">
                         <thead>
