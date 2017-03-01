@@ -19,7 +19,7 @@ function viewStudentGradesTable($mysqli)
     $studentID = $_SESSION['userID'];
 	$yearID = getClassYearID($mysqli);
 
-    if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, className FROM studentClassIDs, classes WHERE studentID = ? AND schoolYearID = ?"))
+    if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, classes.className FROM studentClassIDs INNER JOIN (classes) ON (classes.classID = studentClassIDs.classID AND studentClassIDs.studentID = ? AND classes.schoolYearID = ?)"))
     {
         $stmt->bind_param('ii', $studentID, $yearID);
 
@@ -28,9 +28,7 @@ function viewStudentGradesTable($mysqli)
 
         $stmt->store_result();
 
-        while($stmt->fetch())
-        {
-	    $classGrade = getClassGrade($studentID, $classID, $mysqli);	
+		
             echo '
                     <!-- /.row -->
                         <div class="row">
@@ -47,12 +45,17 @@ function viewStudentGradesTable($mysqli)
                                                     <th>Class Name</th>
                                                     <th>Grade</th>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
+                                            </thead>';
+        while($stmt->fetch())
+        {
+	    $classGrade = getClassGrade($studentID, $classID, $mysqli);	
+echo '                                            <tbody>
                     			<tr class="gradeA">
 		                        <td>' . $className . '</td>
 		                       <td>' . $classGrade . '%</td>
-		                    		</tr>
+		                    		</tr>';
+		}
+							echo '
                                             </tbody>
                                         </table>
                                         <!-- /.table-responsive -->
@@ -75,7 +78,6 @@ function viewStudentGradesTable($mysqli)
                         });
                         </script>
                 ';
-        }
     }
     else
     {
