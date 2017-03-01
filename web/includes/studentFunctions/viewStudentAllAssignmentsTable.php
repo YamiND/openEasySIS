@@ -60,7 +60,7 @@ function viewStudentAssignments($studentID, $mysqli)
 {
 	$yearID = getClassYearID($mysqli);
 
-	if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, className FROM studentClassIDs, classes WHERE studentID = ? AND schoolYearID = ?"))
+	if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, classes.className FROM studentClassIDs INNER JOIN (classes) ON (classes.classID = studentClassIDs.classID AND studentClassIDs.studentID = ? AND classes.schoolYearID = ?)"))
 	{
     	$stmt->bind_param('ii', $studentID, $yearID);
         $stmt->execute();
@@ -126,7 +126,7 @@ function getAssignmentsForStudentClass($studentID, $classID, $mysqli)
                         <td>' . getMaterialTypeName($materialTypeID, $mysqli) . '</td>
                         <td>' . $materialPointsScored . '</td>
                         <td> /' . $materialPointsPossible . '</td>
-                        <td>' . $materialTotalPoints . '%</td>
+                        <td>' . number_format((float)$materialTotalPoints, 2, '.', '') . '%</td>
                     </tr>
                 ';
 		
