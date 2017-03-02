@@ -30,15 +30,7 @@ echo '
                         <div class="panel-body">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs">
-                                <li class="active"><a href="#administrator" data-toggle="tab">Administrator</a>
-                                </li>
-                                <li><a href="#schoolAdmin" data-toggle="tab">School Administrator</a>
-                                </li>
-                                <li><a href="#teacher" data-toggle="tab">Teacher</a>
-                                </li>
-                                <li><a href="#parent" data-toggle="tab">Parent</a>
-                                </li>
-                                <li><a href="#student" data-toggle="tab">Student</a>
+                                <li class="active"><a href="#administrator" data-toggle="tab">User</a>
                                 </li>
                             </ul>
 
@@ -47,33 +39,7 @@ echo '
                                 <div class="tab-pane fade in active" id="administrator">
                                     <br>
             ';
-                                    createAdminForm();
-                                    
-    echo '
-                                </div>
-                                <div class="tab-pane fade" id="schoolAdmin">
-                                <br>
-        ';
-                                    createSchoolAdminForm();
-        echo '
-                                </div>
-                                <div class="tab-pane fade" id="teacher">
-                                <br>
-            ';
-                                    createTeacherForm();
-        echo '
-                                </div>
-                                <div class="tab-pane fade" id="parent">
-                                <br>
-            ';
-                                    createParentForm();
-        echo '
-                                    
-                                </div>
-                                <div class="tab-pane fade" id="student">
-                                <br>
-            ';
-                                    createStudentForm();
+								createUserForm();
         echo '
                                 </div>
                             </div>
@@ -87,142 +53,181 @@ echo '
 
 }
 
-function createAdminForm()
+function createUserForm()
 {
-    generateFormStart("../includes/adminFunctions/createUser", "post"); 
-        generateFormHiddenInput("roleID", "1");
-        generateFormInputDiv(NULL, "email", "adminEmail", NULL, NULL, NULL, NULL, "Email");
-        generateFormInputDiv(NULL, "text", "adminFirstName", NULL, NULL, NULL, NULL, "First Name");
-        generateFormInputDiv(NULL, "text", "adminLastName", NULL, NULL, NULL, NULL, "Last Name");
-        generateFormCheckboxDiv("checked", "modProfile", "modProfile", "Modify Profiles");
-        generateFormCheckboxDiv("checked", "modClassList", "modClassList", "Modify Class Lists");
-        generateFormCheckboxDiv("checked", "viewAllGrades", "viewAllGrades", "View All Grades");
-        generateFormButton(NULL, "Create Administrator");
-    generateFormEnd();
-}
+echo <<<EOF
+<form action="../includes/adminFunctions/createUser" method="POST">
 
-function createSchoolAdminForm()
-{
-    generateFormStart("../includes/adminFunctions/createUser", "post"); 
-        generateFormHiddenInput("roleID", "2");
-        generateFormInputDiv(NULL, "email", "schoolAdminEmail", NULL, NULL, NULL, NULL, "Email");
-        generateFormInputDiv(NULL, "text", "schoolAdminFirstName", NULL, NULL, NULL, NULL, "First Name");
-        generateFormInputDiv(NULL, "text", "schoolAdminLastName", NULL, NULL, NULL, NULL, "Last Name");
-        generateFormCheckboxDiv(NULL, "modProfile", "modProfile", "Modify Profiles");
-        generateFormCheckboxDiv(NULL, "modClassList", "modClassList", "Modify Class Lists");
-        generateFormCheckboxDiv(NULL, "viewAllGrades", "viewAllGrades", "View All Grades");
-        generateFormButton(NULL, "Create School Administrator");
-    generateFormEnd();
-}
+  <div class="form-group">
+    <label>User's Email</label>
+    <input class="form-control" type="email" placeholder="User's Email" name="userEmail">
+  </div>
+  
+  <div class="form-group">
+    <label>User's First Name</label>
+    <input class="form-control" type="text" placeholder="User's First Name" name="userFirstName">
+  </div>
+  
+  <div class="form-group">
+    <label>User's Last Name</label>
+    <input class="form-control" type="text" placeholder="User's Last Name" name="userLastName">
+  </div>
 
-function createTeacherForm()
-{
-    generateFormStart("../includes/adminFunctions/createUser", "post"); 
-        generateFormHiddenInput("roleID", "3");
-        generateFormInputDiv(NULL, "email", "teacherEmail", NULL, NULL, NULL, NULL, "Email");
-        generateFormInputDiv(NULL, "text", "teacherFirstName", NULL, NULL, NULL, NULL, "First Name");
-        generateFormInputDiv(NULL, "text", "teacherLastName", NULL, NULL, NULL, NULL, "Last Name");
-        generateFormCheckboxDiv(NULL, "modProfile", "modProfile", "Modify Profiles");
-        generateFormCheckboxDiv(NULL, "modClassList", "modClassList", "Modify Class Lists");
-        generateFormCheckboxDiv(NULL, "viewAllGrades", "viewAllGrades", "View All Grades");
-        generateFormButton(NULL, "Create Teacher");
-    generateFormEnd();
-}
+<label>Special User Permissions</label> 
+  <div class="form-group">
+     <div class="checkbox">
+		<label>
+      	<input type="checkbox" name="modClassList"> User can assign student to Classes
+		</label>
+     </div>
+   </div>
+  <div class="form-group">
+     <div class="checkbox">
+		<label><input type="checkbox" name="viewAllGrades"> User can view all Student Grades</label>
+     </div>
+   </div>
 
-function createParentForm()
-{
-    generateFormStart("../includes/adminFunctions/createUser", "post"); 
-        generateFormHiddenInput("roleID", "4");
-        generateFormHiddenInput("modeProfile", "0");
-        generateFormHiddenInput("modClassList", "0");
-        generateFormHiddenInput("viewAllGrades", "0");
-        generateFormInputDiv(NULL, "email", "parentEmail", NULL, NULL, NULL, NULL, "Email");
-        generateFormInputDiv(NULL, "text", "parentFirstName", NULL, NULL, NULL, NULL, "First Name");
-        generateFormInputDiv(NULL, "text", "parentLastName", NULL, NULL, NULL, NULL, "Last Name");
-        generateFormInputDiv(NULL, "text", "parentAddress", NULL, NULL, NULL, NULL, "Address");
-        generateFormInputDiv(NULL, "text", "parentyCity", NULL, NULL, NULL, NULL, "City");
-        generateFormStartSelectDiv(NULL, "parentState");
-            // There is no good way to do this that I know...
-            echo '
-                    <option value="AL">Alabama</option>
-                    <option value="AK">Alaska</option>
-                    <option value="AZ">Arizona</option>
-                    <option value="AR">Arkansas</option>
-                    <option value="CA">California</option>
-                    <option value="CO">Colorado</option>
-                    <option value="CT">Connecticut</option>
-                    <option value="DE">Delaware</option>
-                    <option value="DC">District of Columbia</option>
-                    <option value="FL">Florida</option>
-                    <option value="GA">Georgia</option>
-                    <option value="HI">Hawaii</option>
-                    <option value="ID">Idaho</option>
-                    <option value="IL">Illinois</option>
-                    <option value="IN">Indiana</option>
-                    <option value="IA">Iowa</option>
-                    <option value="KS">Kansas</option>
-                    <option value="KY">Kentucky</option>
-                    <option value="LA">Louisiana</option>
-                    <option value="ME">Maine</option>
-                    <option value="MD">Maryland</option>
-                    <option value="MA">Massachusetts</option>
-                    <option value="MI">Michigan</option>
-                    <option value="MN">Minnesota</option>
-                    <option value="MS">Mississippi</option>
-                    <option value="MO">Missouri</option>
-                    <option value="MT">Montana</option>
-                    <option value="NE">Nebraska</option>
-                    <option value="NV">Nevada</option>
-                    <option value="NH">New Hampshire</option>
-                    <option value="NJ">New Jersey</option>
-                    <option value="NM">New Mexico</option>
-                    <option value="NY">New York</option>
-                    <option value="NC">North Carolina</option>
-                    <option value="ND">North Dakota</option>
-                    <option value="OH">Ohio</option>
-                    <option value="OK">Oklahoma</option>
-                    <option value="OR">Oregon</option>
-                    <option value="PA">Pennsylvania</option>
-                    <option value="RI">Rhode Island</option>
-                    <option value="SC">South Carolina</option>
-                    <option value="SD">South Dakota</option>
-                    <option value="TN">Tennessee</option>
-                    <option value="TX">Texas</option>
-                    <option value="UT">Utah</option>
-                    <option value="VT">Vermont</option>
-                    <option value="VA">Virginia</option>
-                    <option value="WA">Washington</option>
-                    <option value="WV">West Virginia</option>
-                    <option value="WI">Wisconsin</option>
-                    <option value="WY">Wyoming</option>
-                ';
-        generateFormEndSelectDiv();
-        generateFormButton(NULL, "Create Parent");
-    generateFormEnd();
-}
+  <label>Select User Roles:</label> <br> 
+   <div class="form-group">
+     <div class="checkbox">
+		<label>
+         <input type="checkbox" id="isAdmin">Is Admin
+		</label>
+     </div>
+   </div>
+   <div class="form-group">
+     <div class="checkbox">
+		<label>
+         <input type="checkbox" id="isSchoolAdmin">Is School Admin
+		</label>
+         </div>
+      </div>
+         <div class="form-group">
+     <div class="checkbox">
+		<label>
+         <input type="checkbox" id="isTeacher">Is Teacher
+		</label>
+         </div>
+      </div>
+         <div class="form-group" id="isParentDiv">
+     <div class="checkbox">
+			<label>
+        		<input type="checkbox" id="isParent">Is Parent
+			</label>
+          </div>
+      </div>
+         <div class="form-group" id="isStudentDiv">
+     <div class="checkbox">
+		<label>
+        	<input type="checkbox" id="isStudent">Is Student
+		</label>
+      </div>
+      </div>
+    
+     <button name="creatUserButton" type="submit" class="btn btn-default">Create User</button>
+     
+</form>
 
-function createStudentForm()
-{
-    generateFormStart("../includes/adminFunctions/createUser", "post"); 
-        generateFormHiddenInput("roleID", "5");
-        generateFormHiddenInput("modProfile", "0");
-        generateFormHiddenInput("modClassList", "0");
-        generateFormHiddenInput("viewAllGrades", "0");
-        generateFormInputDiv(NULL, "email", "studentEmail", NULL, NULL, NULL, NULL, "Email");
-        generateFormInputDiv(NULL, "text", "studentFirstName", NULL, NULL, NULL, NULL, "First Name");
-        generateFormInputDiv(NULL, "text", "studentLastName", NULL, NULL, NULL, NULL, "Last Name");
-        generateFormStartSelectDiv("Gender", "studentGender");
-            generateFormOption("M", "Male");
-            generateFormOption("F", "Female");
-        generateFormEndSelectDiv();
-        generateFormStartSelectDiv("Grade Level", "studentGradeLevel");
-            for ($i = 1; $i <= 12; $i++)
-            {
-                generateFormOption($i, $i);
+<script>
+$(document).ready(function(){
+   /*
+    When Checkbox 1 is checked, the 1 input field will be created. If it is unchecked and the field exists, it will be removed from the DOM. When removing the element, all data related to it will go with it, including any bound events and held data.
+    */
+    $('#isAdmin').click(function(){
+       if(document.getElementById('isAdmin').checked){
+       /*
+         We have to use .after() to identify where the new element should be created in the DOM. In this case, it goes just after the checkbox. If your input field is going into a weird spot you can always make an invisible div right where it should be. The label has to be placed inside of the div so it is remove with the input field, you may want to assign the input field its own ID.
+         */
+       // $('#isAdmin').after('<div class="form-group" id="isAdminDiv">1: <input type="text" name="adminBox" id="text1"></div>');
+       $('#isAdmin').after('<input type="hidden" id="userIsAdmin" name="userIsAdmin" value="1">');
+        }
+        else{
+            if( $('#userIsAdmin').length ){
+                $('#userIsAdmin').remove();
             }
-        generateFormEndSelectDiv();
-        generateFormButton(NULL, "Create Student");
-    generateFormEnd();
+        }
+    });
+    
+     $('#isSchoolAdmin').click(function(){
+       if(document.getElementById('isSchoolAdmin').checked){
+       /*
+         We have to use .after() to identify where the new element should be created in the DOM. In this case, it goes just after the checkbox. If your input field is going into a weird spot you can always make an invisible div right where it should be. The label has to be placed inside of the div so it is remove with the input field, you may want to assign the input field its own ID.
+         */
+       // $('#isAdmin').after('<div class="form-group" id="isAdminDiv">1: <input type="text" name="adminBox" id="text1"></div>');
+       $('#isSchoolAdmin').after('<input type="hidden" id="userIsSchoolAdmin" name="userIsSchoolAdmin" value="1">');
+        }
+        else{
+            if( $('#userIsSchoolAdmin').length ){
+                $('#userIsSchoolAdmin').remove();
+            }
+        }
+    });
+    
+    $('#isTeacher').click(function(){
+       if(document.getElementById('isTeacher').checked){
+       /*
+         We have to use .after() to identify where the new element should be created in the DOM. In this case, it goes just after the checkbox. If your input field is going into a weird spot you can always make an invisible div right where it should be. The label has to be placed inside of the div so it is remove with the input field, you may want to assign the input field its own ID.
+         */
+       // $('#isAdmin').after('<div class="form-group" id="isAdminDiv">1: <input type="text" name="adminBox" id="text1"></div>');
+       $('#isTeacher').after('<input type="hidden" id="userIsTeacher" name="userIsTeacher" value="1">');
+        }
+        else{
+            if( $('#userIsTeacher').length ){
+                $('#userIsTeacher').remove();
+            }
+        }
+    });
+    
+    
+    /*
+     When Checkbox 2 is checked, we check to see if we have created the 1 input field yet. If so, we create the 2 input field below it. If we have not created it, we create the 2 input field below Checkbox 2. Again, when unchecked the element is removed if it exists.
+     */
+    $('#isParent').click(function(){
+        if(document.getElementById('isParent').checked){
+            if( $('#isParentDiv').length){
+                $('#isParentDiv').after('<div class="form-group" id="userIsParent"><input type="hidden" id="userIsParent" name="userIsParent" value="1"></div> <div class="form-group" id="parentAddressField"><input type="text" class="form-control" name="parentAddress" placeholder="Home Address"></div><div class="form-group" id="parentPhoneField"> <input type="text" class="form-control" name="parentPhone" placeholder="Phone Number"></div>');
+             }
+             else{
+                 $('#isParentDiv').after('<div class="form-group" id="userIsParent"><input type="hidden" id="userIsParent" name="userIsParent" value="1"></div> <div class="form-group" id="parentAddressField"><input class="form-control" type="text" name="parentAddress" placeholder="Home Address"></div><div class="form-group" id="parentPhoneField"> <input type="text" class="form-control" name="parentPhone" placeholder="Phone Number"></div>');
+             }
+         }
+         else{
+             if ( $('#userIsParent').length ){
+                  $('#userIsParent').remove();
+             }
+             if ( $('#parentAddressField').length ){
+                  $('#parentAddressField').remove();
+             }
+              if ( $('#parentPhoneField').length ){
+                  $('#parentPhoneField').remove();
+             }
+        } 
+    });
+    
+    $('#isStudent').click(function(){
+        if(document.getElementById('isStudent').checked){
+            if( $('#isStudentDiv').length){
+                $('#isStudentDiv').after('<div class="form-group" id="userIsStudent"><input type="hidden" id="userIsStudent" name="userIsStudent" value="1"></div><div class="form-group" id="studentGradeField"><label>Student Grade Level</label> <select class="form-control" name="studentGradeLevel"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select></div>');
+             }
+             else{
+                 $('#isStudentDiv').after('<div class="form-group" id="userIsStudent"><input type="hidden" id="userIsStudent" name="userIsStudent" value="1"></div><div class="form-group" id="studentGradeField"><label>Student Grade Level</label> <select class="form-control" name="studentGradeLevel"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select></div>');
+             }
+         }
+         else{
+             if ( $('#userIsStudent').length ){
+                  $('#userIsStudent').remove();
+             }
+             if ( $('#studentGradeField').length ){
+                  $('#studentGradeField').remove();
+             }
+        } 
+    });
+    
+  });
+</script>
+
+EOF;
+
 }
 
 ?>
