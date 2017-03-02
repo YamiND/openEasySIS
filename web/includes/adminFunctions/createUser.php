@@ -1,8 +1,6 @@
 <?php
 include_once '../dbConnect.php';
 include_once '../functions.php';
-// TODO: This does not currently work
-// I need to work with ahmed to make a better page
 
 sec_session_start(); // Our custom secure way of starting a PHP session.
 
@@ -12,380 +10,192 @@ if ((login_check($mysqli) == true) && (isAdmin($mysqli)))
 }
 else
 {
-   	$_SESSION['fail'] = 'Account Creations Failed, invalid permissions';
+   	$_SESSION['fail'] = 'Account Creation Failed, invalid permissions';
    	header('Location: ../../pages/createUser');
 
 	return;
 }
 
-function createAdminAccount($mysqli)
+function createUserAccount($mysqli)
 {
-	if ((isset($_POST['adminEmail'], $_POST['adminFirstName'], $_POST['adminLastName'])) && !empty($_POST['adminEmail']) && !empty($_POST['adminFirstName']) && !empty($_POST['adminLastName']))
+	if (isset($_POST['userEmail'], $_POST['userFirstName'], $_POST['userLastName']) && !empty($_POST['userEmail']) && !empty($_POST['userFirstName']) && !empty($_POST['userLastName']))
 	{
-    	$adminEmail = $_POST['adminEmail'];
-		$adminFirstName = $_POST['adminFirstName'];
-		$adminLastName = $_POST['adminLastName'];
-		$roleID = $_POST['roleID'];
-		if ($_POST['modProfile'] == 'modProfile')
-		{
-			$modProfile = '1';
+		$userEmail = $_POST['userEmail'];
+		$userFirstName = $_POST['userFirstName'];
+		$userLastName = $_POST['userLastName'];
+		$studentGPA = NULL; // This will probably never be set at user creation
+		$studentGradeLevel = NULL; // Further down this should be changed if the data is sent
+		$parentAddress = NULL; // See above 
+		$parentPhone = NULL; // Ditto
+
+		if (isset($_POST['modClassList']))
+		{	
+			if ($_POST['modClassList'] == "1")
+			{
+				$modClassList = "1";
+			}
+			else
+			{
+				$modClassList = "0";
+			}
 		}
 		else
 		{
-			$modProfile = '0';
+			$modClassList = "0";
 		}
 
-		if ($_POST['modClassList'] == 'modClassList')
+		if (isset($_POST['viewAllGrades']))
 		{
-			$modClassList = '1';
-		}
-		else
-		{
-			$modClassList = '0';
-		}
-
-		if ($_POST['viewAllGrades'] == 'viewAllGrades')
-		{
-			$viewAllGrades = '1';
+			if ($_POST['viewAllGrades'] == "1")
+			{
+				$viewAllGrades = "1";
+			}
+			else
+			{
+				$viewAllGrades = "0";
+			}
 		}
 		else
 		{
-			$viewAllGrades = '0';
+			$viewAllGrades = "0";
 		}
 
-		$password = randomString();	
-
-		createUserAccount($adminEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $mysqli);
-
-		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
+		// Do our checks to make sure one of the checkboxes is checked
+		if (isset($_POST['userIsAdmin']) || isset($_POST['userIsSchoolAdmin']) || isset($_POST['userIsTeacher']) || isset($_POST['userIsParent']) || isset($_POST['userIsStudent']))
 		{
-			$stmt->bind_param('s', $adminEmail);
+			// Make sure that student is the only box checked if they're a student
+			if (isset($_POST['userIsStudent']) && (isset($_POST['userIsAdmin']) || isset($_POST['userIsSchoolAdmin']) || isset($_POST['userIsTeacher']) || isset($_POST['userIsParent'])))
+			{
+   				$_SESSION['fail'] = 'Account Creation Failed, Can not be a student and other role';
+		   		header('Location: ../../pages/createUser');
+
+				return;
+			}
+			// If they are a student, make sure nothing else is set
+			else if (isset($_POST['userIsStudent']) && (!isset($_POST['userIsAdmin'], $_POST['userIsSchoolAdmin'], $_POST['userIsTeacher'], $_POST['userIsParent'])))
+			{
+				$isStudent = "1";	
+				
+				if (isset($_POST['studentGradeLevel']) && !empty($_POST['studentGradeLevel']))
+				{
+					$studentGradeLevel = $_POST['studentGradeLevel'];
+				}
+				else
+				{
+   					$_SESSION['fail'] = 'Account Creation Failed, student fields must be filled out';
+					header('Location: ../../pages/createUser');
+
+					return;
+				}
+			}
+			// If they're not a student, let the checkbox checking commence
+			else
+			{
+				$isStudent = "0";
+
+				if (isset($_POST['userIsAdmin']) && !empty($_POST['userIsAdmin']))
+				{
+					$isAdmin = $_POST['userIsAdmin'];
+					$modClassList = "1";
+					$viewAllGrades = "1";
+				}
+				else
+				{
+					$isAdmin = "0";
+				}
+
+				if (isset($_POST['userIsSchoolAdmin']) && !empty($_POST['userIsSchoolAdmin']))
+				{
+					$isSchoolAdmin = $_POST['userIsSchoolAdmin'];
+					$modClassList = "1";
+					$viewAllGrades = "1";
+				}
+				else
+				{
+					$isSchoolAdmin = "0";
+				}
+
+				if (isset($_POST['userIsTeacher']) && !empty($_POST['userIsTeacher']))
+				{
+					$isTeacher = $_POST['userIsTeacher'];
+				}
+				else
+				{
+					$isTeacher = "0";
+				}
+
+				if (isset($_POST['userIsParent']) && !empty($_POST['userIsParent']))
+				{
+					$isParent = $_POST['userIsParent'];
+
+					if (isset($_POST['parentAddress'], $_POST['parentPhone']) && !empty($_POST['parentAddress']) && !empty($_POST['parentPhone']))
+					{
+						$parentAddress = $_POST['parentAddress'];
+						$parentPhone = $_POST['parentPhone'];
+					}
+					else
+					{
+   						$_SESSION['fail'] = 'Account Creation Failed, parent fields must be filled out';
+					   	header('Location: ../../pages/createUser');
+
+						return;
+					}
+				}
+				else
+				{
+					$isParent = "0";
+				}
+			}
+		}
+		else
+		{
+   			$_SESSION['fail'] = 'Account Creation Failed, At least one role must be selected';
+		   	header('Location: ../../pages/createUser');
+
+			return;
+		}
+	
+
+		$password = randomString();
+		$randomSalt = hash('sha512', uniqid(mt_rand(1, mt_getrandmax()), true));
+		$hashedPassword = hash("sha512", $password . $randomSalt);
+
+		if ($stmt = $mysqli->prepare("SELECT userEmail FROM users where userEmail = ?"))
+		{
+			$stmt->bind_param('s', $userEmail);
+
 			$stmt->execute();
 			$stmt->store_result();
-			
-			if ($stmt->num_rows == 1)
+
+			if ($stmt->num_rows > 0)
 			{
-				$stmt->bind_result($userID);
-				$stmt->fetch();
+    			$_SESSION['fail'] = 'Account Creation Failed, Account already exists';
+   	   			header('Location: ../../pages/createUser');
+			}
+			else
+			{
+    	
+				if ($stmt = $mysqli->prepare("INSERT INTO users (userEmail, userPassword, userFirstName, userLastName, modClassList, viewAllGrades, userSalt, isParent, isStudent, isTeacher, isSchoolAdmin, isAdmin, studentGPA, studentGradeLevel, parentAddress, parentPhone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
+				{
+    				$stmt->bind_param('ssssiissssssdiss', $userEmail, $hashedPassword, $userFirstName, $userLastName, $modClassList, $viewAllGrades, $randomSalt, $isParent, $isStudent, $isTeacher, $isSchoolAdmin, $isAdmin, $studentGPA, $studentGradeLevel, $parentAddress, $parentPhone); 
+	    			if ($stmt->execute())    // Execute the prepared query.
+					{
+   						$_SESSION['success'] = "Account Creation Success, email is $userEmail and password is $password";
+					   	header('Location: ../../pages/createUser');
+					}
+					else
+					{
+   						$_SESSION['fail'] = 'Account Creation Failed, data could not be inserted into database';
+					   	header('Location: ../../pages/createUser');
+					}
+				}
 			}
 		}
-
-		createAdminProfile($userID, $adminFirstName, $adminLastName, $adminEmail, $mysqli);
-    	
-		$_SESSION['success'] = "Admin Account Created - email is $adminEmail and password is $password";
-   	   	header('Location: ../../pages/createUser');
-    }
+	}
 	else
 	{
-    	// The correct POST variables were not sent to this page.
-    	$_SESSION['fail'] = 'Account Creation Failed';
-   	   	header('Location: ../../pages/createUser');
-	}
-}
-
-function createSchoolAdminAccount($mysqli)
-{
-	if ((isset($_POST['schoolAdminEmail'], $_POST['schoolAdminFirstName'], $_POST['schoolAdminLastName'])) && !empty($_POST['schoolAdminEmail']) && !empty($_POST['schoolAdminFirstName']) && !empty($_POST['schoolAdminLastName'])) 
-	{
-    	$schoolAdminEmail = $_POST['schoolAdminEmail'];
-		$schoolAdminFirstName = $_POST['schoolAdminFirstName'];
-		$schoolAdminLastName = $_POST['schoolAdminLastName'];
-		$roleID = $_POST['roleID'];
-
-		if ($_POST['modProfile'] == 'modProfile')
-		{
-			$modProfile = '1';
-		}
-		else
-		{
-			$modProfile = '0';
-		}
-
-		if ($_POST['modClassList'] == 'modClassList')
-		{
-			$modClassList = '1';
-		}
-		else
-		{
-			$modClassList = '0';
-		}
-
-		if ($_POST['viewAllGrades'] == 'viewAllGrades')
-		{
-			$viewAllGrades = '1';
-		}
-		else
-		{
-			$viewAllGrades = '0';
-		}
-
-		$password = randomString();	
-
-		createUserAccount($schoolAdminEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $mysqli);
-
-		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
-		{
-			$stmt->bind_param('s', $schoolAdminEmail);
-			$stmt->execute();
-			$stmt->store_result();
-			
-			if ($stmt->num_rows == 1)
-			{
-				$stmt->bind_result($schoolAdminID);
-				$stmt->fetch();
-			}
-		}
-
-		createSchoolAdminProfile($schoolAdminID, $schoolAdminFirstName, $schoolAdminLastName, $schoolAdminEmail, $mysqli);
-    	
-		$_SESSION['success'] = "School Admin Account Created - email is $schoolAdminEmail and password is $password";
-   	   	header('Location: ../../pages/createUser');
-    }
-	else
-	{
-    	// The correct POST variables were not sent to this page.
-    	$_SESSION['fail'] = 'Account Creation Failed';
-   	   	header('Location: ../../pages/createUser');
-	}
-}
-
-function createTeacherAccount($mysqli)
-{
-	if ((isset($_POST['teacherEmail'], $_POST['teacherFirstName'], $_POST['teacherLastName'])) && !empty($_POST['teacherEmail']) && !empty($_POST['teacherFirstName']) && !empty($_POST['teacherEmail'])) 
-	{
-    	$teacherEmail = $_POST['teacherEmail'];
-		$teacherFirstName = $_POST['teacherFirstName'];
-		$teacherLastName = $_POST['teacherLastName'];
-		$roleID = $_POST['roleID'];
-
-		if ($_POST['modProfile'] == 'modProfile')
-		{
-			$modProfile = '1';
-		}
-		else
-		{
-			$modProfile = '0';
-		}
-
-		if ($_POST['modClassList'] == 'modClassList')
-		{
-			$modClassList = '1';
-		}
-		else
-		{
-			$modClassList = '0';
-		}
-
-		if ($_POST['viewAllGrades'] == 'viewAllGrades')
-		{
-			$viewAllGrades = '1';
-		}
-		else
-		{
-			$viewAllGrades = '0';
-		}
-
-		$password = randomString();	
-
-		createUserAccount($teacherEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $mysqli);
-
-		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
-		{
-			$stmt->bind_param('s', $teacherEmail);
-			$stmt->execute();
-			$stmt->store_result();
-			
-			if ($stmt->num_rows == 1)
-			{
-				$stmt->bind_result($teacherID);
-				$stmt->fetch();
-			}
-		}
-
-		createTeacherProfile($teacherID, $teacherFirstName, $teacherLastName, $teacherEmail, $mysqli);
-    	
-		$_SESSION['success'] = "Teacher Account Created - email is $teacherEmail and password is $password";
-   	   	header('Location: ../../pages/createUser');
-    }
-	else
-	{
-    	// The correct POST variables were not sent to this page.
-    	$_SESSION['fail'] = 'Account Creation Failed';
-   	   	header('Location: ../../pages/createUser');
-	}
-}
-
-
-function createParentAccount($mysqli)
-{
-	if ((isset($_POST['parentEmail'], $_POST['parentFirstName'], $_POST['parentLastName'], $_POST['parentAddress'], $_POST['parentCity'], $_POST['parentState'], $_POST['parentZip']))  && !empty($_POST['parentEmail']) && !empty($_POST['parentFirstName']) && !empty($_POST['parentLastName']) && !empty($_POST['parentAddress']) && !empty($_POST['parentCity']) && !empty($_POST['parentState']) && !empty($_POST['parentZip']))
-	{
-    	$parentEmail = $_POST['parentEmail'];
-		$parentFirstName = $_POST['parentFirstName'];
-		$parentLastName = $_POST['parentLastName'];
-		$parentAddress = $_POST['parentAddress'];
-		$parentCity = $_POST['parentCity'];
-		$parentState = $_POST['parentState'];
-		$parentZip = $_POST['parentZip'];
-
-
-		$roleID = $_POST['roleID'];
-
-		$modProfile = $_POST['modProfile'];
-		$modClassList = $_POST['modClassList'];
-		$viewAllGrades = $_POST['viewAllGrades'];
-
-		$password = randomString();	
-
-		createUserAccount($parentEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $mysqli);
-
-		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
-		{
-			$stmt->bind_param('s', $parentEmail);
-			$stmt->execute();
-			$stmt->store_result();
-			
-			if ($stmt->num_rows == 1)
-			{
-				$stmt->bind_result($parentID);
-				$stmt->fetch();
-			}
-		}
-		
-		createParentProfile($parentID, $parentFirstName, $parentLastName, $parentEmail, $parentAddress, $parentCity, $parentState, $parentZip, $mysqli);
-    	
-		$_SESSION['success'] = "parent Account Created - email is $parentEmail and password is $password";
-   	   	header('Location: ../../pages/createUser');
-    }
-	else
-	{
-    	// The correct POST variables were not sent to this page.
-    	$_SESSION['fail'] = 'Account Creation Failed';
-   	   	header('Location: ../../pages/createUser');
-	}
-}
-
-
-function createStudentAccount($mysqli)
-{
-	if ((isset($_POST['studentEmail'], $_POST['studentFirstName'], $_POST['studentLastName'], $_POST['studentGender'], $_POST['studentGradeLevel'])) && !empty($_POST['studentEmail']) && !empty($_POST['studentFirstName']) && !empty($_POST['studentLastName']) && !empty($_POST['studentGender']) && !empty($_POST['studentGradeLevel']))
-	{
-    	$studentEmail = $_POST['studentEmail'];
-		$studentFirstName = $_POST['studentFirstName'];
-		$studentLastName = $_POST['studentLastName'];
-		$studentGender = $_POST['studentGender'];
-		$studentGradeLevel = $_POST['studentGradeLevel'];
-
-		$roleID = $_POST['roleID'];
-
-		$modProfile = $_POST['modProfile'];
-		$modClassList = $_POST['modClassList'];
-		$viewAllGrades = $_POST['viewAllGrades'];
-
-		$password = randomString();	
-
-		createUserAccount($studentEmail, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $mysqli);
-
-		if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userEmail = ? LIMIT 1"))
-		{
-			$stmt->bind_param('s', $studentEmail);
-			$stmt->execute();
-			$stmt->store_result();
-			
-			if ($stmt->num_rows == 1)
-			{
-				$stmt->bind_result($studentID);
-				$stmt->fetch();
-			}
-		}
-
-	    createStudentProfile($studentID, $studentFirstName, $studentLastName, $studentEmail, $studentGender, $studentGradeLevel, $mysqli);
-
-		$_SESSION['success'] = "Student Account Created - email is $studentEmail and password is $password";
-   	   	header('Location: ../../pages/createUser');
-    }
-	else
-	{
-    	// The correct POST variables were not sent to this page.
-    	$_SESSION['fail'] = 'Account Creation Failed';
-   	   	header('Location: ../../pages/createUser');
-	}
-}
-
-
-function createUserAccount($email, $password, $roleID, $modProfile, $modClassList, $viewAllGrades, $mysqli)
-{
-	$randomSalt = hash('sha512', uniqid(mt_rand(1, mt_getrandmax()), true));
-	$hashedPassword = hash("sha512", $password . $randomSalt);
-
-	if ($stmt = $mysqli->prepare("SELECT userEmail FROM users where userEmail = ?"))
-	{
-		$stmt->bind_param('s', $email);
-
-		$stmt->execute();
-		$stmt->store_result();
-
-		if ($stmt->num_rows > 0)
-		{
-    		$_SESSION['fail'] = 'Account Creation Failed, Account already exists';
-   	   		header('Location: ../../pages/createUser');
-		}
-		else
-		{
-    	
-			if ($stmt = $mysqli->prepare("INSERT INTO users (userEmail, userPassword, roleID, modProfile, modClassList, viewAllGrades, userSalt) VALUES (?, ?, ?, ?, ?, ?, ?)"))
-			{
-    			$stmt->bind_param('ssiiiis', $email, $hashedPassword, $roleID, $modProfile, $modClassList, $viewAllGrades, $randomSalt); 
-	    	$stmt->execute();    // Execute the prepared query.
-			}
-		}
-	}
-}
-
-function createAdminProfile($adminID, $adminFirstName, $adminLastName, $adminEmail, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("INSERT INTO adminProfile (adminID, adminFirstName, adminLastName, adminEmail) VALUES (?, ?, ?, ?)"))
-	{
-    	$stmt->bind_param('isss', $adminID, $adminFirstName, $adminLastName, $adminEmail); 
-	    $stmt->execute();    // Execute the prepared query.
-	}
-}
-
-function createSchoolAdminProfile($schoolAdminID, $schoolAdminFirstName, $schoolAdminLastName, $schoolAdminEmail, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("INSERT INTO schoolAdminProfile (schoolAdminID, schoolAdminFirstName, schoolAdminLastName, schoolAdminEmail) VALUES (?, ?, ?, ?)"))
-	{
-    	$stmt->bind_param('isss', $schoolAdminID, $schoolAdminFirstName, $schoolAdminLastName, $schoolAdminEmail); 
-	    $stmt->execute();    // Execute the prepared query.
-	}
-}
-
-
-function createTeacherProfile($teacherID, $teacherFirstName, $teacherLastName, $teacherEmail, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("INSERT INTO teacherProfile (teacherID, teacherFirstName, teacherLastName, teacherEmail) VALUES (?, ?, ?, ?)"))
-	{
-    	$stmt->bind_param('isss', $teacherID, $teacherFirstName, $teacherLastName, $teacherEmail); 
-	    $stmt->execute();    // Execute the prepared query.
-	}
-}
-
-function createParentProfile($parentID, $parentFirstName, $parentLastName, $parentEmail, $parentAddress, $parentCity, $parentState, $parentZip, $mysqli)
-{
-
-    if ($stmt = $mysqli->prepare("INSERT INTO parentProfile (parentID, parentFirstName, parentLastName, parentEmail, parentAddress, parentCity, parentState, parentZip) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"))
-	{
-    	$stmt->bind_param('isssssss', $parentID, $parentFirstName, $parentLastName, $parentEmail, $parentAddress, $parentCity, $parentState, $parentZip); 
-	    $stmt->execute();    // Execute the prepared query.
-	}
-}
-
-function createStudentProfile($studentID, $studentFirstName, $studentLastName, $studentEmail, $studentGender, $studentGradeLevel, $mysqli)
-{
-    if ($stmt = $mysqli->prepare("INSERT INTO studentProfile (studentID, studentFirstName, studentLastName, studentEmail, studentGender, studentGradeLevel) VALUES (?, ?, ?, ?, ?, ?)"))
-	{
-    	$stmt->bind_param('issssi', $studentID, $studentFirstName, $studentLastName, $studentEmail, $studentGender, $studentGradeLevel); 
-	    $stmt->execute();    // Execute the prepared query.
+   		$_SESSION['fail'] = 'Account Creation Failed, data not sent';
+	   	header('Location: ../../pages/createUser');
 	}
 }
 
