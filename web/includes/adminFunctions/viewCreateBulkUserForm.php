@@ -74,6 +74,7 @@ function viewCreateBulkUserForm($mysqli)
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
+						<p>*If you want users to have multiple roles, please create them manually</p>
                 </div>
 ';
 }
