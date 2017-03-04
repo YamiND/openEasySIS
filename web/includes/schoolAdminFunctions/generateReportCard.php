@@ -174,26 +174,24 @@ function generateReportCard($studentID, $mysqli)
 	// Get grades that occur for each quarter
 	// Calculate grade for Quarter
 	// Calculate Total Grade
-	$yearID = getClassYearID($mysqli);
 
 	$studentName = getUserName($studentID, $mysqli);
 	$studentGradeLevel = getStudentGradeByID($studentID, $mysqli);
-	$academicYear = getAcademicYear($yearID, $mysqli);	
 
 
-	if ($stmt = $mysqli->prepare("SELECT quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd, quarterFourStart, quarterFourEnd FROM schoolYear WHERE schoolYearID = ?"))
+	if ($stmt = $mysqli->prepare("SELECT schoolYearID, quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd, quarterFourStart, quarterFourEnd FROM schoolYear WHERE schoolYearStart <= CURDATE() AND schoolYearEnd >= CURDATE()"))
 	{
-		$stmt->bind_param('i', $yearID);
-
 		if ($stmt->execute())
 		{
-			$stmt->bind_result($quarterOneStart, $quarterOneEnd, $quarterTwoStart, $quarterTwoEnd, $quarterThreeStart, $quarterThreeEnd, $fallSemesterStart, $fallSemesterEnd, $springSemesterStart, $springSemesterEnd, $quarterFourStart, $quarterFourEnd);
+			$stmt->bind_result($yearID, $quarterOneStart, $quarterOneEnd, $quarterTwoStart, $quarterTwoEnd, $quarterThreeStart, $quarterThreeEnd, $fallSemesterStart, $fallSemesterEnd, $springSemesterStart, $springSemesterEnd, $quarterFourStart, $quarterFourEnd);
 
 			$stmt->store_result();
 
 			$stmt->fetch();
 		}
 	}
+
+	$academicYear = getAcademicYear($yearID, $mysqli);	
 
 	if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, classes.className FROM studentClassIDs INNER JOIN (classes) ON (classes.classID = studentClassIDs.classID AND studentClassIDs.studentID = ? AND classes.schoolYearID = ?)"))
 	{
@@ -204,24 +202,95 @@ function generateReportCard($studentID, $mysqli)
 
 		while ($stmt->fetch())
 		{
-			$quarterOneGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterOneEnd, $mysqli);
-			$quarterTwoGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterTwoEnd, $mysqli);
-			$quarterThreeGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterThreeEnd, $mysqli);
-			$quarterFourGrade = getClassGradeForRange($studentID, $classID, $quarterFourStart, $quarterFourEnd, $mysqli);
+//			echo "Q1S: " . $quarterOneStart . "<br>";	
+//			echo "Q1E: " .$quarterOneEnd . "<br>";	
+//			echo "Q2S: " .$quarterTwoStart . "<br>";	
+//			echo "Q2E: " .$quarterTwoEnd . "<br>";	
+//			echo "Q3S: " .$quarterThreeStart . "<br>";	
+//			echo "Q3E: " .$quarterThreeEnd . "<br>";	
+//			echo "Q4S: " .$quarterFourStart . "<br>";	
+//			echo "Q4E: " .$quarterFourEnd . "<br>";	
+//			echo "YID: " .$yearID . "<br>";
+//			echo "CID: " .$classID . "<br>";
+//			echo "SID: " .$studentID . "<br>";
 
-			$semesterOneGrade = getClassGradeForRange($studentID, $classID, $fallSemesterStart, $fallSemesterEnd, $mysqli);
-			$semesterTwoGrade = getClassGradeForRange($studentID, $classID, $springSemesterStart, $springSemesterEnd, $mysqli);
 
+			if (date('Y-m-d') >= $quarterOneEnd)
+			{
+				$quarterOneGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterOneEnd, $mysqli);
+			}
+			else
+			{
+				$quarterOneGrade = "N/A";
+			}
+
+			if (date('Y-m-d') >= $quarterTwoEnd)
+			{
+				$quarterTwoGrade = getClassGradeForRange($studentID, $classID, $quarterTwoStart, $quarterTwoEnd, $mysqli);
+			}
+			else
+			{
+				$quarterTwoGrade = "N/A";
+			}
+
+			if (date('Y-m-d') >= $quarterThreeEnd)
+			{
+				$quarterThreeGrade = getClassGradeForRange($studentID, $classID, $quarterThreeStart, $quarterThreeEnd, $mysqli);
+			}
+			else
+			{
+				$quarterThreeGrade = "N/A";
+			}
+
+			if (date('Y-m-d') >= $quarterThreeEnd)
+			{
+				$quarterFourGrade = getClassGradeForRange($studentID, $classID, $quarterFourStart, $quarterFourEnd, $mysqli);
+			}
+			else
+			{
+				$quarterFourGrade = "N/A";
+			}
+
+			if (date('Y-m-d') >= $fallSemesterEnd)
+			{
+//				$semesterOneGrade = getClassGradeForRange($studentID, $classID, $fallSemesterStart, $fallSemesterEnd, $mysqli);
+				$semesterOneGrade = ($quarterOneGrade + $quarterTwoGrade) / 2;
+				$semesterOneGrade = number_format((float) $semesterOneGrade, 1, '.', '') . "%";
+			}
+			else
+			{
+				$semesterOneGrade = "N/A";
+			}
+
+			if (date('Y-m-d') >= $springSemesterEnd)
+			{
+//				$semesterTwoGrade = getClassGradeForRange($studentID, $classID, $springSemesterStart, $springSemesterEnd, $mysqli);
+				$semesterTwoGrade = ($quarterTwoGrade + $quarterThreeGrade) / 2;
+				$semesterTwoGrade = number_format((float) $semesterTwoGrade, 1, '.', '') . "%";
+			}
+			else
+			{
+				$semesterTwoGrade = "N/A";
+			}
+
+/*			echo "Q1: " .$quarterOneGrade . "<br>";
+			echo "Q2: " .$quarterTwoGrade . "<br>";
+			echo "Q3: " .$quarterThreeGrade . "<br>";
+			echo "Q4: " .$quarterFourGrade . "<br>";
+			echo "S1: " .$semesterOneGrade . "<br>";
+			echo "S2: " .$semesterTwoGrade . "<br>";
+			exit;
+*/
 			$teacherName = getTeacherNameByClassID($classID, $mysqli);
 
 			$tblBody .= "
 				<tr style=\"background-color:white;color:black; font-size: 14px; padding: 5px;;\">
 			 		<td width=\"140\" align=\"left\"> $className </td>
 				 	<td width=\"140\" align=\"left\"> $teacherName </td>
-					<td width=\"45\" align=\"left\"> $quarterOneGrade </td>
-					<td width=\"45\" align=\"left\"> $quarterTwoGrade </td>
-					<td width=\"45\" align=\"left\"> $quarterThreeGrade </td>
-					<td width=\"45\" align=\"left\"> $quarterFourGrade </td>
+					<td width=\"50\" align=\"left\"> $quarterOneGrade </td>
+					<td width=\"50\" align=\"left\"> $quarterTwoGrade </td>
+					<td width=\"50\" align=\"left\"> $quarterThreeGrade </td>
+					<td width=\"50\" align=\"left\"> $quarterFourGrade </td>
 					<td width=\"60\" align=\"left\"> $semesterOneGrade </td>
 					<td width=\"60\" align=\"left\"> $semesterTwoGrade </td>
 				</tr>
@@ -314,6 +383,7 @@ $pdf->Cell(0,8,'Grade: '.$studentGradeLevel,0,1);
 $pdf->Cell(0,8,'Academic Year: '.$academicYear,0,1);
 $pdf->SetFont('helvetica', '', 12);
 
+
 // -----------------------------------------------------------------------------
 // Table with rowspans and THEAD
 $tbl = <<<EOD
@@ -322,10 +392,10 @@ $tbl = <<<EOD
  <tr style="background-color:white;color:black; font-size: 18px;">
   <td width="140" align="center"><b>Class</b></td>
   <td width="140" align="center"><b>Teacher</b></td>
-  <td width="45" align="center"><b>Q1</b></td>
-  <td width="45" align="center"> <b>Q2</b></td>
-  <td width="45" align="center"><b>Q3</b></td>
-  <td width="45" align="center"><b>Q4</b></td>
+  <td width="50" align="center"><b>Q1</b></td>
+  <td width="50" align="center"> <b>Q2</b></td>
+  <td width="50" align="center"><b>Q3</b></td>
+  <td width="50" align="center"><b>Q4</b></td>
   <td width="60" align="center"><b>S1</b></td>
   <td width="60" align="center"><b>S2</b></td>
  </tr>
@@ -353,6 +423,7 @@ $pdf->writeHTML($tbl, true, false, false, false, '');
 	$outputFile = realpath("../../../reportCardOutputs/Grade $studentGradeLevel");
 	//$pdf->Output("/var/www/html/openEasySIS/reportCardOutputs/Grade $studentGradeLevel/$studentName.pdf", 'F');
 	$pdf->Output("$outputFile/$studentName.pdf", 'F');
+	
 //============================================================+
 // END OF FILE
 //============================================================+
@@ -366,6 +437,12 @@ function getClassGradeForRange($studentID, $classID, $startDate, $endDate, $mysq
     // type1 * (type1Weight) + type2 * (type2Weight) + type3 * (type3Weight)
     // = a % then multiply by 100
 
+/*	echo "Student ID: " . $studentID . "<br>";
+	echo "Class ID: " . $classID . "<br>";
+	echo "Start Date: " . $startDate . "<br>";
+	echo "End Date: " . $endDate . "<br>";
+*/
+
     if ($stmt = $mysqli->prepare("SELECT materialTypeID, materialWeight FROM materialType WHERE classID = ?"))
     {   
         $stmt->bind_param('i', $classID);
@@ -375,32 +452,29 @@ function getClassGradeForRange($studentID, $classID, $startDate, $endDate, $mysq
 
         $score = 0;
    
-	if ($stmt->num_rows > 0)
-	{ 
+		if ($stmt->num_rows > 0)
+		{ 
         	while ($stmt->fetch())
         	{   
+//				echo "Material Type ID: " . $materialTypeID . "<br>";
+//				echo "Material Weight: " . $materialWeight . "<br>";
             	// Score should be adding as a percentage
 	            	$score += getScoreByMaterialTypeRange($materialTypeID, $materialWeight, $studentID, $classID, $startDate, $endDate, $mysqli);
+//					echo $score . "<br>";
         	}   
 
-		if ($score < 0)
-		{
-			// Scores should only be negative if there's no assignments in the range
-			return "N/A";
+			return number_format((float) ($score * 100), 1, '.', '') . "%";
+// 	       	return ($score * 100) . "%";
 		}
 		else
 		{
-        		return ($score * 100) . "%";
+//			return "No database results";
+			return "N/A";
 		}
-	}
-	else
-	{
-		return "N/A";
-	}
     }  
     else
     {
-	return "N/A";
+		return "Database query failed";
     } 
 }
 
@@ -418,8 +492,15 @@ function getScoreByMaterialTypeRange($materialTypeID, $materialWeight, $studentI
 
         if ($stmt->num_rows > 0)
         {
+//			if ($stmt->num_rows == 1)
+//			{
+//				$materialWeight = 100;
+//			}
+
             while ($stmt->fetch())
             {
+
+//				echo "Material ID: " .$materialID . "<br>";
                 $materialPointsPossible = getMaterialPointsPossible($materialID, $mysqli);
                 $materialPointsScored = getMaterialPointsScored($materialID, $classID, $studentID, $mysqli);
 
@@ -429,27 +510,27 @@ function getScoreByMaterialTypeRange($materialTypeID, $materialWeight, $studentI
 
             if ($totalMPP != 0)
             {
+/*				echo "Total Points Scored: " . $materialPointsScored . "<br>";
+				echo "Total Points Possible: " . $materialPointsPossible . "<br>";
+				echo "Material Weight: " . $materialWeight . "<br>";
+*/
                 $totalScore = (($totalMPS / $totalMPP) * ($materialWeight * 0.01));
             }
             else
             {
                 $totalScore = 0;
             }
+        	return $totalScore;
         }
-        else
-        {
-//            $totalScore = $materialWeight * 0.01;
-		$totalScore = "-1";
-        }
-
-        return $totalScore;
+		else
+		{
+			return ($materialWeight * 0.01);
+		}
     }
     else
     {
-        $totalScore = NULL;
+    	return "N/A";
     }
-
-    return $totalScore;
 }
 
 ?>
