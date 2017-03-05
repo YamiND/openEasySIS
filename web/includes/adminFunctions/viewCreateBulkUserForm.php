@@ -18,7 +18,7 @@ function viewCreateBulkUserForm($mysqli)
 {
 
 	echo '
-			<div class="col-lg-6">
+			<div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
 	';
@@ -88,6 +88,18 @@ function getStudentUploadForm()
 	echo "<br>";
         generateFormButton("uploadCSV", "Upload CSV and Create Students");
     generateFormEnd();
+
+echo "<br>";
+    echo "<a href=\"https://support.office.com/en-us/article/Import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba\">To learn how to export a file from Excel as a CSV, please click here</a>";
+   echo "<br>
+    <h5>The format for the Student's CSV should be this: </h5>
+
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;Student Email,Student First Name,Student Last Name,Grade Level</p>
+    <p>A sample CSV is listed below: </p>
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;ltorvalds@lssu.edu,Linus,Torvalds,11</h5> 
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;sballmer@lssu.edu,Steve,Ballmer,10</h5> 
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;sjobs@lssu.edu,Steve,Jobs,12</h5> 
+";
 }
 
 function getParentUploadForm()
@@ -99,6 +111,17 @@ function getParentUploadForm()
 	echo "<br>";
         generateFormButton("uploadCSV", "Upload CSV and Create Parents");
     generateFormEnd();
+echo "<br>";
+    echo "<a href=\"https://support.office.com/en-us/article/Import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba\">To learn how to export a file from Excel as a CSV, please click here</a>";
+   echo "<br>
+    <h5>The format for the Parent's CSV should be this: </h5>
+
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;Parent Email,Parent First Name,Parent Last Name,Parent Home Address,Parent Phone Number</p>
+    <p>A sample CSV is listed below: </p>
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;ltorvalds@lssu.edu,Linus,Torvalds,850. West Easterday Avenue Sault Ste. Marie MI 49783,906-635-6677</h5> 
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;sballmer@lssu.edu,Steve,Ballmer,850. North Easterday Avenue Sault Ste. Marie MI 49783,906-635-5555</h5> 
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;sjobs@lssu.edu,Steve,Jobs,850. South Easterday Avenue Sault Ste. Marie MI 49783,906-635-0000</h5> 
+";
 }
 
 function getTeacherUploadForm()
@@ -110,6 +133,22 @@ function getTeacherUploadForm()
 	echo "<br>";
         generateFormButton("uploadCSV", "Upload CSV and Create Teachers");
     generateFormEnd();
+echo "<br>";
+    echo "<a href=\"https://support.office.com/en-us/article/Import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba\">To learn how to export a file from Excel as a CSV, please click here</a>";
+   echo "<br>
+    <h5>The format for the Teacher's CSV should be this: </h5>
+
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;Teacher Email,Teacher First Name,Teacher Last Name,modClassList,viewAllGrades</p>
+
+	<h5>The last 2 fields are explained below</h5>
+	<p>modClassList can be either a 1 or a 0. This allows teachers to add students to their class. If it is a 0, the teacher can not add students to their class. If it is a 1, the teacher can add students to their class</p>
+	<p>viewAllGrades can be either a 1 or a 0. This allows teachers to view all grades for students. If it is a 0, the teacher can only view grades for their class. If it is a 1, the teacher can view all student grades</p>
+	<br>
+    <p>A sample CSV is listed below: </p>
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;ltorvalds@lssu.edu,Linus,Torvalds,0,0</h5> 
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;sballmers@lssu.edu,Steve,Ballmer,0,1</h5> 
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;sjobs@lssu.edu,Steve,Jobs,1,0</h5> 
+";
 }
 
 function getSchoolAdminUploadForm()
@@ -121,6 +160,18 @@ function getSchoolAdminUploadForm()
 	echo "<br>";
         generateFormButton("uploadCSV", "Upload CSV and Create School Administrators");
     generateFormEnd();
+echo "<br>";
+    echo "<a href=\"https://support.office.com/en-us/article/Import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba\">To learn how to export a file from Excel as a CSV, please click here</a>";
+   echo "<br>
+    <h5>The format for the School Admin's CSV should be this: </h5>
+
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;School Admin Email,School Admin First Name,School Admin Last Name</p>
+
+    <p>A sample CSV is listed below: </p>
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;ltorvalds@lssu.edu,Linus,Torvalds</h5> 
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;sballmers@lssu.edu,Steve,Ballmer</h5> 
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;sjobs@lssu.edu,Steve,Jobs</h5> 
+";
 }
 
 function getAdminUploadForm()
@@ -132,5 +183,17 @@ function getAdminUploadForm()
 	echo "<br>";
         generateFormButton("uploadCSV", "Upload CSV and Create School Administrators");
     generateFormEnd();
+echo "<br>";
+    echo "<a href=\"https://support.office.com/en-us/article/Import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba\">To learn how to export a file from Excel as a CSV, please click here</a>";
+   echo "<br>
+    <h5>The format for the Admin's CSV should be this: </h5>
+
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;Admin Email,Admin First Name,Admin Last Name</p>
+
+    <p>A sample CSV is listed below: </p>
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;ltorvalds@lssu.edu,Linus,Torvalds</h5> 
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;sballmers@lssu.edu,Steve,Ballmer</h5> 
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;sjobs@lssu.edu,Steve,Jobs</h5> 
+";
 }
 ?>
