@@ -421,11 +421,11 @@ $tbl = <<<EOD
 <thead>
  <tr style="background-color:white;color:black; font-size: 18px;">
   <td width="140" align="center"><b>Class</b></td>
-  <td width="140" align="center"><b>Teacher</b></td>
-  <td width="45" align="center"><b>Q1</b></td>
-  <td width="45" align="center"> <b>Q2</b></td>
-  <td width="45" align="center"><b>Q3</b></td>
-  <td width="45" align="center"><b>Q4</b></td>
+  <td width="130" align="center"><b>Teacher</b></td>
+  <td width="55" align="center"><b>Q1</b></td>
+  <td width="55" align="center"> <b>Q2</b></td>
+  <td width="55" align="center"><b>Q3</b></td>
+  <td width="55" align="center"><b>Q4</b></td>
   <td width="60" align="center"><b>S1</b></td>
   <td width="60" align="center"><b>S2</b></td>
  </tr>
