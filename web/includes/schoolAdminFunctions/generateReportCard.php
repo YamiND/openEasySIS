@@ -255,7 +255,7 @@ function generateReportCard($studentID, $mysqli)
 			{
 //				$semesterOneGrade = getClassGradeForRange($studentID, $classID, $fallSemesterStart, $fallSemesterEnd, $mysqli);
 				$semesterOneGrade = ($quarterOneGrade + $quarterTwoGrade) / 2;
-				$semesterOneGrade = number_format((float) $semesterOneGrade, 1, '.', '') . "%";
+				$semesterOneGrade = number_format((float) $semesterOneGrade, 2, '.', '') . "%";
 			}
 			else
 			{
@@ -266,7 +266,7 @@ function generateReportCard($studentID, $mysqli)
 			{
 //				$semesterTwoGrade = getClassGradeForRange($studentID, $classID, $springSemesterStart, $springSemesterEnd, $mysqli);
 				$semesterTwoGrade = ($quarterTwoGrade + $quarterThreeGrade) / 2;
-				$semesterTwoGrade = number_format((float) $semesterTwoGrade, 1, '.', '') . "%";
+				$semesterTwoGrade = number_format((float) $semesterTwoGrade, 2, '.', '') . "%";
 			}
 			else
 			{
@@ -282,15 +282,15 @@ function generateReportCard($studentID, $mysqli)
 			exit;
 */
 			$teacherName = getTeacherNameByClassID($classID, $mysqli);
-
+//Changing the color and the size of the tables data NOT the header of the table 
 			$tblBody .= "
-				<tr style=\"background-color:white;color:black; font-size: 14px; padding: 5px;;\">
+				<tr style=\"background-color:white;color:black; font-size: 13px; padding: 5px;;\">
 			 		<td width=\"140\" align=\"left\"> $className </td>
-				 	<td width=\"140\" align=\"left\"> $teacherName </td>
-					<td width=\"50\" align=\"left\"> $quarterOneGrade </td>
-					<td width=\"50\" align=\"left\"> $quarterTwoGrade </td>
-					<td width=\"50\" align=\"left\"> $quarterThreeGrade </td>
-					<td width=\"50\" align=\"left\"> $quarterFourGrade </td>
+				 	<td width=\"130\" align=\"left\"> $teacherName </td>
+					<td width=\"55\" align=\"left\"> $quarterOneGrade </td>
+					<td width=\"55\" align=\"left\"> $quarterTwoGrade </td>
+					<td width=\"55\" align=\"left\"> $quarterThreeGrade </td>
+					<td width=\"55\" align=\"left\"> $quarterFourGrade </td>
 					<td width=\"60\" align=\"left\"> $semesterOneGrade </td>
 					<td width=\"60\" align=\"left\"> $semesterTwoGrade </td>
 				</tr>
@@ -381,21 +381,21 @@ $pdf->SetFont('helvetica', '', 12);
 $pdf->Cell(0,8,'Student Name: '. $studentName,0,1);
 $pdf->Cell(0,8,'Grade: '.$studentGradeLevel,0,1);
 $pdf->Cell(0,8,'Academic Year: '.$academicYear,0,1);
-$pdf->SetFont('helvetica', '', 12);
+$pdf->SetFont('helvetica', '', 10);
 
 
 // -----------------------------------------------------------------------------
-// Table with rowspans and THEAD
+// Table with rowspans and THEAD Here you can change the font size of the table header. 
 $tbl = <<<EOD
 <table border="1">
 <thead>
  <tr style="background-color:white;color:black; font-size: 18px;">
   <td width="140" align="center"><b>Class</b></td>
-  <td width="140" align="center"><b>Teacher</b></td>
-  <td width="50" align="center"><b>Q1</b></td>
-  <td width="50" align="center"> <b>Q2</b></td>
-  <td width="50" align="center"><b>Q3</b></td>
-  <td width="50" align="center"><b>Q4</b></td>
+  <td width="130" align="center"><b>Teacher</b></td>
+  <td width="55" align="center"><b>Q1</b></td>
+  <td width="55" align="center"> <b>Q2</b></td>
+  <td width="55" align="center"><b>Q3</b></td>
+  <td width="55" align="center"><b>Q4</b></td>
   <td width="60" align="center"><b>S1</b></td>
   <td width="60" align="center"><b>S2</b></td>
  </tr>
@@ -463,7 +463,7 @@ function getClassGradeForRange($studentID, $classID, $startDate, $endDate, $mysq
 //					echo $score . "<br>";
         	}   
 
-			return number_format((float) ($score * 100), 1, '.', '') . "%";
+			return number_format((float) ($score * 100), 2, '.', '') . "%";
 // 	       	return ($score * 100) . "%";
 		}
 		else

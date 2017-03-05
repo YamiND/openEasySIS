@@ -48,7 +48,8 @@ echo '
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="selectAssignment">';
-                           		if ((getStudentCount($_SESSION['userID'], $mysqli) > 1) && (!isset($_SESSION['studentID'])))
+
+                           		if ((getStudentCount($_SESSION['userID'], $mysqli) > 1) && !isset($_SESSION['studentID']))
 								{
 									chooseStudentForm($_SESSION['userID'], $mysqli);
 								}

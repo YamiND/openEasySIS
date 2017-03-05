@@ -43,10 +43,10 @@ echo '
 		//Add our multi code here	
 		if (isAdmin($mysqli))
 		{
-		    viewTotalUsers($mysqli, "Administrators", "adminProfile");
-    		viewTotalUsers($mysqli, "Students", "studentProfile");
-    		viewTotalUsers($mysqli, "Teachers", "teacherProfile");
-    		viewTotalUsers($mysqli, "Parents", "parentProfile");
+		    viewTotalUsers($mysqli, "Administrators", "isAdmin");
+    		viewTotalUsers($mysqli, "Students", "isStudent");
+    		viewTotalUsers($mysqli, "Teachers", "isTeacher");
+    		viewTotalUsers($mysqli, "Parents", "isParent");
 
     		viewTotalClasses($mysqli);
 		}

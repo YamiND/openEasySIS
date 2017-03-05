@@ -1,8 +1,4 @@
 <?php
-//include("./functions.php");
-//include("./dbConnect.php");
-
-//getClassGrade(5, 1, $mysqli);
 
 function getClassYearID($mysqli)
 {
@@ -21,8 +17,7 @@ function getClassYearID($mysqli)
         }
         else
         {
-            $_SESSION['fail'] = 'Class could not be added, you need to set a school year for this current year';
-            header('Location: ../../pages/addClass');
+			return "-1";
         }
     }
 }
@@ -62,7 +57,7 @@ function getClassGrade($studentID, $classID, $mysqli)
 			// Score should be adding as a percentage
 			$score += getScoreByMaterialType($materialTypeID, $materialWeight, $studentID, $classID, $mysqli);
 		}
-		return number_format((float) ($score * 100), 1, '.', '');
+		return number_format((float) ($score * 100), 2, '.', '');
 	//	return ($score * 100);
 	}
 }
