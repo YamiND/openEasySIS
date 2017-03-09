@@ -64,7 +64,7 @@ echo '
                                 }
                                 else if (isset($_SESSION['studentID']))
                                 {
-                                    echo '<h4>' .  getStudentName($_SESSION['studentID'], $mysqli) . '    -----  Grade: ' . getClassGrade($_SESSION['studentID'], $_SESSION['classID'], $mysqli) . '%</h4>';
+                                    echo '<h4>' .  getUserName($_SESSION['studentID'], $mysqli) . '    -----  Grade: ' . getClassGrade($_SESSION['studentID'], $_SESSION['classID'], $mysqli) . '%</h4>';
                                 }
                                 else
                                 {
@@ -76,11 +76,11 @@ echo '
                                 <div class="tab-pane fade in active" id="selectAssignment">';
 
                             
-                               if ((getClassNumber($mysqli) > 1) && (!isset($_SESSION['classID'])) && !empty($_SESSION['classID']))
+                               if ((getClassNumber($mysqli) > 1) && (!isset($_SESSION['classID'])))
                                 {
                                     getClassForm($mysqli);
                                 }
-                                else if (getClassNumber($mysqli) < 2)
+                                else if (!isset($_SESSION['classID']))
                                 {
                                     $_SESSION['classID'] = getClassID($mysqli);
 			
@@ -109,6 +109,7 @@ echo '
 
                                 if ((getClassNumber($mysqli) > 1) && isset($_SESSION['classID']))
                                 {
+									echo "<br>";
                                     generateFormStart("", "post");
                                         generateFormButton("changeClass", "Change Class");
                                     generateFormEnd();
@@ -183,7 +184,7 @@ function getAssignmentsForStudentClass($studentID, $classID, $mysqli)
                         <td>' . getMaterialTypeName($materialTypeID, $mysqli) . '</td>
                         <td>' . $materialPointsScored . '</td>
                         <td> /' . $materialPointsPossible . '</td>
-                        <td>' . $materialTotalPoints . '%</td>
+                        <td>' . number_format((float) $materialTotalPoints, 2, '.', '') . '%</td>
                     </tr>
                 ';
 		
