@@ -59,7 +59,7 @@ echo '
                                 <h4>Modify Assignment Information</h4>
                                 <div class="tab-pane fade in active" id="modifyAssignment">';
 
-                             if ((getClassNumber($mysqli) > 1) && (!isset($_SESSION['classID'])))
+                            if ((getClassNumber($mysqli) > 1) && (!isset($_SESSION['classID'])))
                             {
                                 getClassForm($mysqli);
                             }
@@ -224,9 +224,9 @@ function getClassList($mysqli)
 
     if ($stmt = $mysqli->prepare("SELECT classID, className FROM classes WHERE classTeacherID = ? AND schoolYearID = ?"))
     {
-        $stmt->bind_param('i', $teacherID);
+        $stmt->bind_param('ii', $teacherID, $yearID);
         $stmt->execute();
-        $stmt->bind_result($classID, $className, $yearID);
+        $stmt->bind_result($classID, $className);
         $stmt->store_result();
 
         if ($stmt->num_rows > 0)
@@ -255,18 +255,31 @@ function getClassNumber($mysqli)
     {
         $stmt->bind_param('i', $teacherID);
 
-        $stmt->execute();
-        $stmt->store_result();
+        if ($stmt->execute())
+		{
+	        $stmt->store_result();
 
-        if ($stmt->num_rows > 0)
-        {
-            return $stmt->num_rows;
-        }
-        else
-        {
-            return 0;
-        }
-    }
+        	if ($stmt->num_rows > 0)
+        	{
+           		$numRows =  $stmt->num_rows;
+				mysqli_free_result($stmt);
+
+				return $numRows;
+        	}
+	        else
+   		    {
+           		return 0;
+	        }
+   		}
+		else
+		{
+			return 0;
+		}
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 function getClassID($mysqli)

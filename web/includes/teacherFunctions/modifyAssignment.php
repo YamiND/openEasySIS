@@ -16,7 +16,7 @@ else
 
 function modifyAssignment($mysqli)
 {
-	if ((isset($_POST['materialName'], $_POST['materialPointsPossible'], $_POST['materialDueDate'], $_POST['materialTypeID'], $_POST['classID'])) && !empty($_POST['materialName']) && !empty($_POST['materialPointsPossible']) && !empty($_POST['materialDueDate']) && !empty($_POST['materialTypeID']) && !empty($_POST['classID']))
+	if ((isset($_POST['materialName'], $_POST['materialPointsPossible'], $_POST['materialDueDate'], $_POST['materialTypeID'])) && !empty($_POST['materialName']) && !empty($_POST['materialPointsPossible']) && !empty($_POST['materialDueDate']) && !empty($_POST['materialTypeID']))
   {
       $materialID = $_POST['materialID'];
       $materialName = $_POST['materialName'];
@@ -59,7 +59,7 @@ function modifyAssignment($mysqli)
 	{
     	// The correct POST variables were not sent to this page.
     	$_SESSION['fail'] = 'Assignment could not be modified, data not sent';
-   	   	header('Location: ../../pages/modifiedAssignment');
+   	   	header('Location: ../../pages/modifyAssignment');
 	}
 }
 
