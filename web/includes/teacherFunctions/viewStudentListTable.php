@@ -52,7 +52,7 @@ function viewStudentList($mysqli)
                                             </thead>
                                             <tbody>
                 ';
-                                                getStudentID($classID, $mysqli);
+                                                getStudentIDByClass($classID, $mysqli);
             echo ' 
                                             </tbody>
                                         </table>
@@ -85,7 +85,7 @@ function viewStudentList($mysqli)
     }   
 }
 
-function getStudentID($classID, $mysqli)
+function getStudentIDByClass($classID, $mysqli)
 {
 	if ($stmt = $mysqli->prepare("SELECT studentID FROM studentClassIDs WHERE classID = ?"))
 	{
@@ -108,30 +108,33 @@ function getStudentID($classID, $mysqli)
 
 function getStudentInfo($studentID, $classID, $mysqli)
 {
-    if ($stmt = $mysqli->prepare("SELECT userFirstName, userLastName, userEmail FROM users WHERE studentID = ?"))
+    if ($stmt = $mysqli->prepare("SELECT userFirstName, userLastName, userEmail FROM users WHERE userID = ?"))
     {
         $stmt->bind_param('i', $studentID);
-        $stmt->execute();
-        $stmt->bind_result($studentFirstName, $studentLastName, $studentEmail);
-        $stmt->store_result();
 
-		$studentGrade = getClassGrade($studentID, $classID, $mysqli);
+        if ($stmt->execute())
+		{
+        	$stmt->bind_result($studentFirstName, $studentLastName, $studentEmail);
+	        $stmt->store_result();
 
-        while($stmt->fetch())
-        {       
-            echo '
+			$studentGrade = getClassGrade($studentID, $classID, $mysqli);
+
+   		    while($stmt->fetch())
+	        {       
+   		         echo '
                     <tr class="gradeA">
                         <td>' . $studentFirstName . '</td>
                         <td>' . $studentLastName . '</td>
                         <td>' . $studentEmail . '</td>
 						<td>' . $studentGrade . '%</td>
                     </tr>
-                ';
-        }           
+      	          ';
+       		}           
+		}
     }
     else
     {
-        return;
+		echo $mysqli->error;
     }
 }
 
