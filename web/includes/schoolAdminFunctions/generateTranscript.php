@@ -35,6 +35,7 @@ function generateChoice($mysqli)
 		shell_exec('mkdir ../../../TranscriptOutputs');
 	}
 	shell_exec('rm -rf ../../../TranscriptOutputs/*');
+	array_map('unlink', glob("Transcript*")); 
 
 	if (isset($_POST['generateChoice']) && !empty($_POST['generateChoice']))
   	{
@@ -249,119 +250,91 @@ $pdf->SetFont('helvetica', 'B', 20);
 					{	
 						while ($stmt2->fetch())
 						{
-			 if (date('Y-m-d') >= $quarterOneEnd)
-            {
-                $quarterOneGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterOneEnd, $mysqli);
-            }
-            else
-            {
-                $quarterOneGrade = "N/A";
-            }
+							if (date('Y-m-d') >= $quarterOneEnd)
+				            {
+				                $quarterOneGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterOneEnd, $mysqli);
+				            }
+				            else
+				            {
+				                $quarterOneGrade = "N/A";
+				            }
 
-            if (date('Y-m-d') >= $quarterTwoEnd)
-            {
-                $quarterTwoGrade = getClassGradeForRange($studentID, $classID, $quarterTwoStart, $quarterTwoEnd, $mysqli);
-            }
-            else
-            {
-                $quarterTwoGrade = "N/A";
-            }
+							if (date('Y-m-d') >= $quarterTwoEnd)
+							{
+								$quarterTwoGrade = getClassGradeForRange($studentID, $classID, $quarterTwoStart, $quarterTwoEnd, $mysqli);
+							}
+							else
+							{
+								$quarterTwoGrade = "N/A";
+							}
 
-            if (date('Y-m-d') >= $quarterThreeEnd)
-            {
-                $quarterThreeGrade = getClassGradeForRange($studentID, $classID, $quarterThreeStart, $quarterThreeEnd, $mysqli);
-            }
-            else
-            {
-                $quarterThreeGrade = "N/A";
-            }
+							if (date('Y-m-d') >= $quarterThreeEnd)
+							{
+								$quarterThreeGrade = getClassGradeForRange($studentID, $classID, $quarterThreeStart, $quarterThreeEnd, $mysqli);
+							}
+							else
+							{
+								$quarterThreeGrade = "N/A";
+							}
 
-            if (date('Y-m-d') >= $quarterThreeEnd)
-            {
-                $quarterFourGrade = getClassGradeForRange($studentID, $classID, $quarterFourStart, $quarterFourEnd, $mysqli);
-            }
-            else
-            {
-                $quarterFourGrade = "N/A";
-            }
+							if (date('Y-m-d') >= $quarterThreeEnd)
+							{
+								$quarterFourGrade = getClassGradeForRange($studentID, $classID, $quarterFourStart, $quarterFourEnd, $mysqli);
+							}
+							else
+							{
+								$quarterFourGrade = "N/A";
+							}
 
-            if (date('Y-m-d') >= $fallSemesterEnd)
-            {
-                $semesterOneGrade = ($quarterOneGrade + $quarterTwoGrade) / 2;
-                $semesterOneGrade = number_format((float) $semesterOneGrade, 2, '.', '') . "%";
-            }
-            else
-            {
-                $semesterOneGrade = "N/A";
-            }
+							if (date('Y-m-d') >= $fallSemesterEnd)
+							{
+								$semesterOneGrade = ($quarterOneGrade + $quarterTwoGrade) / 2;
+								$semesterOneGrade = number_format((float) $semesterOneGrade, 2, '.', '') . "%";
+							}
+							else
+							{
+								$semesterOneGrade = "N/A";
+							}
 
-			 if (date('Y-m-d') >= $springSemesterEnd)
-            {
-                $semesterTwoGrade = ($quarterTwoGrade + $quarterThreeGrade) / 2;
-                $semesterTwoGrade = number_format((float) $semesterTwoGrade, 2, '.', '') . "%";
-            }
-            else
-            {
-                $semesterTwoGrade = "N/A";
-            }
+							 if (date('Y-m-d') >= $springSemesterEnd)
+							{
+								$semesterTwoGrade = ($quarterTwoGrade + $quarterThreeGrade) / 2;
+								$semesterTwoGrade = number_format((float) $semesterTwoGrade, 2, '.', '') . "%";
+							}
+							else
+							{
+								$semesterTwoGrade = "N/A";
+							}
 
-/*          echo "Q1: " .$quarterOneGrade . "<br>";
-            echo "Q2: " .$quarterTwoGrade . "<br>";
-            echo "Q3: " .$quarterThreeGrade . "<br>";
-            echo "Q4: " .$quarterFourGrade . "<br>";
-            echo "S1: " .$semesterOneGrade . "<br>";
-            echo "S2: " .$semesterTwoGrade . "<br>";
-            exit;
-*/
-            $teacherName = getTeacherNameByClassID($classID, $mysqli);
-//Changing the color and the size of the tables data NOT the header of the table 
-            $tblBody .= "
-                <tr style=\"background-color:white;color:black; font-size: 13px; padding: 5px;;\">
-                    <td width=\"140\" align=\"left\"> $className </td>
-                    <td width=\"130\" align=\"left\"> $teacherName </td>
-                    <td width=\"55\" align=\"left\"> $quarterOneGrade </td>
-                    <td width=\"55\" align=\"left\"> $quarterTwoGrade </td>
-                    <td width=\"55\" align=\"left\"> $quarterThreeGrade </td>
-                    <td width=\"55\" align=\"left\"> $quarterFourGrade </td>
-                    <td width=\"60\" align=\"left\"> $semesterOneGrade </td>
-                    <td width=\"60\" align=\"left\"> $semesterTwoGrade </td>
-                </tr>
-            ";
-
-							$academicYear = getAcademicYear($schoolYearID, $mysqli);	
-
-		/*			
-							$academicYear = getAcademicYear($schoolYearID, $mysqli);	
-							$quarterOneGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterOneEnd, $mysqli);
-							$quarterTwoGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterTwoEnd, $mysqli);
-							$quarterThreeGrade = getClassGradeForRange($studentID, $classID, $quarterOneStart, $quarterThreeEnd, $mysqli);
-							$quarterFourGrade = getClassGradeForRange($studentID, $classID, $quarterFourStart, $quarterFourEnd, $mysqli);
-
-							$semesterOneGrade = getClassGradeForRange($studentID, $classID, $fallSemesterStart, $fallSemesterEnd, $mysqli);
-							$semesterTwoGrade = getClassGradeForRange($studentID, $classID, $springSemesterStart, $springSemesterEnd, $mysqli);
-
+				/*          echo "Q1: " .$quarterOneGrade . "<br>";
+							echo "Q2: " .$quarterTwoGrade . "<br>";
+							echo "Q3: " .$quarterThreeGrade . "<br>";
+							echo "Q4: " .$quarterFourGrade . "<br>";
+							echo "S1: " .$semesterOneGrade . "<br>";
+							echo "S2: " .$semesterTwoGrade . "<br>";
+							exit;
+				*/
 							$teacherName = getTeacherNameByClassID($classID, $mysqli);
-
+							//Changing the color and the size of the tables data NOT the header of the table 
 							$tblBody .= "
-								<tr style=\"background-color:white;color:black; font-size: 14px; padding: 5px;;\">
-							 		<td width=\"140\" align=\"left\"> $className </td>
-								 	<td width=\"140\" align=\"left\"> $teacherName </td>
-									<td width=\"45\" align=\"left\"> $quarterOneGrade </td>
-									<td width=\"45\" align=\"left\"> $quarterTwoGrade </td>
-									<td width=\"45\" align=\"left\"> $quarterThreeGrade </td>
-									<td width=\"45\" align=\"left\"> $quarterFourGrade </td>
+								<tr style=\"background-color:white;color:black; font-size: 13px; padding: 5px;;\">
+									<td width=\"140\" align=\"left\"> $className </td>
+									<td width=\"130\" align=\"left\"> $teacherName </td>
+									<td width=\"55\" align=\"left\"> $quarterOneGrade </td>
+									<td width=\"55\" align=\"left\"> $quarterTwoGrade </td>
+									<td width=\"55\" align=\"left\"> $quarterThreeGrade </td>
+									<td width=\"55\" align=\"left\"> $quarterFourGrade </td>
 									<td width=\"60\" align=\"left\"> $semesterOneGrade </td>
 									<td width=\"60\" align=\"left\"> $semesterTwoGrade </td>
 								</tr>
 							";
-*/
+
+											$academicYear = getAcademicYear($schoolYearID, $mysqli);	
+
 						}
-				//	$tblBody .= "<br>END ACADEMIC YEAR $academicYear <br><br>";
-				//	$tblBody .= "<br>Start ACADEMIC YEAR $academicYear <br>";
+						writeTranscriptPDF($studentName, $studentGradeLevel, $academicYear, $tblBody, $pdf);  
+						$tblBody = "";
 					}
-					// Generate a PDF for the student
-					writeTranscriptPDF($studentName, $studentGradeLevel, $academicYear, $tblBody, $pdf);  
-		$tblBody = "";
 				}
 			}
 		}
@@ -406,13 +379,15 @@ function writeTranscriptPDF($studentName, $studentGradeLevel, $academicYear, $tb
 
 // add a page
 $pdf->AddPage();
-
+//font type and size for Transcipt. 
+$pdf->SetFont('times', '', 20);
 $pdf->Write(0, 'Transcript', '', 0, 'L', true, 0, false, false, 0);
-$pdf->SetFont('helvetica', '', 12);
+//font type and size for student info
+$pdf->SetFont('times', '', 12);
 $pdf->Cell(0,8,'Student Name: '. $studentName,0,1);
 $pdf->Cell(0,8,'Grade: '.$studentGradeLevel,0,1);
 $pdf->Cell(0,8,'Academic Year: '.$academicYear,0,1);
-$pdf->SetFont('helvetica', '', 12);
+$pdf->SetFont('times', '', 12);
 
 // -----------------------------------------------------------------------------
 // Table with rowspans and THEAD
