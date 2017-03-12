@@ -24,7 +24,7 @@ if (isset($_POST['changeClass']))
 
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (isAdmin($mysqli)))
+    if ((login_check($mysqli) == true) && (canModClassList($mysqli)))
     {
         viewAssignStudentClassForm($mysqli);
     }
@@ -124,7 +124,7 @@ echo '
 
 function assignStudentForm($classID, $gradeID, $mysqli)
 {
-    if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userID IN (SELECT userID from users WHERE studentGradeLevel = ?) AND userID NOT IN (SELECT studentID FROM studentClassIDs WHERE classID LIKE ?);"))
+    if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userID IN (SELECT userID from users WHERE studentGradeLevel = ?) AND userID NOT IN (SELECT studentID FROM studentClassIDs WHERE classID LIKE ?)"))
     {
         $stmt->bind_param('ii', $gradeID, $classID);
         $stmt->execute();

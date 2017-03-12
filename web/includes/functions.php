@@ -350,4 +350,74 @@ function isStudent($mysqli)
 	}
 }
 
+function canModClassList($mysqli)
+{
+	if (isset($_SESSION['userID']) && !empty($_SESSION['userID']))
+	{
+		$userID = $_SESSION['userID'];
+		
+		if ($stmt = $mysqli->prepare("SELECT modClassList FROM users WHERE userID = ?"))
+		{
+			$stmt->bind_param('i', $userID);
+
+			if ($stmt->execute())
+			{
+				$stmt->bind_result($modClassList);
+				$stmt->store_result();
+		
+				$stmt->fetch();
+
+				return $modClassList;	
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function canViewAllGrades($mysqli)
+{
+	if (isset($_SESSION['userID']) && !empty($_SESSION['userID']))
+	{
+		$userID = $_SESSION['userID'];
+		
+		if ($stmt = $mysqli->prepare("SELECT viewAllGrades FROM users WHERE userID = ?"))
+		{
+			$stmt->bind_param('i', $userID);
+
+			if ($stmt->execute())
+			{
+				$stmt->bind_result($viewAllGrades);
+				$stmt->store_result();
+		
+				$stmt->fetch();
+
+				return $viewAllGrades;	
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
 ?>

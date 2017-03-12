@@ -6,17 +6,8 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit6f8e50690f178addf2bd0bc6b5978ccf
 {
-    public static $prefixesPsr0 = array (
-        'P' => 
-        array (
-            'PHPExcel' => 
-            array (
-                0 => __DIR__ . '/../..' . '/Classes',
-            ),
-        ),
-    );
-
     public static $classMap = array (
+        'EasyPeasyICS' => __DIR__ . '/..' . '/phpmailer/phpmailer/extras/EasyPeasyICS.php',
         'Generic_Sniffs_Arrays_DisallowLongArraySyntaxSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Generic/Sniffs/Arrays/DisallowLongArraySyntaxSniff.php',
         'Generic_Sniffs_Arrays_DisallowShortArraySyntaxSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Generic/Sniffs/Arrays/DisallowShortArraySyntaxSniff.php',
         'Generic_Sniffs_Classes_DuplicateClassNameSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Generic/Sniffs/Classes/DuplicateClassNameSniff.php',
@@ -112,6 +103,9 @@ class ComposerStaticInit6f8e50690f178addf2bd0bc6b5978ccf
         'PEAR_Sniffs_WhiteSpace_ObjectOperatorIndentSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/WhiteSpace/ObjectOperatorIndentSniff.php',
         'PEAR_Sniffs_WhiteSpace_ScopeClosingBraceSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/WhiteSpace/ScopeClosingBraceSniff.php',
         'PEAR_Sniffs_WhiteSpace_ScopeIndentSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/WhiteSpace/ScopeIndentSniff.php',
+        'PHPMailer' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmailer.php',
+        'PHPMailerOAuth' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmaileroauth.php',
+        'PHPMailerOAuthGoogle' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmaileroauthgoogle.php',
         'PHP_CodeSniffer' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer.php',
         'PHP_CodeSniffer_CLI' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/CLI.php',
         'PHP_CodeSniffer_DocGenerators_Generator' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/DocGenerators/Generator.php',
@@ -150,6 +144,7 @@ class ComposerStaticInit6f8e50690f178addf2bd0bc6b5978ccf
         'PHP_CodeSniffer_Tokenizers_JS' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Tokenizers/JS.php',
         'PHP_CodeSniffer_Tokenizers_PHP' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Tokenizers/PHP.php',
         'PHP_CodeSniffer_Tokens' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Tokens.php',
+        'POP3' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.pop3.php',
         'PSR1_Sniffs_Classes_ClassDeclarationSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR1/Sniffs/Classes/ClassDeclarationSniff.php',
         'PSR1_Sniffs_Files_SideEffectsSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR1/Sniffs/Files/SideEffectsSniff.php',
         'PSR1_Sniffs_Methods_CamelCapsMethodNameSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR1/Sniffs/Methods/CamelCapsMethodNameSniff.php',
@@ -165,6 +160,7 @@ class ComposerStaticInit6f8e50690f178addf2bd0bc6b5978ccf
         'PSR2_Sniffs_Methods_MethodDeclarationSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR2/Sniffs/Methods/MethodDeclarationSniff.php',
         'PSR2_Sniffs_Namespaces_NamespaceDeclarationSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR2/Sniffs/Namespaces/NamespaceDeclarationSniff.php',
         'PSR2_Sniffs_Namespaces_UseDeclarationSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR2/Sniffs/Namespaces/UseDeclarationSniff.php',
+        'SMTP' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.smtp.php',
         'Squiz_Sniffs_Arrays_ArrayBracketSpacingSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Squiz/Sniffs/Arrays/ArrayBracketSpacingSniff.php',
         'Squiz_Sniffs_Arrays_ArrayDeclarationSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Squiz/Sniffs/Arrays/ArrayDeclarationSniff.php',
         'Squiz_Sniffs_CSS_ClassDefinitionClosingBraceSpaceSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Squiz/Sniffs/CSS/ClassDefinitionClosingBraceSpaceSniff.php',
@@ -268,12 +264,13 @@ class ComposerStaticInit6f8e50690f178addf2bd0bc6b5978ccf
         'Zend_Sniffs_Debug_CodeAnalyzerSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Zend/Sniffs/Debug/CodeAnalyzerSniff.php',
         'Zend_Sniffs_Files_ClosingTagSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Zend/Sniffs/Files/ClosingTagSniff.php',
         'Zend_Sniffs_NamingConventions_ValidVariableNameSniff' => __DIR__ . '/..' . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Zend/Sniffs/NamingConventions/ValidVariableNameSniff.php',
+        'ntlm_sasl_client_class' => __DIR__ . '/..' . '/phpmailer/phpmailer/extras/ntlm_sasl_client.php',
+        'phpmailerException' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmailer.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixesPsr0 = ComposerStaticInit6f8e50690f178addf2bd0bc6b5978ccf::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit6f8e50690f178addf2bd0bc6b5978ccf::$classMap;
 
         }, null, ClassLoader::class);

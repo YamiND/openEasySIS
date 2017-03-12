@@ -115,6 +115,9 @@ if (login_check($mysqli) == true)
                     <li>
                         <a href="assignStudent">Assign Student to Class</a>
                     </li>
+                   	<li>
+		            	<a href="unAssignStudent">Remove Student From Class</a>
+       			    </li>
     				<li>
     					<a href="modifyClass">Modify a Class</a>
     				</li>
@@ -165,7 +168,7 @@ if (login_check($mysqli) == true)
     {
     echo '
             <li>
-                <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> My Classes <span class="fa arrow"></span></a>
+                <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> My Classes/Students <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
                         <a href="viewStudentList">View Student List</a>
@@ -176,6 +179,21 @@ if (login_check($mysqli) == true)
                     <li>
                         <a href="teacherGradebook">Gradebook</a>
                     </li>
+			';
+					if (canModClassList($mysqli))
+					{
+						echo '
+                    		<li>
+		                        <a href="assignStudent">Assign Student to Class</a>
+       			            </li>
+                    		<li>
+		                        <a href="unAssignStudent">Remove Student From Class</a>
+       			            </li>
+						';
+					}
+
+
+echo '
                 </ul>   
             </li>
             <li>

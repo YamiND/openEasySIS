@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'EasyPeasyICS' => $vendorDir . '/phpmailer/phpmailer/extras/EasyPeasyICS.php',
     'Generic_Sniffs_Arrays_DisallowLongArraySyntaxSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Generic/Sniffs/Arrays/DisallowLongArraySyntaxSniff.php',
     'Generic_Sniffs_Arrays_DisallowShortArraySyntaxSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Generic/Sniffs/Arrays/DisallowShortArraySyntaxSniff.php',
     'Generic_Sniffs_Classes_DuplicateClassNameSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Generic/Sniffs/Classes/DuplicateClassNameSniff.php',
@@ -101,6 +102,9 @@ return array(
     'PEAR_Sniffs_WhiteSpace_ObjectOperatorIndentSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/WhiteSpace/ObjectOperatorIndentSniff.php',
     'PEAR_Sniffs_WhiteSpace_ScopeClosingBraceSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/WhiteSpace/ScopeClosingBraceSniff.php',
     'PEAR_Sniffs_WhiteSpace_ScopeIndentSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PEAR/Sniffs/WhiteSpace/ScopeIndentSniff.php',
+    'PHPMailer' => $vendorDir . '/phpmailer/phpmailer/class.phpmailer.php',
+    'PHPMailerOAuth' => $vendorDir . '/phpmailer/phpmailer/class.phpmaileroauth.php',
+    'PHPMailerOAuthGoogle' => $vendorDir . '/phpmailer/phpmailer/class.phpmaileroauthgoogle.php',
     'PHP_CodeSniffer' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer.php',
     'PHP_CodeSniffer_CLI' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/CLI.php',
     'PHP_CodeSniffer_DocGenerators_Generator' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/DocGenerators/Generator.php',
@@ -139,6 +143,7 @@ return array(
     'PHP_CodeSniffer_Tokenizers_JS' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Tokenizers/JS.php',
     'PHP_CodeSniffer_Tokenizers_PHP' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Tokenizers/PHP.php',
     'PHP_CodeSniffer_Tokens' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Tokens.php',
+    'POP3' => $vendorDir . '/phpmailer/phpmailer/class.pop3.php',
     'PSR1_Sniffs_Classes_ClassDeclarationSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR1/Sniffs/Classes/ClassDeclarationSniff.php',
     'PSR1_Sniffs_Files_SideEffectsSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR1/Sniffs/Files/SideEffectsSniff.php',
     'PSR1_Sniffs_Methods_CamelCapsMethodNameSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR1/Sniffs/Methods/CamelCapsMethodNameSniff.php',
@@ -154,6 +159,7 @@ return array(
     'PSR2_Sniffs_Methods_MethodDeclarationSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR2/Sniffs/Methods/MethodDeclarationSniff.php',
     'PSR2_Sniffs_Namespaces_NamespaceDeclarationSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR2/Sniffs/Namespaces/NamespaceDeclarationSniff.php',
     'PSR2_Sniffs_Namespaces_UseDeclarationSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/PSR2/Sniffs/Namespaces/UseDeclarationSniff.php',
+    'SMTP' => $vendorDir . '/phpmailer/phpmailer/class.smtp.php',
     'Squiz_Sniffs_Arrays_ArrayBracketSpacingSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Squiz/Sniffs/Arrays/ArrayBracketSpacingSniff.php',
     'Squiz_Sniffs_Arrays_ArrayDeclarationSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Squiz/Sniffs/Arrays/ArrayDeclarationSniff.php',
     'Squiz_Sniffs_CSS_ClassDefinitionClosingBraceSpaceSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Squiz/Sniffs/CSS/ClassDefinitionClosingBraceSpaceSniff.php',
@@ -257,4 +263,6 @@ return array(
     'Zend_Sniffs_Debug_CodeAnalyzerSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Zend/Sniffs/Debug/CodeAnalyzerSniff.php',
     'Zend_Sniffs_Files_ClosingTagSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Zend/Sniffs/Files/ClosingTagSniff.php',
     'Zend_Sniffs_NamingConventions_ValidVariableNameSniff' => $vendorDir . '/squizlabs/php_codesniffer/CodeSniffer/Standards/Zend/Sniffs/NamingConventions/ValidVariableNameSniff.php',
+    'ntlm_sasl_client_class' => $vendorDir . '/phpmailer/phpmailer/extras/ntlm_sasl_client.php',
+    'phpmailerException' => $vendorDir . '/phpmailer/phpmailer/class.phpmailer.php',
 );
