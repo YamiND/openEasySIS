@@ -25,15 +25,15 @@ sec_session_start();
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
 					<?php
-						if (isset($_SESSION['invalidEmail']))
+						if (isset($_SESSION['fail']))
 						{
-    						echo '<h3 class="panel-title">' . $_SESSION['invalidEmail'] . '</h3>';
-    						unset($_SESSION['invalidEmail']);
+    						echo '<h3 class="panel-title">' . $_SESSION['fail'] . '</h3>';
+    						unset($_SESSION['fail']);
 						}
-						else if (isset($_SESSION['validEmail']))
+						else if (isset($_SESSION['success']))
 						{
-    						echo '<h3 class="panel-title">' . $_SESSION['validEmail'] . '</h3>';
-    						unset($_SESSION['validEmail']);
+    						echo '<h3 class="panel-title">' . $_SESSION['success'] . '</h3>';
+    						unset($_SESSION['success']);
 						}
 						else
 						{
