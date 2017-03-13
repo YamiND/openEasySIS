@@ -32,6 +32,11 @@ if (!isset($_SESSION['roleID'], $_SESSION['userID'], $_SESSION['userEmail'])):
     						echo '<h3 class="panel-title">' . $_SESSION['invalidLogin'] . '</h3>';
     						unset($_SESSION['invalidLogin']);
 						}
+						else if (isset($_SESSION['success']))
+						{
+    						echo '<h3 class="panel-title">' . $_SESSION['success'] . '</h3>';
+    						unset($_SESSION['success']);
+						}
 						else
 						{
                         	echo '<h3 class="panel-title">Sign in to ' . aliasOpenEasySIS . '</h3>';

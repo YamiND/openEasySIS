@@ -103,7 +103,7 @@ function resetUserPassword($userEmail, $userSalt, $mysqli)
 			else 
 			{
         		$_SESSION['success'] = "Password Reset Succeeded, email sent to $userEmail";
-		        header('Location: ../../pages/forgotPassword');
+		        header('Location: ../../pages/login');
 			}
 		}
     }   
