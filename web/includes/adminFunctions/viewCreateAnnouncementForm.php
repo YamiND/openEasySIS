@@ -48,6 +48,9 @@ echo '
                                     generateFormInputDiv("Announcement Post Date", "date", "announcementPostDate", date('Y-m-d'), NULL, date('Y-m-d'));
                                     generateFormInputDiv("Announcement End Date", "date", "announcementEndDate", NULL, NULL, date('Y-m-d'));
                                     generateFormTextAreaDiv("Announcement Description", "announcementDescription", "5");
+									generateFormCheckboxDiv(NULL, "sendAllUsers", NULL, "Send Email to all Users");
+									generateFormCheckboxDiv(NULL, "sendAllElementary", NULL, "Send Email to Elementary Students and Parents");
+									generateFormCheckboxDiv(NULL, "sendAllHighschool", NULL, "Send Email to High School Students and Parents");
                                     generateFormButton("createAnnouncementButton", "Create Announcement");
                                 generateFormEnd();
 
@@ -61,8 +64,7 @@ echo '
                     <!-- /.panel -->
                 </div>
 			</div>
-';
-
+	';
 }
 
 ?>
