@@ -1,5 +1,85 @@
 <?php
 
+function getTotalGPA($studentID, $mysqli)
+{
+	$gpaPercentage = 0;
+	$classNumber = 0;
+
+	if ($stmt = $mysqli->prepare("SELECT schoolYearID FROM schoolYear"))
+	{
+		if ($stmt->execute())
+		{
+			$stmt->bind_result($schoolYearID);
+
+			$stmt->store_result();
+
+			while ($stmt->fetch())
+			{
+				if ($stmt2 = $mysqli->prepare("SELECT studentClassIDs.classID FROM studentClassIDs INNER JOIN (classes) ON (classes.classID = studentClassIDs.classID AND studentClassIDs.studentID = ? AND classes.schoolYearID = ?)"))
+				{
+					$stmt2->bind_param('ii', $studentID, $schoolYearID);
+
+					if ($stmt2->execute())
+					{
+						$stmt2->bind_result($classID);
+						$stmt2->store_result();
+					
+						if ($stmt2->num_rows > 0)
+						{	
+							while ($stmt2->fetch())
+							{
+								$classNumber++;
+								$classGrade = getClassGrade($studentID, $classID, $mysqli);
+								
+								if ($classGrade > 59)
+								{		// Appparently grades below 59% are 0 as GPAs
+									$gpaPercentage += (($classGrade / 20) - 1);
+								}
+							}	
+						}
+					}
+				}
+			}
+		}
+	}
+	$totalGPA = ($gpaPercentage / $classNumber);
+
+	return "$totalGPA";	
+}
+
+function getCurrentSchoolYearGPA($studentID, $mysqli)
+{
+	$gpaPercentage = 0;
+	$currentYear = getClassYearID($mysqli);
+
+	if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID FROM studentClassIDs INNER JOIN (classes) ON (classes.classID = studentClassIDs.classID AND studentClassIDs.studentID = ? AND classes.schoolYearID = ?)"))
+	{
+		$stmt->bind_param('ii', $studentID, $currentYear);
+
+		if ($stmt->execute())
+		{
+			$stmt->bind_result($classID);
+			$stmt->store_result();
+
+			$classNumber = $stmt->num_rows;
+
+			while ($stmt->fetch())
+			{
+				$classGrade = getClassGrade($studentID, $classID, $mysqli);
+				
+				if ($classGrade > 59)
+				{		// Appparently grades below 59% are 0 as GPAs
+					$gpaPercentage += (($classGrade / 20) - 1);
+				}
+			}	
+		}
+	}
+
+	$totalGPA = ($gpaPercentage / $classNumber);
+
+	return "$totalGPA";	
+}
+
 function getClassYearID($mysqli)
 {
     if ($stmt = $mysqli->prepare("SELECT schoolYearID FROM schoolYear WHERE schoolYearStart <= CURDATE() AND schoolYearEnd >= CURDATE()"))
