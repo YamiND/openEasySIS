@@ -24,7 +24,7 @@ if (isset($_POST['changeClass']))
 
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (canModClassList($mysqli)))
+    if ((login_check($mysqli) == true) && (isAdmin($mysqli)))
     {
         viewAssignStudentClassForm($mysqli);
     }
@@ -40,7 +40,7 @@ function viewAssignStudentClassForm($mysqli)
 {
 	echo '
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
 	     ';
@@ -58,6 +58,9 @@ echo '
 
                             <!-- Tab panes -->
                             <div class="tab-content">';
+		echo "<h1>Please note that the student grades will be deleted for the class</h1>";
+		echo "<h1>This will affect their GPA and transcript (if they have grades in that class)!</h1>";
+		echo "<br>";
                                 if (isset($_SESSION['classID']))
                                 {
                                     echo '<h4>Class Name: ' . getClassName($_SESSION['classID'], $mysqli) . '</h4>';
@@ -131,9 +134,10 @@ function unAssignStudentForm($classID, $gradeID, $mysqli)
         $stmt->bind_result($studentID);
         $stmt->store_result();
 
-        generateFormStart("../includes/adminFunctions/assignStudentClass", "post"); 
+
+        generateFormStart("../includes/adminFunctions/unAssignStudentClass", "post"); 
             generateFormHiddenInput("classID", $classID);
-            generateFormStartSelectDiv(NULL, "studentID");
+            generateFormStartSelectDiv("Student's Name: ", "studentID");
             if ($stmt->num_rows > 0)
             {
                 while ($stmt->fetch())
