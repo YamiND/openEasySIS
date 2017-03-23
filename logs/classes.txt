@@ -1,7 +1,0 @@
-Grade: 1 Class: Test of Logging 11 added successfully
-Grade: 1 Class: Test of Logging 12 added successfully
-Grade: 1 Class: Test of Logging 13 added successfully
-Grade: 1 Class: Test of Logging 14 added successfully
-Grade: 1 Class: Test of Logging 15 added successfully
-Grade: 1 Class: Test of Logging 15 
-Grade: 1 Class: Test of Logging 15 could not be added, already exists
