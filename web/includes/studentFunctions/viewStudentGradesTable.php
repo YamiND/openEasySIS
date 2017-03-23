@@ -27,7 +27,7 @@ function viewStudentGradesTable($mysqli)
         $stmt->bind_result($classID, $className);
 
         $stmt->store_result();
-
+        
 		
             echo '
                     <!-- /.row -->
@@ -35,7 +35,14 @@ function viewStudentGradesTable($mysqli)
                             <div class="col-lg-12">
                                 <div class="panel panel-default">
                                     <div class="panel-heading" id="grades"> 
-                                        Class Grades
+                                        Class Grades 
+										<br />';
+			echo "Current School Year GPA: " . number_format((float) getCurrentSchoolYearGPA($_SESSION['userID'], $mysqli), 2, '.', '') . "";
+			echo "<br />";
+			echo "Cumulative GPA: " . number_format((float) getTotalGPA($_SESSION['userID'], $mysqli), 2, '.', '') . "";
+													
+			echo '
+
                                     </div>
                                     <!-- /.panel-heading -->
                                     <div class="panel-body">
@@ -56,6 +63,7 @@ echo '                                            <tbody>
 		                    		</tr>';
 		}
 							echo '
+							
                                             </tbody>
                                         </table>
                                         <!-- /.table-responsive -->

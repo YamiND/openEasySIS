@@ -90,6 +90,11 @@ function getGradesForStudent($studentID, $mysqli)
                                 <div class="panel panel-default">
                                     <div class="panel-heading" id="grades">
                                         Student Name: ' . $studentName . '
+										<br />';
+			echo "Current School Year GPA: " . number_format((float) getCurrentSchoolYearGPA($studentID, $mysqli), 2, '.', '') . "";
+			echo "<br />";
+			echo "Cumulative GPA: " . number_format((float) getTotalGPA($studentID, $mysqli), 2, '.', '') . "";
+			echo '	
                                     </div>
                                     <!-- /.panel-heading -->
                                     <div class="panel-body">

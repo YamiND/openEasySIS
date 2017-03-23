@@ -177,6 +177,9 @@ function generateReportCard($studentID, $mysqli)
 
 	$studentName = getUserName($studentID, $mysqli);
 	$studentGradeLevel = getStudentGradeByID($studentID, $mysqli);
+	
+	$CurrentGPA = number_format((float) getCurrentSchoolYearGPA($studentID, $mysqli), 2, '.', '');
+
 
 
 	if ($stmt = $mysqli->prepare("SELECT schoolYearID, quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd, quarterFourStart, quarterFourEnd FROM schoolYear WHERE schoolYearStart <= CURDATE() AND schoolYearEnd >= CURDATE()"))
@@ -299,7 +302,7 @@ function generateReportCard($studentID, $mysqli)
 		}
 	}
 	// Generate a PDF for the student
-	writeReportCardPDF($studentName, $studentGradeLevel, $academicYear, $tblBody);  
+	writeReportCardPDF($studentName, $studentGradeLevel, $academicYear, $CurrentGPA, $tblBody);  
 }
 
 function getTeacherNameByClassID($classID, $mysqli)
@@ -327,7 +330,7 @@ function getTeacherNameByClassID($classID, $mysqli)
 	}
 }
 
-function writeReportCardPDF($studentName, $studentGradeLevel, $academicYear, $tblBody)
+function writeReportCardPDF($studentName, $studentGradeLevel, $academicYear, $CurrentGPA, $tblBody)
 {
 // Include the main TCPDF library (search for installation path).
 require_once('../../fpdf181/TCPDF-master/examples/tcpdf_include.php');
@@ -381,6 +384,7 @@ $pdf->SetFont('helvetica', '', 12);
 $pdf->Cell(0,8,'Student Name: '. $studentName,0,1);
 $pdf->Cell(0,8,'Grade: '.$studentGradeLevel,0,1);
 $pdf->Cell(0,8,'Academic Year: '.$academicYear,0,1);
+$pdf->Cell(0,8,'Current GPA: '.$CurrentGPA,0,1);
 $pdf->SetFont('helvetica', '', 10);
 
 

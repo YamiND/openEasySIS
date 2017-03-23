@@ -182,7 +182,8 @@ function generateTranscript($studentID, $mysqli)
 
 	$studentName = getUserName($studentID, $mysqli);
 	$studentGradeLevel = getStudentGradeByID($studentID, $mysqli);
-
+	//$CumulativeGPA = number_format((float)getTotalGPA($studentID, $mysqli);
+	$CumulativeGPA = number_format((float) getTotalGPA($studentID, $mysqli), 2, '.', '');
 //	$tblBody = "";
 
 // Include the main TCPDF library (search for installation path).
@@ -330,9 +331,9 @@ $pdf->SetFont('helvetica', 'B', 20);
 							";
 
 											$academicYear = getAcademicYear($schoolYearID, $mysqli);	
-
+						
 						}
-						writeTranscriptPDF($studentName, $studentGradeLevel, $academicYear, $tblBody, $pdf);  
+						writeTranscriptPDF($studentName, $studentGradeLevel, $academicYear, $CumulativeGPA , $tblBody, $pdf);  
 						$tblBody = "";
 					}
 				}
@@ -374,7 +375,7 @@ function getTeacherNameByClassID($classID, $mysqli)
 	}
 }
 
-function writeTranscriptPDF($studentName, $studentGradeLevel, $academicYear, $tblBody, $pdf)
+function writeTranscriptPDF($studentName, $studentGradeLevel, $academicYear, $CumulativeGPA , $tblBody, $pdf)
 {
 
 // add a page
@@ -387,7 +388,9 @@ $pdf->SetFont('times', '', 12);
 $pdf->Cell(0,8,'Student Name: '. $studentName,0,1);
 $pdf->Cell(0,8,'Grade: '.$studentGradeLevel,0,1);
 $pdf->Cell(0,8,'Academic Year: '.$academicYear,0,1);
+$pdf->Cell(0,8,'GPA: '.$CumulativeGPA ,0,1);
 $pdf->SetFont('times', '', 12);
+
 
 // -----------------------------------------------------------------------------
 // Table with rowspans and THEAD

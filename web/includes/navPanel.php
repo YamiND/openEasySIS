@@ -186,9 +186,6 @@ if (login_check($mysqli) == true)
                     		<li>
 		                        <a href="assignStudent">Assign Student to Class</a>
        			            </li>
-                    		<li>
-		                        <a href="unAssignStudent">Remove Student From Class</a>
-       			            </li>
 						';
 					}
 
