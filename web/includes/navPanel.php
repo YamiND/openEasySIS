@@ -93,7 +93,7 @@ if (login_check($mysqli) == true)
                 </ul>   
             </li>
             <li>
-                <a href="#"><i class="fa fa-users fa-fw"></i> Parents <span class="fa arrow"></span></a>
+                <a href="#"><i class="fa fa-child fa-fw"></i> Parents & Children <span class="fa arrow"></span></a>
     			<ul class="nav nav-second-level">
     				<li>
     					<a href="addParentChild">Add Child to Parent</a>
