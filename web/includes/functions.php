@@ -350,6 +350,49 @@ function isStudent($mysqli)
 	}
 }
 
+function isPrincipal($mysqli)
+{
+	if (isset($_SESSION['userID']) && !empty($_SESSION['userID']))
+	{
+		$userID = $_SESSION['userID'];
+
+		if ($stmt = $mysqli->prepare("SELECT isPrincipal FROM users WHERE userID = ? LIMIT 1"))
+		{
+			$stmt->bind_param('i', $userID);
+
+			if ($stmt->execute())
+			{
+				$stmt->store_result();
+
+				if ($stmt->num_rows == 1)
+				{
+					$stmt->bind_result($isPrincipal);
+
+					$stmt->fetch();
+
+					return $isPrincipal;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
 function canModClassList($mysqli)
 {
 	if (isset($_SESSION['userID']) && !empty($_SESSION['userID']))

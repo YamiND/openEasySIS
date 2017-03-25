@@ -61,7 +61,7 @@ function createUserAccount($mysqli)
 		}
 
 		// Do our checks to make sure one of the checkboxes is checked
-		if (isset($_POST['userIsAdmin']) || isset($_POST['userIsSchoolAdmin']) || isset($_POST['userIsTeacher']) || isset($_POST['userIsParent']) || isset($_POST['userIsStudent']))
+		if (isset($_POST['userIsAdmin']) || isset($_POST['userIsSchoolAdmin']) || isset($_POST['userIsTeacher']) || isset($_POST['userIsParent']) || isset($_POST['userIsStudent']) || isset($_POST['userIsPrincipal']))
 		{
 			// Make sure that student is the only box checked if they're a student
 			if (isset($_POST['userIsStudent']) && (isset($_POST['userIsAdmin']) || isset($_POST['userIsSchoolAdmin']) || isset($_POST['userIsTeacher']) || isset($_POST['userIsParent'])))
@@ -102,6 +102,36 @@ function createUserAccount($mysqli)
 				else
 				{
 					$isAdmin = "0";
+				}
+
+				if (isset($_POST['userIsPrincipal']) && !empty($_POST['userIsPrincipal']))
+				{
+					// We need to clear out the principal in the database 
+
+					$isPrincipal = $_POST['userIsPrincipal'];
+
+					if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE isPrincipal"))
+					{
+						if ($stmt->execute())
+						{
+							$stmt->bind_result($dbUserID);
+							$stmt->store_result();
+
+							while ($stmt->fetch())
+							{
+								if ($stmt2 = $mysqli->prepare("UPDATE users SET isPrincipal = 0 WHERE userID = ?"))
+								{
+									$stmt2->bind_param('i', $dbUserID);
+
+									$stmt2->execute();
+								}
+							}
+						}
+					}
+				}
+				else
+				{
+					$isPrincipal = "0";
 				}
 
 				if (isset($_POST['userIsSchoolAdmin']) && !empty($_POST['userIsSchoolAdmin']))
@@ -175,9 +205,9 @@ function createUserAccount($mysqli)
 			else
 			{
     	
-				if ($stmt = $mysqli->prepare("INSERT INTO users (userEmail, userPassword, userFirstName, userLastName, modClassList, viewAllGrades, userSalt, isParent, isStudent, isTeacher, isSchoolAdmin, isAdmin, studentGPA, studentGradeLevel, parentAddress, parentPhone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
+				if ($stmt = $mysqli->prepare("INSERT INTO users (userEmail, userPassword, userFirstName, userLastName, modClassList, viewAllGrades, userSalt, isParent, isStudent, isTeacher, isSchoolAdmin, isAdmin, studentGPA, studentGradeLevel, parentAddress, parentPhone, isPrincipal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
 				{
-    				$stmt->bind_param('ssssiissssssdiss', $userEmail, $hashedPassword, $userFirstName, $userLastName, $modClassList, $viewAllGrades, $randomSalt, $isParent, $isStudent, $isTeacher, $isSchoolAdmin, $isAdmin, $studentGPA, $studentGradeLevel, $parentAddress, $parentPhone); 
+    				$stmt->bind_param('ssssiissssssdisss', $userEmail, $hashedPassword, $userFirstName, $userLastName, $modClassList, $viewAllGrades, $randomSalt, $isParent, $isStudent, $isTeacher, $isSchoolAdmin, $isAdmin, $studentGPA, $studentGradeLevel, $parentAddress, $parentPhone, $isPrincipal); 
 	    			if ($stmt->execute())    // Execute the prepared query.
 					{
    						$_SESSION['success'] = "Account Creation Success, email is $userEmail and password is $password";
@@ -205,7 +235,8 @@ function randomString($length = 8)
 	$str = "";
 	$characters = array_merge(range('A','Z'), range('a','z'), range('0','9'));
 	$max = count($characters) - 1;
-	for ($i = 0; $i < $length; $i++) {
+	for ($i = 0; $i < $length; $i++) 
+	{
 		$rand = mt_rand(0, $max);
 		$str .= $characters[$rand];
 	}

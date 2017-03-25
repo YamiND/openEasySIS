@@ -31,6 +31,9 @@ if (login_check($mysqli) == true)
                 <!-- /.navbar-header -->
                 <ul class="nav navbar-top-links navbar-right">
     				<a href="settings"> ' . htmlentities($_SESSION['userEmail']) . '</a>
+					<li>
+						<a href="userManual"><i class="fa fa-question-circle fa-fw"></i>Help</a>
+					</li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>

@@ -98,6 +98,13 @@ echo <<<EOF
    <div class="form-group">
      <div class="checkbox">
 		<label>
+         <input type="checkbox" id="isPrincipal">Is Principal
+		</label>
+     </div>
+   </div>
+   <div class="form-group">
+     <div class="checkbox">
+		<label>
          <input type="checkbox" id="isSchoolAdmin">Is School Admin
 		</label>
          </div>
@@ -135,9 +142,6 @@ $(document).ready(function(){
     */
     $('#isAdmin').click(function(){
        if(document.getElementById('isAdmin').checked){
-       /*
-         We have to use .after() to identify where the new element should be created in the DOM. In this case, it goes just after the checkbox. If your input field is going into a weird spot you can always make an invisible div right where it should be. The label has to be placed inside of the div so it is remove with the input field, you may want to assign the input field its own ID.
-         */
        // $('#isAdmin').after('<div class="form-group" id="isAdminDiv">1: <input type="text" name="adminBox" id="text1"></div>');
        $('#isAdmin').after('<input type="hidden" id="userIsAdmin" name="userIsAdmin" value="1">');
         }
@@ -147,7 +151,18 @@ $(document).ready(function(){
             }
         }
     });
-    
+
+     $('#isPrincipal').click(function(){
+       if(document.getElementById('isPrincipal').checked){
+       $('#isPrincipal').after('<input type="hidden" id="userIsPrincipal" name="userIsPrincipal" value="1">');
+        }
+        else{
+            if( $('#userIsPrincipal').length ){
+                $('#userIsPrincipal').remove();
+            }
+        }
+    });
+
      $('#isSchoolAdmin').click(function(){
        if(document.getElementById('isSchoolAdmin').checked){
        /*
