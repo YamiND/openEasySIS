@@ -20,4 +20,22 @@ function getUserName($userID, $mysqli)
     }   
 }
 
+function getUserEmail($userID, $mysqli)
+{
+	if ($stmt = $mysqli->prepare("SELECT userEmail FROM users WHERE userID = ?"))
+	{
+		$stmt->bind_param('i', $userID);
+
+		if ($stmt->execute())
+		{
+			$stmt->bind_result($userEmail);
+			$stmt->store_result();
+
+			$stmt->fetch();
+
+			return "$userEmail";
+		}
+	}
+}
+
 ?>

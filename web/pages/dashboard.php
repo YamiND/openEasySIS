@@ -41,6 +41,7 @@ echo '
 		{
 			echo "<h3>Current School Year GPA: " . number_format((float) getCurrentSchoolYearGPA($_SESSION['userID'], $mysqli), 2, '.', '') . "</h3>";
 			echo "<h3>Cumulative GPA: " . number_format((float) getTotalGPA($_SESSION['userID'], $mysqli), 2, '.', '') . "</h3>";
+			echo "<h3>Graduation Year: " . getStudentGraduationYear($_SESSION['userID'], $mysqli) . "</h3>";
 		}
     	// View our announcements	
 		viewAnnouncements($mysqli);

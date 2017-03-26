@@ -42,7 +42,14 @@ function getTotalGPA($studentID, $mysqli)
 			}
 		}
 	}
-	$totalGPA = ($gpaPercentage / $classNumber);
+	if ($classNumber > 0)
+	{
+		$totalGPA = ($gpaPercentage / $classNumber);
+	}
+	else
+	{
+		$totalGPA = "0";
+	}
 
 	return "$totalGPA";	
 }
