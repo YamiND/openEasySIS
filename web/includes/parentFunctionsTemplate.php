@@ -5,16 +5,24 @@ function getStudentCount($parentID, $mysqli)
 	if ($stmt = $mysqli->prepare("SELECT studentID FROM studentParentIDs WHERE parentID = ?"))
 	{
 		$stmt->bind_param('i', $parentID);
-		$stmt->execute();
-		$stmt->bind_result($studentID);
 
-		if ($stmt->num_rows > 0)
+		if ($stmt->execute())
 		{
-			return $stmt->num_rows;	
+				$stmt->bind_result($studentID);
+				$stmt->store_result();
+
+				if ($stmt->num_rows > 0)
+				{
+					return $stmt->num_rows;	
+				}
+				else
+				{
+					return 0;
+				}
 		}
 		else
 		{
-			return 0;
+			return "-1";
 		}
 	}
 	else
