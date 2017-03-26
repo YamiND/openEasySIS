@@ -72,7 +72,7 @@ function createUserAccount($mysqli)
 				return;
 			}
 			// If they are a student, make sure nothing else is set
-			else if (isset($_POST['userIsStudent']) && (!isset($_POST['userIsAdmin'], $_POST['userIsSchoolAdmin'], $_POST['userIsTeacher'], $_POST['userIsParent'])))
+			else if (isset($_POST['userIsStudent']) && (!isset($_POST['userIsAdmin'], $_POST['userIsSchoolAdmin'], $_POST['userIsTeacher'], $_POST['userIsParent'], $_POST['userIsPrincipal'])))
 			{
 				$isStudent = "1";	
 				
