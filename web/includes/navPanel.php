@@ -85,17 +85,6 @@ if (login_check($mysqli) == true)
     			</ul>	
             </li>
             <li>
-                <a href="#"><i class="fa fa-user fa-fw"></i> Profiles <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li>
-                        <a href="viewProfile">My Profile</a>
-                    </li>
-                    <li>
-                        <a href="editProfile">Edit User Profile</a>
-                    </li>
-                </ul>   
-            </li>
-            <li>
                 <a href="#"><i class="fa fa-child fa-fw"></i> Parents & Children <span class="fa arrow"></span></a>
     			<ul class="nav nav-second-level">
     				<li>
@@ -108,6 +97,17 @@ if (login_check($mysqli) == true)
     					<a href="viewParentChild">View Parent\'s Children</a>
     				</li>
     			</ul>	
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-user fa-fw"></i> Profiles <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="viewProfile">My Profile</a>
+                    </li>
+                    <li>
+                        <a href="editProfile">Edit User Profile</a>
+                    </li>
+                </ul>   
             </li>
             <li>
                 <a href="#"><i class="fa fa-users fa-fw"></i> Users <span class="fa arrow"></span></a>
@@ -184,6 +184,24 @@ if (login_check($mysqli) == true)
             </li>  
         ';
     }
+
+	if (isSchoolAdmin($mysqli))
+	{
+		echo '
+            <li>
+                <a href="#"><i class="fa fa-user fa-fw"></i> Profiles <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="lookupStudentProfile">Lookup Student Profile</a>
+                    </li>
+                    <li>
+                        <a href="editStudentProfile">Edit Student Profile</a>
+                    </li>
+                </ul>   
+            </li>
+		';
+	}	
+
 	if (isTeacher($mysqli))
     {
     echo '
