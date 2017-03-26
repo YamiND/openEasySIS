@@ -20,4 +20,36 @@ function getStudentGradeByID($studentID, $mysqli)
     } 	
 }
 
+function getStudentGraduationYear($studentID, $mysqli)
+{
+	$studentGradeLevel = getStudentGradeByID($studentID, $mysqli);
+
+	$schoolYearID = getClassYearID($mysqli);
+	
+	if ($stmt = $mysqli->prepare("SELECT schoolYearEnd FROM schoolYear WHERE schoolYearID = ?"))
+	{
+		$stmt->bind_param('i', $schoolYearID);
+
+		if ($stmt->execute())
+		{
+			$stmt->bind_result($schoolYearEnd);
+			$stmt->store_result();
+			$stmt->fetch();
+		}
+	}
+
+	$numYears = 12 - $studentGradeLevel;
+
+	if ($numYears == 0)
+	{
+		// The student graduates at the end of the year
+		return "$schoolYearEnd";
+	}
+	else
+	{
+		// Add their remaining years to the schoolyear start date
+		return ($numYears + $schoolYearEnd);
+	}
+}
+
 ?>
