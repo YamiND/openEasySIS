@@ -53,19 +53,20 @@ echo '
 								{
 									chooseStudentForm($_SESSION['userID'], $mysqli);
 								}
-								else if (getStudentCount($_SESSION['userID'], $mysqli) == 1)
-								{
-									$_SESSION['studentID'] = getStudentID($_SESSION['userID'], $mysqli);
-
-								}
-								else
+								else if (getStudentCount($_SESSION['userID'], $mysqli) == 0)
 								{
 									echo "<br><p>No student assigned to account</p>";	
 								}
-								if ((isset($_SESSION['studentID']) && (!empty($_SESSION['studentID']))))
+								else
 								{
+									if (getStudentCount($_SESSION['userID'], $mysqli) == 1)
+									{
+										$_SESSION['studentID'] = getStudentID($_SESSION['userID'], $mysqli);
+									}
+
                                     viewStudentAssignments($_SESSION['studentID'], $mysqli);
 								}
+
 
 								if ((isset($_SESSION['studentID'])) && (getStudentCount($_SESSION['userID']) > 1))
 								{
@@ -93,25 +94,30 @@ function chooseStudentForm($parentID, $mysqli)
 	if ($stmt = $mysqli->prepare("SELECT studentID FROM studentParentIDs WHERE parentID = ?"))
     {
         $stmt->bind_param('i', $parentID);
-        $stmt->execute();
-        $stmt->bind_result($studentID);
 
-        if ($stmt->num_rows > 0)
-        {
-			generateFormStart("", "post");
-            	generateFormStartSelectDiv(NULL, "studentID");
-            	while ($stmt->fetch())
-            	{
-            		getStudentInfo($studentID, $mysqli);    
-            	}
-            	generateFormEndSelectDiv();
-            	generateFormButton("selectStudent", "Select Student");
-        	generateFormEnd();
-        }
-        else
-        {
-            return 0;
-        }
+        if ($stmt->execute())
+		{
+				$stmt->bind_result($studentID);
+				$stmt->store_result();
+
+				if ($stmt->num_rows > 0)
+				{
+					echo "<br>";
+					generateFormStart("", "post");
+						generateFormStartSelectDiv("Select Student", "studentID");
+						while ($stmt->fetch())
+						{
+							getStudentInfo($studentID, $mysqli);    
+						}
+						generateFormEndSelectDiv();
+						generateFormButton("selectStudent", "Select Student");
+					generateFormEnd();
+				}
+				else
+				{
+					return 0;
+				}
+		}
 	}
 }
 
@@ -140,7 +146,7 @@ function viewStudentAssignments($studentID, $mysqli)
 	$yearID = getClassYearID($mysqli);
 	$studentName = getUserName($studentID, $mysqli);
 
-	if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, className FROM studentClassIDs, classes WHERE studentID = ? AND schoolYearID = ?"))
+	if ($stmt = $mysqli->prepare("SELECT studentClassIDs.classID, className FROM studentClassIDs, classes WHERE studentClassIDs.classID = classes.classID AND studentID = ? AND schoolYearID = ?"))
 	{
     	$stmt->bind_param('ii', $studentID, $yearID);
         $stmt->execute();
@@ -153,7 +159,7 @@ function viewStudentAssignments($studentID, $mysqli)
 		{
 			echo '
 				<h4> Class Name: ' . $className . ' </h4>
-                                <table width="100%" class="table table-striped table-bordered table-hover" id="' . $studentID . '">
+                                <table width="100%" class="table table-striped table-bordered table-hover" id="' . $classID . '">
                                     <thead>
                                         <tr>
                                             <th>Assignment Name</th>
@@ -175,7 +181,7 @@ function viewStudentAssignments($studentID, $mysqli)
                 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
                 <script>
                 $(document).ready(function() {
-                    $(\'#' . $studentID . '\').DataTable({
+                    $(\'#' . $classID . '\').DataTable({
                         responsive: true
                     });
                 });
@@ -207,7 +213,7 @@ function getAssignmentsForStudentClass($studentID, $classID, $mysqli)
                         <td>' . getMaterialTypeName($materialTypeID, $mysqli) . '</td>
                         <td>' . $materialPointsScored . '</td>
                         <td> /' . $materialPointsPossible . '</td>
-                        <td>' . $materialTotalPoints . '%</td>
+                        <td>' . number_format((float) $materialTotalPoints, 2, '.', '') . '%</td>
                     </tr>
                 ';
 		
