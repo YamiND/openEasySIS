@@ -4,14 +4,14 @@ include_once '../functions.php';
 
 sec_session_start(); // Our custom secure way of starting a PHP session.
 
-if ((login_check($mysqli) == true) && (isAdmin($mysqli) || isSchoolAdmin($mysqli)))
+if ((login_check($mysqli) == true) && (isAdmin($mysqli)))
 {
 	editUserAccount($mysqli);
 }
 else
 {
    	$_SESSION['fail'] = 'Account Creation Failed, invalid permissions';
-   	header('Location: ../../pages/createUser');
+   	header('Location: ../../pages/editProfile');
 
 	return;
 }
@@ -84,7 +84,7 @@ function editUserAccount($mysqli)
 				else
 				{
    					$_SESSION['fail'] = 'Account Edit Failed, student fields must be filled out';
-					header('Location: ../../pages/editUser');
+					header('Location: ../../pages/editProfile');
 
 					return;
 				}
@@ -240,8 +240,7 @@ function editUserAccount($mysqli)
 	else
 	{
    		$_SESSION['fail'] = 'Account Edit Failed, data not sent';
-		header('Location: ../../pages/editUser');
-
+		header('Location: ../../pages/editProfile');
 	}
 }
 ?>
