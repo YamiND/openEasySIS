@@ -247,6 +247,9 @@ echo '
                     		<li>
 		                        <a href="assignStudent">Assign Student to Class</a>
        			            </li>
+                    		<li>
+		                        <a href="unAssignStudentTeacher">Remove Student from Class</a>
+       			            </li>
 						';
 					}
 
