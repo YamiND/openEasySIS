@@ -323,17 +323,20 @@ echo '
     {
     echo '
             <li>
-                    <a href="viewProfile">My Profile</a>
-            </li>
+           		<a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Grades <span class="fa arrow"></span></a>
+            	<ul class="nav nav-second-level">
+                	<li>
+                    	<a href="viewStudentClassGrades">View all Class Grades</a>
+	                </li>
+					<li>
+							<a href="viewProfile">My Profile</a>
+					</li>
+					<li>
+						<a href="viewStudentContactForm">Contact Teacher/Principal</a>
+					</li>
+				</ul>   
+			</li>
             <li>
-            <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Grades <span class="fa arrow"></span></a>
-            <ul class="nav nav-second-level">
-                <li>
-                    <a href="viewStudentClassGrades">View all Class Grades</a>
-                </li>
-            </ul>   
-            </li>
-                <li>
                 <a href="#"><i class="fa fa-book fa-fw"></i> Assignments <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
