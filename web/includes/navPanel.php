@@ -211,6 +211,14 @@ echo '
     				</li>
     			</ul>	
             </li>  
+			<li>
+          	<a href="#"><i class="fa fa-envelope fa-fw"></i> Mass Emailing<span class="fa arrow"></span></a>
+    			<ul class="nav nav-second-level">
+    				<li>
+    					<a href="massEmailForm">Send a Mass Email</a>
+    				</li>
+    			</ul>	
+            </li>  
         ';
     }
 
