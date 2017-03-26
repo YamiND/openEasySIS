@@ -3,7 +3,7 @@ include_once '../includes/dbConnect.php';
 
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (isAdmin($mysqli)))
+    if ((login_check($mysqli) == true) && (isAdmin($mysqli) || isSchoolAdmin($mysqli)))
     {
         viewAllAnnouncements($mysqli);
     }
