@@ -68,7 +68,7 @@ echo '
 								}
 
 
-								if ((isset($_SESSION['studentID'])) && (getStudentCount($_SESSION['userID']) > 1))
+								if ((isset($_SESSION['studentID'])) && (getStudentCount($_SESSION['userID'], $mysqli) > 1))
 								{
 									generateFormStart("", "post");
             							generateFormButton("changeStudent", "Change Student");
