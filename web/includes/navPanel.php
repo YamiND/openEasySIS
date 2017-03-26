@@ -208,7 +208,7 @@ echo '
         ';
     }
 
-	if (isSchoolAdmin($mysqli))
+	if (isSchoolAdmin($mysqli) || canModClassList($mysqli))
 	{
 		echo '
             <li>
