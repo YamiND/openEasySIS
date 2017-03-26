@@ -48,13 +48,14 @@ echo '
                             <!-- Tab panes -->
                             <div class="tab-content">
 		';
-							if (isset($_SESSION['classID']))
+							if (!isset($_SESSION['classID']))
 							{
 								echo '<h4>Select Material Type</h4>';
 							}
 							else
 							{
-								echo '<h4>Select Class</h4>';
+								echo '<h4>Class Name: ' . getClassName($_SESSION['classID'], $mysqli) . '</h4>';
+								
 							}
 echo '
                                 <div class="tab-pane fade in active" id="modifyAssignment">';
@@ -182,6 +183,21 @@ function getClassNumber($mysqli)
         {
             return 0;
         }
+    }
+}
+
+function getClassName($classID, $mysqli)
+{
+    if ($stmt = $mysqli->prepare("SELECT className FROM classes WHERE classID = ?"))
+    {
+        $stmt->bind_param('i', $classID);
+        $stmt->execute();
+        $stmt->bind_result($className);
+        $stmt->store_result();
+
+        $stmt->fetch();
+
+        return $className;
     }
 }
 
