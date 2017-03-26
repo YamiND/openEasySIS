@@ -12,7 +12,7 @@ if (isset($_POST['changeUser']))
 
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (isAdmin($mysqli)))
+    if ((login_check($mysqli) == true) && (isAdmin($mysqli) || isSchoolAdmin($mysqli)))
     {
         viewEditProfileForm($mysqli);
     }
