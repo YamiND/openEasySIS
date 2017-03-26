@@ -19,7 +19,7 @@ if (isset($_SESSION['success']))
 
 function checkPermissions($mysqli)
 {
-    if ((login_check($mysqli) == true) && (isAdmin($mysqli)))
+    if ((login_check($mysqli) == true) && (isAdmin($mysqli) || isSchoolAdmin($mysqli)))
     {
         viewEditAnnouncementForm($mysqli);
     }

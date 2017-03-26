@@ -4,7 +4,7 @@ include_once '../functions.php';
 
 sec_session_start();
 
-if ((login_check($mysqli) == true) && (isAdmin($mysqli)))
+if ((login_check($mysqli) == true) && (isAdmin($mysqli) || isSchoolAdmin($mysqli)))
 {
 	// If permissions are in check, call the main function
 	updateAnnouncement($mysqli);
