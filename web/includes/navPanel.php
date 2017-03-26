@@ -201,7 +201,13 @@ echo '
     					<a href="generateTranscript">Generate Transcript</a>
     				</li>
     				<li>
+    					<a href="generateManualTranscript">Generate Transcript Manually</a>
+    				</li>
+    				<li>
     					<a href="generateReportCard">Generate Report Card</a>
+    				</li>
+    				<li>
+    					<a href="generateManualReportCard">Generate Report Card Manually</a>
     				</li>
     			</ul>	
             </li>  
@@ -304,6 +310,9 @@ echo '
                		 </li>
        		         <li>
            		         <a href="viewParentStudentAllAssignments">View all Student Assignments</a>
+               		 </li>
+       		         <li>
+           		         <a href="viewContactForm">Contact Teacher/Principal</a>
                		 </li>
 	            </ul>   
 			</li>
