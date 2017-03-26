@@ -68,23 +68,6 @@ if (login_check($mysqli) == true)
     {
     echo '
             <li>
-                <a href="#"><i class="fa fa-bullhorn fa-fw"></i> Announcements <span class="fa arrow"></span></a>
-    			<ul class="nav nav-second-level">
-    				<li>
-    					<a href="createAnnouncement">Create Announcement</a>
-    				</li>
-    				<li>
-    					<a href="editAnnouncement">Edit Announcement</a>
-    				</li>
-    				<li>
-    					<a href="deleteAnnouncement">Delete Announcement</a>
-    				</li>
-    				<li>
-    					<a href="viewAllAnnouncements">View All Announcements</a>
-    				</li>
-    			</ul>	
-            </li>
-            <li>
                 <a href="#"><i class="fa fa-child fa-fw"></i> Parents & Children <span class="fa arrow"></span></a>
     			<ul class="nav nav-second-level">
     				<li>
@@ -125,33 +108,7 @@ if (login_check($mysqli) == true)
     					<a href="viewUserTables">View All Users</a>
     				</li>
     			</ul>	
-            </li>
-            <li>
-                <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Classes <span class="fa arrow"></span></a>
-    			<ul class="nav nav-second-level">
-    				<li>
-    					<a href="addClass">Add a Class</a>
-    				</li>
-                    <li>
-                        <a href="assignStudent">Assign Student to Class</a>
-                    </li>
-                   	<li>
-		            	<a href="unAssignStudent">Remove Student From Class</a>
-       			    </li>
-    				<li>
-    					<a href="modifyClass">Modify a Class</a>
-    				</li>
-    				<li>
-    					<a href="deleteClass">Delete a Class</a>
-    				</li>
-                    <li>
-                        <a href="viewStudentListClass">View Student List by Class</a>
-                    </li>
-    				<li>
-    					<a href="viewClassesTable">View All Classes</a>
-    				</li>
-    			</ul>	
-            </li>
+            </li> 
             <li>
                 <a href="#"><i class="fa fa-wrench fa-fw"></i> School Configuration <span class="fa arrow"></span></a>
     			<ul class="nav nav-second-level">
@@ -168,9 +125,75 @@ if (login_check($mysqli) == true)
             </li>  
         ';
     }
+
+
+		if (isAdmin($mysqli) || isSchoolAdmin($mysqli))
+		{
+echo '
+            <li>
+                <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Classes <span class="fa arrow"></span></a>
+    			<ul class="nav nav-second-level">
+	';
+			if (isAdmin($mysqli))
+			{
+
+				echo '
+    				<li>
+    					<a href="addClass">Add a Class</a>
+    				</li>
+                    <li>
+                        <a href="assignStudent">Assign Student to Class</a>
+                    </li>
+                   	<li>
+		            	<a href="unAssignStudent">Remove Student From Class</a>
+       			    </li>
+    				<li>
+    					<a href="modifyClass">Modify a Class</a>
+    				</li>
+    				<li>
+    					<a href="deleteClass">Delete a Class</a>
+    				</li> ';
+
+				}
+			
+				if (isAdmin($mysqli) || isSchoolAdmin($mysqli))
+				{
+
+				echo '
+                    <li>
+                        <a href="viewStudentListClass">View Student List by Class</a>
+                    </li>
+    				<li>
+    					<a href="viewClassesTable">View All Classes</a>
+    				</li>';
+				}
+
+	echo '
+    			</ul>	
+            </li>';
+
+		}
+
 	if (isSchoolAdmin($mysqli) || isAdmin($mysqli))
     {
     echo '
+            <li>
+                <a href="#"><i class="fa fa-bullhorn fa-fw"></i> Announcements <span class="fa arrow"></span></a>
+    			<ul class="nav nav-second-level">
+    				<li>
+    					<a href="createAnnouncement">Create Announcement</a>
+    				</li>
+    				<li>
+    					<a href="editAnnouncement">Edit Announcement</a>
+    				</li>
+    				<li>
+    					<a href="deleteAnnouncement">Delete Announcement</a>
+    				</li>
+    				<li>
+    					<a href="viewAllAnnouncements">View All Announcements</a>
+    				</li>
+    			</ul>	
+            </li>
 			<li>
           	<a href="#"><i class="fa fa-wrench fa-fw"></i> Report Generation <span class="fa arrow"></span></a>
     			<ul class="nav nav-second-level">
