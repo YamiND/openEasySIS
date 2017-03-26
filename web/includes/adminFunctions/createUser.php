@@ -64,7 +64,7 @@ function createUserAccount($mysqli)
 		if (isset($_POST['userIsAdmin']) || isset($_POST['userIsSchoolAdmin']) || isset($_POST['userIsTeacher']) || isset($_POST['userIsParent']) || isset($_POST['userIsStudent']) || isset($_POST['userIsPrincipal']))
 		{
 			// Make sure that student is the only box checked if they're a student
-			if (isset($_POST['userIsStudent']) && (isset($_POST['userIsAdmin']) || isset($_POST['userIsSchoolAdmin']) || isset($_POST['userIsTeacher']) || isset($_POST['userIsParent'])))
+			if (isset($_POST['userIsStudent']) && (isset($_POST['userIsAdmin']) || isset($_POST['userIsSchoolAdmin']) || isset($_POST['userIsTeacher']) || isset($_POST['userIsParent']) || isset($_POST['userIsPrincipal'])))
 			{
    				$_SESSION['fail'] = 'Account Creation Failed, Can not be a student and other role';
 		   		header('Location: ../../pages/createUser');
