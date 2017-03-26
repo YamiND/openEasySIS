@@ -90,6 +90,9 @@ if (login_check($mysqli) == true)
                     <li>
                         <a href="viewProfile">My Profile</a>
                     </li>
+                    <li>
+                        <a href="editProfile">Edit User Profile</a>
+                    </li>
                 </ul>   
             </li>
             <li>
