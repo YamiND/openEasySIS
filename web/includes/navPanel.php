@@ -251,7 +251,10 @@ echo '
 				{
 				echo '
                     <li>
-                        <a href="exportAllData">Export All Data</a>
+                        <a href="exportAllData">Export All Data (CSV)</a>
+                    </li>
+                    <li>
+                        <a href="exportAllSQL">Export All Data (SQL)</a>
                     </li>
 					';
 				}
