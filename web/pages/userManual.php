@@ -327,6 +327,7 @@ echo '
 										<li>Fall semester start/end date</li>
 										<li>Spring semester start/end date</li>
 										<li>Quarter 1, 2, 3 start/end date</li>
+										</br>
 										<p>
 											Once the correct dates have been entered for the school year, the administrator will then select the button “Add school year”, and the new school year will be created.
 										</p>
@@ -338,6 +339,7 @@ echo '
 										<li>Fall semester start/end date</li>
 										<li>Spring semester start/end date</li>
 										<li>Quarter 1, 2, 3 start/end date</li>
+										</br>
 										<p>
 											Once complete, the administrator will need to select the button “Modify school year”, and the new updates will be applied to the school year that the administrator selected to modify. 
 										</p>
@@ -417,39 +419,158 @@ echo '
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Collapsible Group Item #1</a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">1 - Dashboard </a>
                                         </h4>
                                     </div>
                                     <div id="collapseOne" class="panel-collapse collapse in">
                                         <div class="panel-body">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+										<h4>1.1 - My Dashboard</h4>
+										<p>
+                                            The first thing the school administrator will see is the announcements widget, which gives the information of the Date, Name, and Descriptions of all announcements. Creation of these announcements will be explained further in the manual. 
+										</p>										
                                         </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Collapsible Group Item #2</a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">2 - Classes</a>
                                         </h4>
                                     </div>
                                     <div id="collapseTwo" class="panel-collapse collapse">
                                         <div class="panel-body">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+										<h4>2.1 - View Student List by Class</h4>
+										<p>
+											“View Student List by Class”, allows the school administrator to conveniently view every student that is registered to a class.  
+										</p>
+										<p>
+											Select the grade level, and class name, to have a list displayed of all current students in the class. The list displays the first name, last name, and email for each student.  
+										</p
+										</br>
+										<h4>2.2 - View All Classes</h4>
+										<p>
+											This option allows the school administrator to view all classes offered at Maplewood Baptist Academy, regardless of grade level. It will display a list containing the class name, grade level, and the email for the teacher that is in charge of the class.  
+										</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Collapsible Group Item #3</a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">3 - Announcement</a>
                                         </h4>
                                     </div>
                                     <div id="collapseThree" class="panel-collapse collapse">
                                         <div class="panel-body">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+										<h4>3.1 - Create Announcement</h4>
+										<p>
+											The first option given is “create an announcement”.  The school administrator will be given 4 text boxes to input information.
+										</p>
+										<p>
+											The administrator will need to give the announcement a name, and the date in which the announcement was created and when the planned event of the announcement will end. When the administrator hovers over the announcement post date and end date, on the far right section of the textbox, is a drop arrow. By selecting this, a calendar will appear, and the administrator can easily find the day and month to select. 	 
+										</p>
+										<p>	
+											End Date, allows the administrator to decide when they would wish for the announcement to be automatically deleted from the SIS. The record of it will still viewable on the “View All Announcements” page, however, other users of the SIS will no longer see it when the end date has come to pass.  
+										</p>
+										<p>
+											The last text box, named “Description”, is where the administrator can type in detail on what the announcement is about, and any other key information needed.  	 
+										</p>
+										<p>	
+											Once finished, select the “Create Announcement” button on the bottom of the page, and display the announcement to all faculty, parents, and students.   
+										</p>
+										<h4>3.2 - Edit Announcement</h4>
+										<p>
+											Edit Announcement allows the user to change any information on previously created announcements. Corrections to a date, name, typo, add more information to description, etc. 
+										</p>
+										<p>
+											When you select the tab “Edit Announcement”, it will take you to a page with a textbox and a button called “Select Announcement”. When you click on the first text box, it will display a list of all announcements currently being shown on the SIS. Select the announcement you wish to edit, then click the “Select Announcement” button to start editing. 	 
+										</p>
+										<p>	
+											This will open up the information similar to “Create Announcement”, and from here the administrator can start to fix, change, update, etc. anything needed for the announcement.   
+										</p>
+										<p>
+											Once finished, the administrator will then click the button “Edit announcement” at the bottom of the page, and the updated announcement will take the place of the old announcement. 	 
+										</p>										
+										<h4>3.3 - Delete Announcement</h4>
+										<p>
+											The delete announcement tab, allows the Administrator to delete any announcements that have been created. This applies for both expired announcements, and current announcements still viewable.  
+										</p>
+										<p>
+											Under “Announcement Title, Announcement Post Date”, select the announcement you wish to delete, then click the button “Delete Announcement”.  	 
+										</p>
+										<p style="color:red;">	
+											*Warning* once you delete an announcement, you will be unable to retrieve it later.   
+										</p>
+										<h4>3.4 - View All Announcements</h4>
+										<p>
+											“View All announcements”, allows the administrator to view all announcements, whether expired or still viewable, that have been published on the student information system for Maplewood Baptist Academy. 
+										</p>
                                         </div>
                                     </div>
                                 </div>
+								<div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">4 - Report Generation</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseFour" class="panel-collapse collapse">
+                                        <div class="panel-body">
+										<h4>4.1 - Generate Transcript</h4>
+										<p>
+											“Generate Transcript” allows for the administrator to print out a student’s entire Report Card history during their attendance at Maplewood Baptist Academy. The administrator has three methods to choose from: Generate Single Transcript, Generate Transcripts for Specific Grade, and Generate Transcripts for All Grades.  
+										</p>
+										<p>
+											Generate Single Transcript: when this option is selected, the administrator will choose the desired student’s grade, from the drop box. This will present a list via the new drop box of every student in that grade. Once the student is selected, click “Choose Student”. This will download a zip file. The zip file contains a list of directories, one for each grade level the student has attended. Inside each directory, contains an Adobe file that depicts that year’s report card. 
+										</p>
+										<p>
+											Generate Transcripts for Specific Grade: This allows the admin to generate transcripts for every student that is currently attending the selected grade. Chosen via the drop box. Similar to single transcript, a zip file containing the grade level, will have every current student of said grade level’s transcript, during their duration at Maplewood Baptist Academy.
+										</p>
+										<p>
+											Generate Transcripts for All Grades: This option will generate a transcript for every student currently attending Maplewood Baptist Academy. 
+										</p>
+										<h4>4.2 - Generate Report Card</h4>
+										<p>
+											“Generate Report Card” allows the administrator to generate report cards of the students that attend Maplewood Baptist Academy.  
+										</p>
+										<p>
+											The administrator will have three methods to choose from: Generate Single Report Card, Generate Report Cards for Specific Grade, and Generate Report Cards for All Grades. 
+										</p>
+										<p>
+											Generate Single Report Card: when this option is selected, the administrator will choose which grade level the student currently is, and then to select the specific student from the drop box list of all students currently in the selected grade bracket. Once the student needed has been selected, the administrator will select the button “Choose Student”, afterwards, a zip file will be downloaded to the computer. Inside the zip file will be a folder containing an Adobe file. 
+										</p>
+										<p>
+											Generate Report Cards for Specific Grade: When this option is selected, the administrator will be able to generate all report cards for students assigned to a specific grade level. The administrator will be given the option to select which grade from the drop box report cards will generate for. 
+										</p>
+										<p>
+											Similar to single report card generation, a zip file will be downloaded to the admin’s computer, containing a list of all students’ report cards.
+										</p>
+										<p>
+											Generate Report Cards for All Grades: This allows the admin to quickly generate a report card for every student in the school. A zip file will be downloaded, containing a list of directories (one per grade). Each directory will contain every student in that grade level, along with their report card.
+										</p>
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">5 - Profiles</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseFive" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                        <h4>5.1 - Lookup Student Profile</h4>
+										<p>
+											Add Content.  
+										</p>
+										<h4>5.2 - Edit Student Profile</h4>
+										<p>
+											Add Content.  
+										</p>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                         <!-- .panel-body -->
@@ -476,39 +597,123 @@ echo '
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Collapsible Group Item #1</a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">1 - Dashboard </a>
                                         </h4>
                                     </div>
                                     <div id="collapseOne" class="panel-collapse collapse in">
                                         <div class="panel-body">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+										<h4>1.1 - My Dashboard</h4>
+										<p>
+                                            The first thing the you will see is the announcements widget, which gives the information of the Date, Name, and Descriptions of all announcements.  
+										</p>										
                                         </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Collapsible Group Item #2</a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">2 - Profiles</a>
                                         </h4>
                                     </div>
                                     <div id="collapseTwo" class="panel-collapse collapse">
                                         <div class="panel-body">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                        <h4>2.1 - Lookup Student Profile</h4>
+										<p>
+											Add Content.  
+										</p>
+										<h4>2.2 - Edit Student Profile</h4>
+										<p>
+											Add Content.  
+										</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Collapsible Group Item #3</a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">3 - My Classes/Students</a>
                                         </h4>
                                     </div>
                                     <div id="collapseThree" class="panel-collapse collapse">
                                         <div class="panel-body">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+										<h4>3.1 - View Student List</h4>
+										<p>
+											The View Student List section shows a list of all your students in each of your classes.  The class name is located in the top left corner of the gray table.  Each class shows a list that includes first name, last name, email, and current grade.
+										</p>
+										<h4>3.2 - View Grades for Student</h4>
+										<p>
+											The View Grades for Student section allows you to view a student`s grade based on one of their classes.  The system will default to one of your classes which you can see in the gray table.  If you would like to change the class you can [Click] on the “change class” button. Then select a class from the dropdown list and [Click] the “select class” button.  After you have your class selected you will choose a student from the dropdown list and [Click] the “Select Student” button.  At the top of the table you will see the class name, student name, and their current grade.  Inside of the table you will see a detailed list of the students assignments including the assignment name, due date, type, points scored, points possible, and percentage grade as shown below.  You can change the student or class at anytime by clicking on either the “Change Student” or “Change Class” button and following the  instructions above.
+										</p>
+										<h4>3.3 - Gradebook</h4>
+										<p>
+											The Gradebook section allows you to manage your assignment grades for each of your classes.  The system will default to one of your classes which you can see in the gray table.  If you would like to change the class you can [Click] on the “change class” button. Then select a class from the dropdown list and [Click] the “select class” button.  After you have your class selected choose an assignment from the dropdown list and [Click] the “Select Assignment” button.  At the top of the table you will see the class name along with the assignment name.  Inside of the table you will see list of students for the assignment including the student first name, last name, points earned, points possible, and an apply changes button.  You will be able to update and change the score, at any time, for each student by updating the “Points Earned” field and [Clicking] the “Apply Changes” button.  You will see a “Grade Change” message in the gray table once this has updated.  You will only be able to update one student score at a time.  You can change the assignment or class at anytime by clicking on either the “Select Assignment” or “Change Class” button and follow the instructions above.  
+										</p>
+										<h4>3.4 - Assign Student to Class</h4>
+										<p>
+											The Assign Student to Class section allows you to assign a student to any of you classes. First you will select the grade level from the dropdown list and [Click] the “Select Grade Level” button. If you select a grade level and you dont have classes assigned you see a “No Classes for Grade Level, Select Another Class” message.  Then you will select a class from the dropdown list and [Click] the “Select Class” button. You could also change the grade level by clicking on the “Change Grade Level” button.  At the top of the table you will see the grade level along with the class name.  Then you will choose a student from the dropdown list and [Click] “Add Student to Class” button. You will see a “Student added to Class” message in the gray table if successful.  If the drop down list says  “No Students” then the student is already enrolled in the class.  You can change the grade level or class at anytime by clicking on either the “Change Class” or “Change Grade Level” button and follow the instructions above.
+										</p>
+										<h4>3.5 - Remove Student from Class</h4>
+										<p>
+											The Remove Student From Class section allows you to remove a student from any of you classes. First you will select the grade level from the dropdown list and [Click] the “Select Grade Level” button. If you select a grade level and you dont have classes assigned you see a “No Classes for Grade Level, Select Another Class” message.  Then you will select a class from the dropdown list and [Click] the “Select Class” button. You could also change the grade level by clicking on the “Change Grade Level” button.  At the top of the table you will see the grade level along with the class name.  Then you will choose a student from the dropdown list and [Click] “Remove Student from Class” button. You will see a “Student removed from Class” message in the gray table if successful.  If the drop down list says  “No Students” then the student is already enrolled in the class.  You can change the grade level or class at anytime by clicking on either the “Change Class” or “Change Grade Level” button and follow the instructions above.
+										</p>
                                         </div>
                                     </div>
                                 </div>
+								<div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">4 - Assignments</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseFour" class="panel-collapse collapse">
+                                        <div class="panel-body">
+										<h4>4.1 - Add Assignment</h4>
+										<p>
+											The Add Assignment section allows you to add a new assignment to any of your classes.  First you will select the class from the dropdown list and [Click] the “Select Class” button.  You will have four fields to fill out in order to save a new assignment.  They include Assignment Name, Assignment Points Possible, Assignment Due Date, and Type of assignment. Then you [Click] the “Add Assignment” button to save your new assignment.  You will see a “Assignment Added” message in the gray table if successful.  You must have a “Type of Assignment” created in order to save a new assignment.  You can change the class at anytime by clicking the “Change Class” button.  In order to add a new “Assignment Type” please refer to section 4.5.1. 
+										</p>
+										<h4>4.2 - Modify Assignment</h4>
+										<p>
+											The View Grades for Student section allows you to view a student`s grade based on one of their classes.  The system will default to one of your classes which you can see in the gray table.  If you would like to change the class you can [Click] on the “change class” button. Then select a class from the dropdown list and [Click] the “select class” button.  After you have your class selected you will choose a student from the dropdown list and [Click] the “Select Student” button.  At the top of the table you will see the class name, student name, and their current grade.  Inside of the table you will see a detailed list of the students assignments including the assignment name, due date, type, points scored, points possible, and percentage grade as shown below.  You can change the student or class at anytime by clicking on either the “Change Student” or “Change Class” button and following the  instructions above.
+										</p>
+										<h4>4.3 - Delete Assignment</h4>
+										<p>
+											The Delete Assignment section allows you to delete an existing assignment to any of your classes.  First you will select the class from the dropdown list and [Click] the “Select Class” button.  Then you will select the assignment from the dropdown list and [Click} the “Delete Assignment” button.  You will see a “Assignment Deleted” message in the gray table if successful.  You can change the class at anytime by clicking on the “Change Class”  button and follow the instructions above. 
+										</p>
+										<h4>4.4 - View All Assignments</h4>
+										<p>
+											The View All Assignment section shows a list of all your assignments in each of your classes.  The class name is located in the top left corner of the gray table.  Each class shows a list that includes Assignment Name, Assignment Points Possible, Assignment Due Date, and Assignment Type.  In order to modify an assignment please refer to section 4.4.2
+										</p>
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">5 - Class Configuration</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseFive" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                        <h4>5.1 - Add Assignment Type</h4>
+										<p>
+											Add Content.  
+										</p>
+										<h4>5.2 - Modify assignment Type</h4>
+										<p>
+											Add Content.  
+										</p>
+										<h4>5.3 - Delete Assignment Type</h4>
+										<p>
+											Add Content.  
+										</p>
+										<h4>5.4 - View All Assignment Types</h4>
+										<p>
+											Add Content.  
+										</p>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                         <!-- .panel-body -->
@@ -535,36 +740,38 @@ echo '
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Collapsible Group Item #1</a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">1 - Dashboard</a>
                                         </h4>
                                     </div>
                                     <div id="collapseOne" class="panel-collapse collapse in">
                                         <div class="panel-body">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                            <h4>1.1 - My Dashboard</h4>
+										<p>
+                                            The first thing the parents will see is the announcements table, which gives the information of the Date, Name, and Descriptions of all announcements. 
+										</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Collapsible Group Item #2</a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">2 - Student</a>
                                         </h4>
                                     </div>
                                     <div id="collapseTwo" class="panel-collapse collapse">
                                         <div class="panel-body">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Collapsible Group Item #3</a>
-                                        </h4>
-                                    </div>
-                                    <div id="collapseThree" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                        <h4>2.1 - View All Class Grades</h4>
+										<p>
+                                            It will give you tables of all the students that you have the access to.  In the top of each table you will see the Student’s name next to it will provide the GPA.
+										</p>
+										<h4>2.2 - View All Student Assignments</h4>
+										<p>
+                                            It will provide all the assignments in your children classes, provided with the dates.
+										</p>
+										<h4>2.3 - Contact Teacher/Principal</h4>
+										<p>
+                                            Add Content.
+										</p>
                                         </div>
                                     </div>
                                 </div>
@@ -594,36 +801,67 @@ echo '
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Collapsible Group Item #1</a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">1 - Dashboard</a>
                                         </h4>
                                     </div>
                                     <div id="collapseOne" class="panel-collapse collapse in">
                                         <div class="panel-body">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                            <h4>1.1 - My Dashboard</h4>
+										<p>
+                                            You will see your Current School Year GPA, your Cumulative GPA and these are updating automatically regarding to your grades.
+										</p>
+										<p>
+										You will see all the announcements that sent by the school administrator with the dates for each one. 
+										</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Collapsible Group Item #2</a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">2 - My Profile</a>
                                         </h4>
                                     </div>
                                     <div id="collapseTwo" class="panel-collapse collapse">
                                         <div class="panel-body">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                        <h4>2.1 - My Profile</h4>
+										<p>
+                                            You will find your basic information ( First Name, Last Name and your email address ).
+										</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="panel panel-default">
+								<div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Collapsible Group Item #3</a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">3 - Grades</a>
                                         </h4>
                                     </div>
                                     <div id="collapseThree" class="panel-collapse collapse">
                                         <div class="panel-body">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+										<h4>3.1 - View All Class Grades</h4>
+										<p>
+											You will see your Current GPA and Cumulative GPA.  Inside the table you will see all your classes and the grades for the current semester.
+										</p>
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">4 - Assignments</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseFour" class="panel-collapse collapse">
+                                        <div class="panel-body">
+										<h4>4.1 - View Due Assignments</h4>
+										<p>
+											You will see all the classes and all the assignments with specific details ( Assignment Name, Assignment Type, Assignment Due Date and Assignment Points Possible). 
+										</p>
+										<h4>4.2 - View All Assignments</h4>
+										<p>
+											Will give you an overall assignments the past ones and the current one by having that you will have a good idea on every single assignment. 
+										</p>
                                         </div>
                                     </div>
                                 </div>
