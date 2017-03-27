@@ -10,11 +10,6 @@ sec_session_start(); // Our custom secure way of starting a PHP session.
 
 date_default_timezone_set('America/New_York');
 
-// Error Testing
-error_reporting(E_ALL);
-ini_set('display_startup_errors',1);
-ini_set('display_errors',1);
-
 if ((login_check($mysqli) == true) && (isSchoolAdmin($mysqli) || isAdmin($mysqli)))
 {
 	generateChoice($mysqli);
@@ -35,7 +30,7 @@ function generateChoice($mysqli)
 		shell_exec('mkdir ../../../TranscriptOutputs');
 	}
 	shell_exec('rm -rf ../../../TranscriptOutputs/*');
-	array_map('unlink', glob("Transcript*")); 
+	shell_exec('rm -rf Transcript*');
 
 	if (isset($_POST['generateChoice']) && !empty($_POST['generateChoice']))
   	{
