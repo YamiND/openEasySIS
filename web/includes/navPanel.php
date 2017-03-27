@@ -102,6 +102,9 @@ if (login_check($mysqli) == true)
     					<a href="createBulkUser">Create User (CSV Upload)</a>
     				</li>
     				<li>
+    					<a href="deleteUser">Delete User</a>
+    				</li>
+    				<li>
     					<a href="adminPasswordReset">Reset User Password</a>
     				</li>
     				<li>
