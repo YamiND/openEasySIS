@@ -239,6 +239,39 @@ echo '
 		';
 	}	
 
+	if (isAdmin($mysqli) || isTeacher($mysqli))
+	{
+    	echo '
+            <li>
+                <a href="#"><i class="fa fa-database fa-fw"></i> Data Export <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+			';
+
+				if (isAdmin($mysqli))
+				{
+				echo '
+                    <li>
+                        <a href="exportAllData">Export All Data</a>
+                    </li>
+					';
+				}
+		
+				if (isTeacher($mysqli))
+				{
+				echo '
+                    <li>
+                        <a href="exportStudentTeacherGrades">Export Students Grades</a>
+                    </li>
+					';
+				}	
+
+		echo '
+                </ul>   
+            </li>
+		';
+
+	}
+
 	if (isTeacher($mysqli))
     {
     echo '
