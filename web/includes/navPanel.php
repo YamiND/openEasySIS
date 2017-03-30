@@ -145,6 +145,9 @@ echo '
     					<a href="addClass">Add a Class</a>
     				</li>
                     <li>
+                        <a href="assignTeacher">Assign Teacher to Class</a>
+                    </li>
+                    <li>
                         <a href="assignStudent">Assign Student to Class</a>
                     </li>
                    	<li>

@@ -56,6 +56,26 @@ echo '
 
     		viewTotalClasses($mysqli);
 		}
+		
+		if (isTeacher($mysqli))
+		{
+			include("../includes/teacherFunctions/viewTeacherDashboard.php");	
+		}
+		
+		if (isSchoolAdmin($mysqli))
+		{
+			include("../includes/schoolAdminFunctions/viewSchoolAdminDashboard.php");	
+		}
+		
+		if (isStudent($mysqli))
+		{
+			include("../includes/studentFunctions/viewStudentDashboard.php");	
+		}
+		
+		if (isParent($mysqli))
+		{
+			include("../includes/parentFunctions/viewParentDashboard.php");	
+		}
 
 
     echo '
