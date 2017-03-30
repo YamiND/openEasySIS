@@ -27,6 +27,7 @@ function createUserAccount($mysqli)
 		$studentGradeLevel = NULL; // Further down this should be changed if the data is sent
 		$parentAddress = NULL; // See above 
 		$parentPhone = NULL; // Ditto
+		$studentBirthdate = NULL; // Ditto
 
 		if (isset($_POST['modClassList']))
 		{	
@@ -86,6 +87,11 @@ function createUserAccount($mysqli)
 					header('Location: ../../pages/createUser');
 
 					return;
+				}
+
+				if (isset($_POST['studentBirthdate']) && !empty($_POST['studentBirthdate']))
+				{
+					$studentBirthdate = $_POST['studentBirthdate'];
 				}
 			}
 			// If they're not a student, let the checkbox checking commence
@@ -205,9 +211,9 @@ function createUserAccount($mysqli)
 			else
 			{
     	
-				if ($stmt = $mysqli->prepare("INSERT INTO users (userEmail, userPassword, userFirstName, userLastName, modClassList, viewAllGrades, userSalt, isParent, isStudent, isTeacher, isSchoolAdmin, isAdmin, studentGPA, studentGradeLevel, parentAddress, parentPhone, isPrincipal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
+				if ($stmt = $mysqli->prepare("INSERT INTO users (userEmail, userPassword, userFirstName, userLastName, modClassList, viewAllGrades, userSalt, isParent, isStudent, isTeacher, isSchoolAdmin, isAdmin, studentGPA, studentGradeLevel, parentAddress, parentPhone, isPrincipal, studentBirthdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
 				{
-    				$stmt->bind_param('ssssiissssssdisss', $userEmail, $hashedPassword, $userFirstName, $userLastName, $modClassList, $viewAllGrades, $randomSalt, $isParent, $isStudent, $isTeacher, $isSchoolAdmin, $isAdmin, $studentGPA, $studentGradeLevel, $parentAddress, $parentPhone, $isPrincipal); 
+    				$stmt->bind_param('ssssiissssssdissss', $userEmail, $hashedPassword, $userFirstName, $userLastName, $modClassList, $viewAllGrades, $randomSalt, $isParent, $isStudent, $isTeacher, $isSchoolAdmin, $isAdmin, $studentGPA, $studentGradeLevel, $parentAddress, $parentPhone, $isPrincipal, $studentBirthdate); 
 	    			if ($stmt->execute())    // Execute the prepared query.
 					{
    						$_SESSION['success'] = "Account Creation Success, email is $userEmail and password is $password";
