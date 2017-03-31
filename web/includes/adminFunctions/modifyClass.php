@@ -20,10 +20,19 @@ function modifyClass($mysqli)
 {
 	if (isset($_POST['classID'], $_POST['className'], $_POST['classTeacherID'], $_POST['classGradeLevel'])) 
 	{
+		$classStartTime = NULL;
+		$classEndTime = NULL;
+		
 		$classID = $_POST['classID'];
 		$className = $_POST['className'];
 		$classTeacherID = $_POST['classTeacherID'];
     	$classGradeLevel = $_POST['classGradeLevel'];
+
+		if (isset($_POST['classStartTime'], $_POST['classEndTime']))
+		{
+			$classStartTime = $_POST['classStartTime'];
+			$classEndTime = $_POST['classEndTime'];	
+		}
 
         if ($stmt = $mysqli->prepare("SELECT classID, className, classGrade FROM classes"))
         {
@@ -43,16 +52,21 @@ function modifyClass($mysqli)
                 }
             }
 
-    	    if ($stmt = $mysqli->prepare("UPDATE classes SET className = ?, classGrade = ?, classTeacherID = ? WHERE classID = ?"))
+    	    if ($stmt = $mysqli->prepare("UPDATE classes SET className = ?, classGrade = ?, classTeacherID = ?, classStartTime = ?, classEndTime = ? WHERE classID = ?"))
 		    {
-    		    $stmt->bind_param('siii', $className, $classGradeLevel, $classTeacherID, $classID); 
+    		    $stmt->bind_param('siiiss', $className, $classGradeLevel, $classTeacherID, $classID, $classStartTime, $classEndTime); 
 
-	    	    $stmt->execute();    // Execute the prepared query.
-
-			    $_SESSION['success'] = "Class Modified Successfully";
-   	   		    header('Location: ../../pages/modifyClass');
+	    	    if ($stmt->execute())    // Execute the prepared query.
+				{
+			    	$_SESSION['success'] = "Class Modified Successfully";
+	   	   		    header('Location: ../../pages/modifyClass');
+				}
+				else
+				{
+			    	$_SESSION['fail'] = "Class Modification failed, database not updated";
+	   	   		    header('Location: ../../pages/modifyClass');
+				}
 		    }
-
         }
     }
 	else

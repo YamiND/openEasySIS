@@ -148,13 +148,13 @@ function getClassInfo($classID, $mysqli)
 {
 	$yearID = getClassYearID($mysqli);
 
-    if($stmt = $mysqli->prepare("SELECT classGrade, className, classTeacherID FROM classes WHERE classID = ? AND schoolYearID = ?"))
+    if($stmt = $mysqli->prepare("SELECT classGrade, className, classTeacherID, classStartTime, classEndTime FROM classes WHERE classID = ? AND schoolYearID = ?"))
     {
         $stmt->bind_param('ii', $classID, $yearID);
 
         $stmt->execute();
 
-        $stmt->bind_result($classGrade, $className, $classTeacherID);
+        $stmt->bind_result($classGrade, $className, $classTeacherID, $classStartTime, $classEndTime);
         $stmt->store_result();
 
         while ($stmt->fetch())
@@ -162,6 +162,8 @@ function getClassInfo($classID, $mysqli)
             generateFormStart("../includes/adminFunctions/modifyClass", "post"); 
                 generateFormHiddenInput("classID", $classID);
                 generateFormInputDiv("Class", "text", "className", $className, NULL, NULL, NULL, "Class Name");
+				generateFormInputDiv("Class Start Time", "time", "classStartTime", $classStartTime, NULL, "07:00:00", NULL, NULL);
+		        generateFormInputDiv("Class End Time", "time", "classEndTime", $classEndTime, NULL, NULL, "23:00:00", NULL);
                 generateFormStartSelectDiv("Grade Level", "classGradeLevel");
                     for ($i = 1; $i <= 12; $i++)
                     {
