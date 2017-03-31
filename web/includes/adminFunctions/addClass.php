@@ -22,12 +22,11 @@ function addClass($mysqli)
 		$classStartTime = NULL;
 		$classEndTime = NULL;
 
-		if (isset($_POST['classStartTime'], $_POST['classEndTime']) && !empty($_POST['classStartTime']) && !empty($_POST['classEndTime']))
+		if (isset($_POST['classStartTime'], $_POST['classEndTime']))
 		{
 			$classStartTime = $_POST['classStartTime'];
 			$classEndTime = $_POST['classEndTime'];
 		}
-
 
     	$className = $_POST['className'];
     	$classGradeLevel = $_POST['classGradeLevel'];
