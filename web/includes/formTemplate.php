@@ -88,11 +88,15 @@ function generateFormInputDiv($label = NULL, $type = "text", $name = NULL, $valu
         {
         	case "date":
 		           echo  '<input class="form-control" type="' . $type . '" name="' . $name . '" value="' . $value . '" min="' . $min . '" max="' . $max . '" ' . $disabled . '>';
-        		break;
+       		break;
+
+			case "time":
+		           echo  '<input class="form-control" type="' . $type . '" name="' . $name . '" value="' . $value . '" min="' . $min . '" max="' . $max . '" ' . $disabled . '>';
+			break;
 
         	default:
         		echo  '<input class="form-control" type="' . $type . '" placeholder="' . $placeholder . '" name="' . $name . '" value="' . $value . '"' . $disabled . '>';
-        		break;
+       		break;
 
         }
 
