@@ -94,11 +94,11 @@ echo "<br>";
    echo "<br>
     <h5>The format for the Student's CSV should be this: </h5>
 
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;Student Email,Student First Name,Student Last Name,Grade Level</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;Student Email,Student First Name,Student Last Name,Grade Level,Student Birthdate (YYYY-MM-DD),Student Gender</p>
     <p>A sample CSV is listed below: </p>
-    <h5>&nbsp;&nbsp;&nbsp;&nbsp;ltorvalds@lssu.edu,Linus,Torvalds,11</h5> 
-    <h5>&nbsp;&nbsp;&nbsp;&nbsp;sballmer@lssu.edu,Steve,Ballmer,10</h5> 
-    <h5>&nbsp;&nbsp;&nbsp;&nbsp;sjobs@lssu.edu,Steve,Jobs,12</h5> 
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;ltorvalds@lssu.edu,Linus,Torvalds,11,2009-01-05,M</h5> 
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;sballmer@lssu.edu,Steve,Ballmer,10,2008-04-09,M</h5> 
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;sjobs@lssu.edu,Sarah,Jobs,12,2007-09-09,F</h5> 
 ";
 }
 

@@ -41,7 +41,7 @@ function parseCSV($mysqli)
    		 	if($ext === 'csv')
 			{
 				$userCSV = array_map('str_getcsv', file($tmpName));
-			
+
 				if (isset($_POST['isStudent']) && !empty($_POST['isStudent']))
 				{	
 					foreach($userCSV as $i => $data)
@@ -50,6 +50,8 @@ function parseCSV($mysqli)
 						$userFirstName = $userCSV[$i][1];
 						$userLastName = $userCSV[$i][2];
 						$studentGradeLevel = $userCSV[$i][3];
+						$studentBirthdate = $userCSV[$i][4];
+						$studentGender = $userCSV[$i][5];
 						
 						if ($studentGradeLevel > 12 || $studentGradeLevel < 1)
 						{
@@ -58,7 +60,7 @@ function parseCSV($mysqli)
 						}
 						$password = randomString();	
 
-						createStudentAccount($userEmail, $userFirstName, $userLastName, $password, $studentGradeLevel, $mysqli);
+						createStudentAccount($userEmail, $userFirstName, $userLastName, $password, $studentGradeLevel, $studentBirthdate, $studentGender, $mysqli);
 		
 						// Add email and password to output csv
 						fputcsv($fp, array($userEmail, $password));
@@ -142,7 +144,7 @@ function parseCSV($mysqli)
 	}
 }
 
-function createStudentAccount($userEmail, $userFirstName, $userLastName, $password, $studentGradeLevel, $mysqli)
+function createStudentAccount($userEmail, $userFirstName, $userLastName, $password, $studentGradeLevel, $studentBirthdate, $studentGender, $mysqli)
 {
 	$modClassList = 0; 
 	$viewAllGrades = 0;
@@ -172,9 +174,9 @@ function createStudentAccount($userEmail, $userFirstName, $userLastName, $passwo
 			}
 			else
 			{
-				if ($stmt = $mysqli->prepare("INSERT INTO users (userEmail, userPassword, userFirstName, userLastName, modClassList, viewAllGrades, userSalt, isAdmin, isSchoolAdmin, isTeacher, isParent, isStudent, studentGPA, studentGradeLevel, parentAddress, parentPhone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
+				if ($stmt = $mysqli->prepare("INSERT INTO users (userEmail, userPassword, userFirstName, userLastName, modClassList, viewAllGrades, userSalt, isAdmin, isSchoolAdmin, isTeacher, isParent, isStudent, studentGPA, studentGradeLevel, parentAddress, parentPhone, studentBirthdate, studentGender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
 				{
-    				$stmt->bind_param('ssssiisiiiiidiss', $userEmail, $hashedPassword, $userFirstName, $userLastName, $modClassList, $viewAllGrades, $randomSalt, $isAdmin, $isSchoolAdmin, $isTeacher, $isParent, $isStudent, $studentGPA, $studentGradeLevel, $parentAddress, $parentPhone); 
+    				$stmt->bind_param('ssssiisiiiiidissss', $userEmail, $hashedPassword, $userFirstName, $userLastName, $modClassList, $viewAllGrades, $randomSalt, $isAdmin, $isSchoolAdmin, $isTeacher, $isParent, $isStudent, $studentGPA, $studentGradeLevel, $parentAddress, $parentPhone, $studentBirthdate, $studentGender); 
 	    			if($stmt->execute())    // Execute the prepared query.
 					{
 						$_SESSION['success'] = 'User Accounts Created';
