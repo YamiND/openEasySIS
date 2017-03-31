@@ -19,6 +19,16 @@ function addClass($mysqli)
 {
 	if (isset($_POST['className'], $_POST['classGradeLevel'], $_POST['classTeacherID']) && !empty($_POST['className']) && !empty($_POST['classGradeLevel']) && !empty($_POST['classTeacherID'])) 
 	{
+		$classStartTime = NULL;
+		$classEndTime = NULL;
+
+		if (isset($_POST['classStartTime'], $_POST['classEndTime']) && !empty($_POST['classStartTime']) && !empty($_POST['classEndTime']))
+		{
+			$classStartTime = $_POST['classStartTime'];
+			$classEndTime = $_POST['classEndTime'];
+		}
+
+
     	$className = $_POST['className'];
     	$classGradeLevel = $_POST['classGradeLevel'];
 		$classTeacherID = $_POST['classTeacherID'];
@@ -45,9 +55,9 @@ function addClass($mysqli)
             }
         }
 
-    	if ($stmt = $mysqli->prepare("INSERT INTO classes (classGrade, className, classTeacherID, schoolYearID) VALUES (?, ?, ?, ?)"))
+    	if ($stmt = $mysqli->prepare("INSERT INTO classes (classGrade, className, classTeacherID, schoolYearID, classStartTime, classEndTime) VALUES (?, ?, ?, ?, ?, ?)"))
 		{
-    		$stmt->bind_param('isii', $classGradeLevel, $className, $classTeacherID, $classYearID); 
+    		$stmt->bind_param('isiiss', $classGradeLevel, $className, $classTeacherID, $classYearID, $classStartTime, $classEndTime); 
 	    	if ($stmt->execute())
 			{
 				$_SESSION['success'] = "Class Added";

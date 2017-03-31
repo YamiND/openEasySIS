@@ -56,7 +56,9 @@ echo '
 function getAddClassForm($mysqli)
 {
     generateFormStart("../includes/adminFunctions/addClass", "post"); 
-        generateFormInputDiv(NULL, "text", "className", NULL, NULL, NULL, NULL, "Class Name");
+        generateFormInputDiv("Class Name", "text", "className", NULL, NULL, NULL, NULL, "Class Name");
+        generateFormInputDiv("Class Start Time", "time", "classStartTime", NULL, NULL, "07:00:00", NULL, NULL);
+        generateFormInputDiv("Class End Time", "time", "classEndTime", NULL, NULL, NULL, "23:00:00", NULL);
         generateFormStartSelectDiv("Class Grade Level", "classGradeLevel");
             for ($i = 1; $i <= 12; $i++)
             {
