@@ -222,10 +222,10 @@ $(document).ready(function(){
     $('#isStudent').click(function(){
         if(document.getElementById('isStudent').checked){
             if( $('#isStudentDiv').length){
-                $('#isStudentDiv').after('<div class="form-group" id="userIsStudent"><input type="hidden" id="userIsStudent" name="userIsStudent" value="1"></div><div class="form-group" id="studentGradeField"><label>Student Grade Level</label> <select class="form-control" name="studentGradeLevel"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select></div><div class="form-group"><label>Student Birthdate</label><input class="form-control" type="date" name="studentBirthdate"></div>');
+                $('#isStudentDiv').after('<div class="form-group" id="userIsStudent"><input type="hidden" id="userIsStudent" name="userIsStudent" value="1"></div><div class="form-group" id="studentGradeField"><label>Student Grade Level</label> <select class="form-control" name="studentGradeLevel"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select></div><div class="form-group" id="studentBirthdateField"><label>Student Birthdate</label><input class="form-control" type="date" name="studentBirthdate"></div><div class="form-group" id="studentGenderField"><label>Student Gender</label><select class="form-control" name="studentGender"><option value="M">Male</option><option value="F">Female</option></select></div>');
              }
              else{
-                $('#isStudentDiv').after('<div class="form-group" id="userIsStudent"><input type="hidden" id="userIsStudent" name="userIsStudent" value="1"></div><div class="form-group" id="studentGradeField"><label>Student Grade Level</label> <select class="form-control" name="studentGradeLevel"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select></div><div class="form-group"><label>Student Birthdate</label><input class="form-control" type="date" name="studentBirthdate"></div>');
+                $('#isStudentDiv').after('<div class="form-group" id="userIsStudent"><input type="hidden" id="userIsStudent" name="userIsStudent" value="1"></div><div class="form-group" id="studentGradeField"><label>Student Grade Level</label> <select class="form-control" name="studentGradeLevel"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select></div><div class="form-group" id="studentBirthdateField"><label>Student Birthdate</label><input class="form-control" type="date" name="studentBirthdate"></div><div class="form-group" id="studentGenderField"><label>Student Gender</label><select class="form-control" name="studentGender"><option value="M">Male</option><option value="F">Female</option></select></div>');
              }
          }
          else{
@@ -234,6 +234,12 @@ $(document).ready(function(){
              }
              if ( $('#studentGradeField').length ){
                   $('#studentGradeField').remove();
+             }
+             if ( $('#studentBirthdateField').length ){
+                  $('#studentBirthdateField').remove();
+             }
+             if ( $('#studentGenderField').length ){
+                  $('#studentGenderField').remove();
              }
         } 
     });
