@@ -16,7 +16,7 @@ function viewProfile($mysqli)
 {
 	echo '
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
 	   ';
@@ -38,6 +38,15 @@ function viewProfile($mysqli)
                                 <br>
         ';
 								getUserProfile($_SESSION['userID'], $mysqli);
+
+								if (isStudent($mysqli))
+								{
+									getStudentProfile($_SESSION['userID'], $mysqli);
+									echo "<br>";
+									echo "<h4>Class Schedule:</h4>";
+									getStudentClassSchedule($_SESSION['userID'], $mysqli);
+								}
+								
     echo '
                                     
                                 </div>
@@ -49,6 +58,31 @@ function viewProfile($mysqli)
                 </div>
 			</div>
         ';
+
+}
+
+function getStudentProfile($studentID, $mysqli)
+{
+	if ($stmt = $mysqli->prepare("SELECT studentGradeLevel, studentBirthdate, studentGender FROM users WHERE userID = ?"))
+	{
+		$stmt->bind_param('i', $studentID);
+
+		if ($stmt->execute())
+		{
+			$stmt->bind_result($studentGradeLevel, $studentBirthdate, $studentGender);
+			$stmt->store_result();
+
+			$stmt->fetch();
+
+            generateFormStart();
+                generateFormInputDiv("Student Grade Level", "text", "studentGradeLevel", $studentGradeLevel, "disabled");
+                generateFormInputDiv("Student Birthdate", "text", "studentBirthdate", $studentBirthdate, "disabled");
+                generateFormInputDiv("Student Gender", "text", "studentGender", $studentGender, "disabled");
+            generateFormEnd();
+
+			
+		}
+	}
 
 }
 
