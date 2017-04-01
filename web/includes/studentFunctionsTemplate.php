@@ -103,4 +103,55 @@ function getStudentClassSchedule($studentID, $mysqli)
 		</div>";
 }
 
+
+function getStudentContact($studentID, $mysqli)
+{
+            echo '
+                                    <!-- /.panel-heading -->
+                                    <div class="panel-body">
+                                        <table width="100%" class="table table-striped table-bordered table-hover" id="' . $studentID . '">
+                                            <thead>
+                                                <tr>
+                                                    <th>Parent First Name</th>
+                                                    <th>Parent Last Name</th>
+                                                    <th>Parent Email</th>
+                                                    <th>Address</th>
+                                                    <th>Phone</th>
+                                                </tr>
+                                            </thead>
+											<tbody>';
+
+	if ($stmt = $mysqli->prepare("SELECT users.userFirstName, users.userLastName, users.parentAddress, users.parentPhone, users.userEmail FROM users INNER JOIN (studentParentIDs) ON (users.userID = studentParentIDs.parentID AND studentID = ?)"))
+	{
+		$stmt->bind_param('i', $studentID);
+
+		if ($stmt->execute())
+		{
+			$stmt->bind_result($parentFirstName, $parentLastName, $parentAddress, $parentPhone, $parentEmail);
+			$stmt->store_result();
+
+			while ($stmt->fetch())
+			{
+				echo '<tr class="gradeA">
+						<td>' . $parentFirstName . '</td>
+						<td>' . $parentLastName . '</td>
+						<td>' . $parentEmail . '</td>
+						<td>' . $parentAddress . '</td>
+						<td>' . $parentPhone . '</td>
+					</tr>';				
+			}
+		} 
+	}
+
+
+	echo "</tbody>
+			</table>
+		</div>";
+}
+
+function getStudentUniqueID($studentID)
+{
+	return "$studentID" . "-MBA-Student";
+}
+
 ?>

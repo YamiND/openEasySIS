@@ -45,6 +45,10 @@ function viewProfile($mysqli)
 									echo "<br>";
 									echo "<h4>Class Schedule:</h4>";
 									getStudentClassSchedule($_SESSION['userID'], $mysqli);
+
+									echo "<h4>Contact Info:</h4>";
+									getStudentContact($_SESSION['userID'], $mysqli);
+									
 								}
 								
     echo '
@@ -75,6 +79,8 @@ function getStudentProfile($studentID, $mysqli)
 			$stmt->fetch();
 
             generateFormStart();
+                generateFormInputDiv("Student Unique ID", "text", "studentUniqueID", getStudentUniqueID($_SESSION['userID']), "disabled");
+                generateFormInputDiv("Student Graduation Year", "text", "studentGradYear", getStudentGraduationYear($_SESSION['userID'], $mysqli), "disabled");
                 generateFormInputDiv("Student Grade Level", "text", "studentGradeLevel", $studentGradeLevel, "disabled");
                 generateFormInputDiv("Student Birthdate", "text", "studentBirthdate", $studentBirthdate, "disabled");
                 generateFormInputDiv("Student Gender", "text", "studentGender", $studentGender, "disabled");
