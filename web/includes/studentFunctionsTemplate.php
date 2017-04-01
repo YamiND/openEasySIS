@@ -52,4 +52,55 @@ function getStudentGraduationYear($studentID, $mysqli)
 	}
 }
 
+
+function getStudentClassSchedule($studentID, $mysqli)
+{
+            echo '
+                                    <!-- /.panel-heading -->
+                                    <div class="panel-body">
+                                        <table width="100%" class="table table-striped table-bordered table-hover" id="' . $studentID . '">
+                                            <thead>
+                                                <tr>
+                                                    <th>Class Name</th>
+                                                    <th>Teacher</th>
+                                                    <th>Start Time</th>
+                                                    <th>End Time</th>
+                                                </tr>
+                                            </thead>
+											<tbody>';
+
+
+
+	$schoolYearID = getClassYearID($mysqli);
+
+	if ($stmt = $mysqli->prepare("SELECT className, classTeacherID, classStartTime, classEndTime FROM classes, studentClassIDs WHERE classes.classID = studentClassIDs.classID AND schoolYearID = ? AND studentID = ? ORDER BY classStartTime ASC"))
+	{
+		$stmt->bind_param('ii', $schoolYearID, $studentID);
+
+		if ($stmt->execute())
+		{
+			$stmt->bind_result($className, $classTeacherID, $classStartTime, $classEndTime);
+			$stmt->store_result();
+
+			while ($stmt->fetch())
+			{
+				$teacherName = getUserName($classTeacherID, $mysqli);
+
+
+				echo '<tr class="gradeA">
+						<td>' . $className . '</td>
+						<td>' . $teacherName . '</td>
+						<td>' . $classStartTime . '</td>
+						<td>' . $classEndTime . '</td>
+					</tr>';				
+			}
+		} 
+	}
+
+
+	echo "</tbody>
+			</table>
+		</div>";
+}
+
 ?>
