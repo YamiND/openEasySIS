@@ -52,19 +52,11 @@ function viewDeleteClassForm($mysqli)
                             if (!isset($_SESSION['gradeID']))
                             {
                                 getGradeLevelForm();
+                                echo "<br>";
                             }
                             else
                             {
                                 getClassForm($_SESSION['gradeID'], $mysqli);
-                                echo "<br>";
-                            }
-
-                            if (isset($_SESSION['classID']))
-                            {
-                                generateFormStart("", "post"); 
-                                    generateFormButton("changeClass", "Change Class");
-                                generateFormEnd();
-
                                 echo "<br>";
                             }
 
@@ -89,7 +81,7 @@ function viewDeleteClassForm($mysqli)
 function getGradeLevelForm()
 {
     generateFormStart("", "post"); 
-        generateFormStartSelectDiv("Grade", "gradeID");
+        generateFormStartSelectDiv("Select Grade", "gradeID");
             for ($i = 1; $i <= 12; $i++)
             {
                 generateFormOption($i, $i);
@@ -110,7 +102,7 @@ function getClassForm($gradeID, $mysqli)
         $stmt->store_result();
 
         generateFormStart("../includes/adminFunctions/deleteClass", "post"); 
-            generateFormStartSelectDiv("Class Name", "classID");
+            generateFormStartSelectDiv("Select Class", "classID");
             if ($stmt->num_rows > 0)
             {
                 while ($stmt->fetch())

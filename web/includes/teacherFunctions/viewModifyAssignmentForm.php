@@ -57,14 +57,13 @@ echo '
                             <!-- Tab panes -->
                             <div class="tab-content">
           ';
-							if (!isset($_SESSION['classID']))
+							if (isset($_SESSION['classID']))
 							{
-								echo '<h4>Select Assignment</h4>';
+								echo '<h4>Class Name: ' . getClassName($_SESSION['classID'], $mysqli) . '</h4>';
 							}
 							else
 							{
-								echo '<h4>Class Name: ' . getClassName($_SESSION['classID'], $mysqli) . '</h4>';
-								
+								echo "<br>";
 							}
 echo '							
                                 <div class="tab-pane fade in active" id="modifyAssignment">';
@@ -183,7 +182,7 @@ function chooseAssignmentForm($classID, $mysqli)
 {
     generateFormStart("", "post"); 
         generateFormHiddenInput("classID", $classID);
-        generateFormStartSelectDiv(NULL, "assignmentID");
+        generateFormStartSelectDiv("Select Assignment", "assignmentID");
             getAssignmentList($classID, $mysqli);
         generateFormEndSelectDiv();
         generateFormButton("selectAssignmentButton", "Select Assignment");
@@ -220,7 +219,7 @@ function getAssignmentList($classID, $mysqli)
 function getClassForm($mysqli)
 {
     generateFormStart("", "post"); 
-        generateFormStartSelectDiv(NULL, "classID");
+        generateFormStartSelectDiv("Select Class", "classID");
             getClassList($mysqli);
         generateFormEndSelectDiv();
         generateFormButton("selectClassButton", "Select Class");

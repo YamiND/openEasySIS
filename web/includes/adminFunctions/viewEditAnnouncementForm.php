@@ -129,7 +129,7 @@ function getAnnouncementsForm($mysqli)
 
             // Form to select the announcement and send the announcementID
         generateFormStart("", "post"); 
-            generateFormStartSelectDiv(NULL, "announcementID");
+            generateFormStartSelectDiv("Select Announcement to Modify", "announcementID");
 
             if ($stmt->num_rows == 0)
             {

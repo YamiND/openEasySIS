@@ -37,7 +37,7 @@ function viewDeleteAnnouncementForm($mysqli)
                         <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="deleteAnnouncement">
-                                    <h4>Announcement Title, Announcement Post Date</h4>
+								<br>
         ';
 										getAnnouncementsForm($mysqli);
 	echo '									
@@ -66,7 +66,7 @@ function getAnnouncementsForm($mysqli)
         $stmt->store_result();
 
         generateFormStart("../includes/adminFunctions/deleteAnnouncement", "post"); 
-            generateFormStartSelectDiv(NULL, "announcementID");
+            generateFormStartSelectDiv("Select Announcement to delete", "announcementID");
             if ($stmt->num_rows == 0)
             {
                 generateFormOption(NULL, "No announcements to delete", "disabled", "selected");

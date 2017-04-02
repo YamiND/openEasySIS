@@ -48,14 +48,14 @@ echo '
                             <!-- Tab panes -->
                             <div class="tab-content">
 			';				
-							if (!isset($_SESSION['classID']))
-							{
-								echo '<h4>Select Assignment</h4>';
-							}
-							else
+							if (isset($_SESSION['classID']))
 							{
 								echo '<h4>Class Name: ' . getClassName($_SESSION['classID'], $mysqli) . '</h4>';
 								
+							}
+							else
+							{
+								echo "<br>";
 							}
 echo '                                
                                 <div class="tab-pane fade in active" id="deleteAssignment">';
@@ -98,7 +98,7 @@ echo '
 function chooseAssignmentForm($classID, $mysqli)
 {
     generateFormStart("../includes/teacherFunctions/deleteAssignment", "post"); 
-        generateFormStartSelectDiv(NULL, "materialID");
+        generateFormStartSelectDiv("Choose Assignment", "materialID");
             getAssignmentList($classID, $mysqli);
         generateFormEndSelectDiv();
         generateFormButton(NULL, "Delete Assignment");
@@ -128,7 +128,7 @@ function getAssignmentList($classID, $mysqli)
 function getClassForm($mysqli)
 {
     generateFormStart("", "post"); 
-        generateFormStartSelectDiv(NULL, "classID");
+        generateFormStartSelectDiv("Select Class", "classID");
             getClassList($mysqli);
         generateFormEndSelectDiv();
         generateFormButton("selectClassButton", "Select Class");

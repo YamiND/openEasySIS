@@ -55,7 +55,7 @@ function exportAllDataForm($mysqli)
 	echo "<br>";
 	echo "<label>Export All data to SQL File</label>";
 	echo "<label>This will include everything in the database, so this feature is meant only for programmers trying to reverse engineer the DB/Data</label>";
-	echo "<label>(Really this should be too hard to re-import into a database after exported. We are using MariaDB if that helps you</label>";
+	echo "<label>(Really this shouldn't be too hard to re-import into a database after exported. We are using MariaDB if that helps you)</label>";
 
 	generateFormStart("../includes/adminFunctions/exportSQL", "post");
 		generateFormButton(NULL, "Export ALL Data (SQL)");

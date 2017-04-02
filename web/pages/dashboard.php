@@ -41,9 +41,11 @@ echo '
 
 		if (isStudent($mysqli))
 		{
+/*
+			This info can be viewed in the User's profile
 			echo "<h4>Current School Year GPA: " . number_format((float) getCurrentSchoolYearGPA($_SESSION['userID'], $mysqli), 2, '.', '') . "</h4>";
 			echo "<h4>Cumulative GPA: " . number_format((float) getTotalGPA($_SESSION['userID'], $mysqli), 2, '.', '') . "</h4>";
-			echo "<h4>Graduation Year: " . getStudentGraduationYear($_SESSION['userID'], $mysqli) . "</h4>";
+			echo "<h4>Graduation Year: " . getStudentGraduationYear($_SESSION['userID'], $mysqli) . "</h4>";*/
 
 			getStudentClassSchedule($_SESSION['userID'], $mysqli);
 		}
