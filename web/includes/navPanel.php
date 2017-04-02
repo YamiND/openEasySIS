@@ -82,17 +82,6 @@ if (login_check($mysqli) == true)
     			</ul>	
             </li>
             <li>
-                <a href="#"><i class="fa fa-user fa-fw"></i> Profiles <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li>
-                        <a href="viewProfile">My Profile</a>
-                    </li>
-                    <li>
-                        <a href="editProfile">Edit User Profile</a>
-                    </li>
-                </ul>   
-            </li>
-            <li>
                 <a href="#"><i class="fa fa-users fa-fw"></i> Users <span class="fa arrow"></span></a>
     			<ul class="nav nav-second-level">
     				<li>
@@ -228,22 +217,40 @@ echo '
         ';
     }
 
-	if (isSchoolAdmin($mysqli) || canModClassList($mysqli))
-	{
 		echo '
             <li>
                 <a href="#"><i class="fa fa-user fa-fw"></i> Profiles <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
+				<li>
+					<a href="viewProfile">My Profile</a>
+				</li>
+			';
+				if (isAdmin($mysqli))
+				{
+					echo '
+							<li>
+								<a href="editProfile">Edit User Profile</a>
+							</li>
+						';
+				}
+
+				if (isSchoolAdmin($mysqli) || canModClassList($mysqli))
+				{
+
+		echo '
                     <li>
                         <a href="lookupStudentProfile">Lookup Student Profile</a>
                     </li>
                     <li>
                         <a href="editStudentProfile">Edit Student Profile</a>
                     </li>
+
+			';
+				}	
+		echo '
                 </ul>   
             </li>
 		';
-	}	
 
 	if (isAdmin($mysqli) || isTeacher($mysqli))
 	{
@@ -378,9 +385,6 @@ echo '
                 	<li>
                     	<a href="viewStudentClassGrades">View all Class Grades</a>
 	                </li>
-					<li>
-							<a href="viewProfile">My Profile</a>
-					</li>
 					<li>
 						<a href="viewStudentContactForm">Contact Teacher/Principal</a>
 					</li>
