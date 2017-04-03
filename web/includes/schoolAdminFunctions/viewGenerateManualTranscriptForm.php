@@ -102,7 +102,7 @@ EOF;
 
 	    <p>&nbsp;&nbsp;&nbsp;&nbsp;Class Name,Teacher Name,Q1,Q2,Q3,Q4</p>
 	   	<p>A sample CSV is listed below: </p>
-	    <h5>&nbsp;&nbsp;&nbsp;&nbsp;Math 105,Torvalds, Linus,80,85,98,91</h5> 
+	    <h5>&nbsp;&nbsp;&nbsp;&nbsp;Math 105,Linux Torvalds,80,85,98,91</h5> 
 		";
     generateFormEnd();
 }
