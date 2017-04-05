@@ -24,17 +24,29 @@ function changeGrade($mysqli)
       $classID = $_POST['classID'];
       $materialID = $_POST['materialID'];
       $materialPointsScored = $_POST['materialPointsScored'];
+	  $gradeComment = NULL;
+
+		if (isset($_POST['gradeComment']) && !empty($_POST['gradeComment']))
+		{
+			$gradeComment = $_POST['gradeComment'];
+		}
       
       if (checkAssignmentExists($studentID, $materialID, $mysqli))
       {
-        	if ($stmt = $mysqli->prepare("UPDATE grades SET gradeMaterialPointsScored = ? WHERE gradeStudentID = ? AND gradeClassID = ? AND gradeMaterialID = ?"))
+        	if ($stmt = $mysqli->prepare("UPDATE grades SET gradeMaterialPointsScored = ?, gradeComment = ? WHERE gradeStudentID = ? AND gradeClassID = ? AND gradeMaterialID = ?"))
     		  {
-        		$stmt->bind_param('iiii', $materialPointsScored, $studentID, $classID, $materialID); 
+        		$stmt->bind_param('isiii', $materialPointsScored, $gradeComment, $studentID, $classID, $materialID); 
 
-            $stmt->execute();    // Execute the prepared query.
-            
-            $_SESSION['success'] = "Grade Changed";
-       	    header('Location: ../../pages/teacherGradebook');
+            if ($stmt->execute())    // Execute the prepared query.
+           { 
+   	        	 $_SESSION['success'] = "Grade Changed";
+	       	    header('Location: ../../pages/teacherGradebook');
+			}
+			else
+			{
+        		$_SESSION['fail'] = 'Grade could not be changed';
+       	   		header('Location: ../../pages/teacherGradebook');
+			}
     		  }
     		  else
     		  {
@@ -45,13 +57,21 @@ function changeGrade($mysqli)
       }
       else
       {
-          if ($stmt = $mysqli->prepare("INSERT INTO grades (gradeStudentID, gradeClassID, gradeMaterialID, gradeMaterialPointsScored) VALUES (?, ?, ?, ?)"))
+          if ($stmt = $mysqli->prepare("INSERT INTO grades (gradeStudentID, gradeClassID, gradeMaterialID, gradeMaterialPointsScored, gradeComment) VALUES (?, ?, ?, ?, ?)"))
           {
-            $stmt->bind_param('iiii', $studentID, $classID, $materialID, $materialPointsScored);
-            $stmt->execute();
+            $stmt->bind_param('iiiis', $studentID, $classID, $materialID, $materialPointsScored, $gradeComment);
 
-            $_SESSION['success'] = "Grade Changed";
-            header('Location: ../../pages/teacherGradebook');
+            if ($stmt->execute())
+			{
+            	$_SESSION['success'] = "Grade Changed";
+	            header('Location: ../../pages/teacherGradebook');
+			}
+			else
+			{
+            	// The correct POST variables were not sent to this page.
+	            $_SESSION['fail'] = 'Grade could not be changed, insert failed';
+   	           header('Location: ../../pages/teacherGradebook');
+			}
           }
           else
           {

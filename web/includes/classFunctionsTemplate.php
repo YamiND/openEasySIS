@@ -1,5 +1,23 @@
 <?php
 
+function getGradeComment($studentID, $materialID, $classID, $mysqli)
+{
+	if ($stmt = $mysqli->prepare("SELECT gradeComment FROM grades WHERE gradeMaterialID = ? AND gradeStudentID = ? AND gradeClassID = ?"))
+	{
+		$stmt->bind_param('iii', $materialID, $studentID, $classID);
+
+		if ($stmt->execute())
+		{
+			$stmt->bind_result($gradeComment);
+			$stmt->store_result();
+
+			$stmt->fetch();
+
+			return $gradeComment;
+		}
+	}
+}
+
 function getTotalGPA($studentID, $mysqli)
 {
 	$gpaPercentage = 0;

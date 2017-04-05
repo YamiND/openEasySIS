@@ -39,7 +39,7 @@ function viewGradebookForm($mysqli)
 {
 	echo '
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
 	     ';
@@ -132,12 +132,12 @@ function viewGradebook($classID, $materialID, $mysqli)
            
                                 <table width="100%" class="table table-striped table-bordered table-hover" id="' . $materialID . '">
                                     <thead>
-
                                         <tr>
                                             <th>First Name</th>
                                             <th>Last Name</th>
                                             <th>Points Earned</th>
                                             <th>Points Possible</th>
+                                            <th>Assignment Comment</th>
                                             <th>Submit Changes</th>
                                         </tr>
                                     </thead>
@@ -208,6 +208,7 @@ function getStudentInfo($classID, $studentID, $materialID, $mysqli)
                         <td>' . $studentLastName . '</td>
                         <td> '; echo generateFormInput("number", "materialPointsScored", getMaterialPointsScored($materialID, $classID, $studentID, $mysqli), NULL, NULL, $materialPointsPossible); echo '</td>
                         <td>' . '/ '; echo  getMaterialPointsPossible($materialID, $mysqli); echo  '</td>
+                        <td> '; generateFormTextAreaDiv(NULL, "gradeComment", "5", getGradeComment($studentID, $materialID, $classID, $mysqli)); echo '</td>
                         <td>'; echo generateFormButton("applyChangesButton", "Apply Changes"); echo '</td>
                 ';
                         generateFormEnd();
