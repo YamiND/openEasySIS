@@ -2,6 +2,8 @@
 include_once '../dbConnect.php';
 include_once '../functions.php';
 
+ini_set("auto_detect_line_endings", true);
+
 sec_session_start(); // Our custom secure way of starting a PHP session.
 
 //TODO Test this
