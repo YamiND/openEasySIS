@@ -81,6 +81,7 @@ function viewStudentAssignments($studentID, $mysqli)
                                             <th>Points Scored</th>
                                             <th>Points Possible</th>
                                             <th>Assignment Grade</th>
+                                            <th>Assignment Comment</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -127,6 +128,7 @@ function getAssignmentsForStudentClass($studentID, $classID, $mysqli)
                         <td>' . $materialPointsScored . '</td>
                         <td> /' . $materialPointsPossible . '</td>
                         <td>' . number_format((float)$materialTotalPoints, 2, '.', '') . '%</td>
+						<td> '; generateFormTextAreaDiv(NULL, "gradeComment", "5", getGradeComment($studentID, $materialID, $classID, $mysqli), "disabled"); echo '</td>
                     </tr>
                 ';
 		
