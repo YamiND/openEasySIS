@@ -170,6 +170,7 @@ function generateAll($mysqli)
 
 function generateReportCard($studentID, $mysqli)
 {
+	$teacherComments = "";
 	$tblBody = "";
 	// Get grades that occur for each quarter
 	// Calculate grade for Quarter
@@ -179,8 +180,6 @@ function generateReportCard($studentID, $mysqli)
 	$studentGradeLevel = getStudentGradeByID($studentID, $mysqli);
 	
 	$CurrentGPA = number_format((float) getCurrentSchoolYearGPA($studentID, $mysqli), 2, '.', '');
-
-
 
 	if ($stmt = $mysqli->prepare("SELECT schoolYearID, quarterOneStart, quarterOneEnd, quarterTwoStart, quarterTwoEnd, quarterThreeStart, quarterThreeEnd, fallSemesterStart, fallSemesterEnd, springSemesterStart, springSemesterEnd, quarterFourStart, quarterFourEnd FROM schoolYear WHERE schoolYearStart <= CURDATE() AND schoolYearEnd >= CURDATE()"))
 	{
@@ -285,6 +284,10 @@ function generateReportCard($studentID, $mysqli)
 			exit;
 */
 			$teacherName = getTeacherNameByClassID($classID, $mysqli);
+
+			$reportCardComment = getReportCardComment($studentID, $classID, $mysqli);
+
+			$teacherComment .= "Comment for $className: $reportCardComment <br>";
 //Changing the color and the size of the tables data NOT the header of the table 
 			$tblBody .= "
 				<tr style=\"background-color:white;color:black; font-size: 13px; padding: 5px;;\">
@@ -302,7 +305,7 @@ function generateReportCard($studentID, $mysqli)
 		}
 	}
 	// Generate a PDF for the student
-	writeReportCardPDF($studentName, $studentGradeLevel, $academicYear, $CurrentGPA, $tblBody);  
+	writeReportCardPDF($studentName, $studentGradeLevel, $academicYear, $CurrentGPA, $tblBody, $teacherComment);  
 }
 
 function getTeacherNameByClassID($classID, $mysqli)
@@ -330,7 +333,7 @@ function getTeacherNameByClassID($classID, $mysqli)
 	}
 }
 
-function writeReportCardPDF($studentName, $studentGradeLevel, $academicYear, $CurrentGPA, $tblBody)
+function writeReportCardPDF($studentName, $studentGradeLevel, $academicYear, $CurrentGPA, $tblBody, $teacherComment)
 {
 // Include the main TCPDF library (search for installation path).
 require_once('../../fpdf181/TCPDF-master/examples/tcpdf_include.php');
@@ -408,8 +411,9 @@ $tbl = <<<EOD
 </table>
 EOD;
 
-
 $pdf->writeHTML($tbl, true, false, false, false, '');
+
+$pdf->writeHTML($teacherComment, true, false, false, false, '');
 //New table with new Academic Year for multiple tables like Transcript
 //$pdf->Cell(0,8,'Academic Year: '.$i,0,1);
 //$pdf->writeHTML($tbl, true, false, false, false, '');
