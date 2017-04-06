@@ -60,7 +60,7 @@ echo '
                                         <div class="panel-body">
 										<h4>1.1 - My Dashboard</h4>
 										<p>
-                                            The first thing the administrator will see is the announcements widget, which gives the information of the Date, Name, and Descriptions of all announcements. Creation of these announcements will be explained further in the manual. 
+                                            The first thing the administrator will see is the announcements widget, which gives you the Date, Name, and Descriptions of all announcements. Creation of these announcements will be explained further in the manual. 
 										</p>
 										<p>
 											Also show, are 5 boxes. These boxes include Administrators, Students, Teachers, Parents, and Classes. When the administrator selects the “View Details link”, they are taken to a page called “User Table”. From here, they have access to view all of the users of the SIS. Details include their First Name, Last Name, and Email that is registered to the SIS. The administrator can see who is on their system, and who still needs to be added, updated, or deleted. 
@@ -82,17 +82,17 @@ echo '
                                         <div class="panel-body">
 										<h4>2.1 - Add Child to Parent</h4>
 										<p>
-											Add Content.
+											Once student and parents accounts have been crated they can be link together here.  First you will select the grade level of the student from the drop down list and click the "Choose Grade Level" button.  Then you will select the student and parent from the drop down list respectively and click the "Add Student to Parent" button.  You can also change the student by clicking on the "Change Grade" button.   
 										</p>
 										</br>
 										<h4>2.2 - Remove Child from Parent</h4>
 										<p>
-											Add Content.
+											First select the parent from the drop down list and click on the "Choose Parent" button.  Then you will select a student from the drop down list and click on the "Remove Student from Parent" button.  You can also change the parent by clicking on the "Change Parent" button.
 										</p>
 										</br>
 										<h4>2.3 - View Parent\'s Children</h4>
 										<p>
-											Add Content.  
+											Here you will see a table that includes a list of parents along with a list of their children(s).  
 										</p>
                                         </div>
                                     </div>
@@ -177,12 +177,15 @@ echo '
 											The same basic principles will be applied to all other roles, when creating users. The specific formatting for the .csv files will be found at the bottom of each roles tabs 
 										</p>
 										<h4>3.3 - Delete User</h4>
+										<p style="color:red;">
+											Deleting a user should not be taken lightly. This will completely wipe them out of the system
+										</p>
 										<p>
-											Add Content. 
+											To delete a user from the system choose the appropriate account from the drop down list and click "Delete User".
 										</p>
 										<h4>3.4 - Reset User Password</h4>
 										<p>
-											This allows the administrator to reset any user’s password, in case they have forgotten, or there has been a breach in the system. 
+											This allows the you to reset any user’s password.  Enter in the Users email addess and click "Submit".  You will see their new password above the email field.  They will also receive an email with their new password.   
 										</p>
 										<h4>3.5 - View All User</h4>
 										<p>
@@ -253,7 +256,7 @@ echo '
 										</p>
 										<h4>5.2 - Assign Teacher to Class</h4>
 										<p>
-											Add Content.  
+											First select a grade level from the drop down list and click the "Select Grade Level" button. If there is not a class available for that grade level you will see the following message "No Classes for Grade Level, Select Another Class".  After you select the grade level you will select the class from the drop down list and click "Select Class".  Next you will select the teacher from the drop down list and click "Assign Teacher to Class".  You can also change the class or grade level at anytime by clicking the "Change Class" and "Change Grade Level" buttons accordingly.  
 										</p>										
 										<h4>5.3 - Assign Student to Class</h4>
 										<p>
@@ -268,10 +271,16 @@ echo '
 										<p>
 											You will then be brought to a screen in which you will be able to select from a list of students that are in the grade level, associated with the class. Once you have selected a student, select the button “Add Student to Class”, and the selected student will then be added to the class. 
 										</p>
-										<h4>5.4 - Remove Stucent From Class</h4>
+										<h4>5.4 - Remove Student From Class</h4>
+										<p style="color:red;">
+											Please note that the student grades will be deleted for the class.
+										</p>
+										<p style="color:red;">		
+                                            This will affect their GPA and transcript (if they have grades in that class)!
+										</p>
 										<p>
-											Add Content.  
-										</p>										
+											First you will select the grade level from the drop down list and click the "Select Grade Level" button.  Then you will select the class from the drop down list and click the "Select Class" buton. Next select the student from the drop down list and click the "Remove Student from Clas" button. You also have the option to change the class and grade level by clicking the "Change Class" and "Change Grade Level" buttons accordingly.  
+										</p>
 										<h4>5.5 - Modify Class</h4>
 										<p>
 											“Modify Class” allows the administrator to make changes to any class that has already been added to the Student Information System.  
@@ -386,7 +395,16 @@ echo '
 										</p>
 										<h4>7.2 - Generate Transcript Manually</h4>
 										<p>
-											Add Content.  
+											This section allows you to manually generate a transcript from a CSV file.  You will fill out the following form fields: Student’s First Name, Student’s Last Name, Academic Year, Student’s GPA, and Student Grade Level.  Then you will upload a CSV file by clicking the “Browse…” button.  
+										</p>
+										<p>
+											The format for the Manual Transcript CSV is: Class Name,Teacher Name,Q1,Q2,Q3,Q4  
+										</p>
+										<p>
+											Then click the "Generate Manual Transcript" button to download the transcript.
+										</p>										
+										<p>
+											<a href="https://support.office.com/en-us/article/Import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba">To learn how to export a file from Excell as a CSV, click here</a>
 										</p>										
 										<h4>7.3 - Generate Report Card</h4>
 										<p>
@@ -409,7 +427,16 @@ echo '
 										</p>
 										<h4>7.4 - Generate Report Card Manually</h4>
 										<p>
-											Add Content. 
+											This section allows you to manually generate a report card from a CSV file.  You will fill out the following form fields: Student’s First Name, Student’s Last Name, Student’s GPA, and Student Grade Level.  Then you will upload a CSV file by clicking the “Browse…” button.  
+										</p>
+										<p>
+											The format for the Manual Transcript CSV is: Class Name,Teacher Name,Q1,Q2,Q3,Q4  
+										</p>
+										<p>
+											Then click the "Generate Manual Report Card" button to download the report card.
+										</p>										
+										<p>
+											<a href="https://support.office.com/en-us/article/Import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba">To learn how to export a file from Excell as a CSV, click here</a>
 										</p>										
                                         </div>
                                     </div>
@@ -424,7 +451,10 @@ echo '
                                         <div class="panel-body">
 										<h4>8.1 - Send a Mass Email</h4>
 										<p>
-											Add Content.
+											This allows you to send an email one of the following groups: Everyone, Teachers, Students, Parents, Elementary Parents and Students, High School Parents and Students, Elementary Teachers, High School Teachers.  Select your option from the drop down list and click “Choose Who to Email”.
+										</p>
+										<p>
+											Then you will put your message in the "Email Body" section.  Once you have entered your message click the "Send Email" button.  You also have the option to change recipients by clicking the “Change Choice” button.
 										</p>
                                         </div>
                                     </div>
@@ -451,7 +481,7 @@ echo '
 										</p>
 										<h4>9.4 - Edit Student Profile</h4>
 										<p>
-											Add Content.
+											This allows you to change students profile information.  Choose a student from the drop down list and click "Select User". Then you have the option to update the following fields including Student Email, Student First Name, Student Last Name, and Student Grade Level.  After you have made your updates click "Edit Student" button to save your changes.  You also have the option to change the student by clicking the "Change User" button.
 										</p>
                                         </div>
                                     </div>
@@ -466,11 +496,14 @@ echo '
                                         <div class="panel-body">
 										<h4>10.1 - Export All Data (CSV)</h4>
 										<p>
-											Add Content.
+											This will include everything in the database, so this feature is meant only for programmers trying to reverse engineer the DB/Data.  Click the "Export All Data" button to process the download. 
 										</p>
 										<h4>10.2 - Export All Data (SQL)</h4>
 										<p>
-											Add Content.
+											This will include everything in the database, so this feature is meant only for programmers trying to reverse engineer the DB/Data.
+										</p>
+										<p>
+											(Really this shouldn`t be too hard to re-import into a database after exported. We are using MariaDB if that helps you)
 										</p>
                                         </div>
                                     </div>
@@ -508,8 +541,11 @@ echo '
                                         <div class="panel-body">
 										<h4>1.1 - My Dashboard</h4>
 										<p>
-                                            The first thing the school administrator will see is the announcements widget, which gives the information of the Date, Name, and Descriptions of all announcements. Creation of these announcements will be explained further in the manual. 
-										</p>										
+                                            The first thing the school administrator will see is the announcements widget, which gives you the Date, Name, and Descriptions of all announcements. Creation of these announcements will be explained further in the manual. 
+										</p>		
+										<p>
+                                            Also shown are four panels that act as shortcuts to other parts of the application.  The function of these panels are explained later in the user manual. 
+										</p>		
                                         </div>
                                     </div>
                                 </div>
@@ -613,7 +649,16 @@ echo '
 										</p>
 										<h4>4.2 - Generate Transcript Manually</h4>
 										<p>
-											Add Content.  
+											This section allows you to manually generate a transcript from a CSV file.  You will fill out the following form fields: Student’s First Name, Student’s Last Name, Academic Year, Student’s GPA, and Student Grade Level.  Then you will upload a CSV file by clicking the “Browse…” button.  
+										</p>
+										<p>
+											The format for the Manual Transcript CSV is: Class Name,Teacher Name,Q1,Q2,Q3,Q4  
+										</p>
+										<p>
+											Then click the "Generate Manual Transcript" button to download the transcript.
+										</p>										
+										<p>
+											<a href="https://support.office.com/en-us/article/Import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba">To learn how to export a file from Excell as a CSV, click here</a>
 										</p>										
 										<h4>4.3 - Generate Report Card</h4>
 										<p>
@@ -636,7 +681,16 @@ echo '
 										</p>
 										<h4>4.4 - Generate Report Card Manually</h4>
 										<p>
-											Add Content. 
+											This section allows you to manually generate a report card from a CSV file.  You will fill out the following form fields: Student’s First Name, Student’s Last Name, Student’s GPA, and Student Grade Level.  Then you will upload a CSV file by clicking the “Browse…” button.  
+										</p>
+										<p>
+											The format for the Manual Transcript CSV is: Class Name,Teacher Name,Q1,Q2,Q3,Q4  
+										</p>
+										<p>
+											Then click the "Generate Manual Report Card" button to download the report card.
+										</p>										
+										<p>
+											<a href="https://support.office.com/en-us/article/Import-or-export-text-txt-or-csv-files-5250ac4c-663c-47ce-937b-339e391393ba">To learn how to export a file from Excell as a CSV, click here</a>
 										</p>										
                                         </div>
                                     </div>
@@ -651,7 +705,10 @@ echo '
                                         <div class="panel-body">
 										<h4>5.1 - Send a Mass Email</h4>
 										<p>
-											Add Content.
+											This allows you to send an email one of the following groups: Everyone, Teachers, Students, Parents, Elementary Parents and Students, High School Parents and Students, Elementary Teachers, High School Teachers.  Select your option from the drop down list and click “Choose Who to Email”.
+										</p>
+										<p>
+											Then you will put your message in the "Email Body" section.  Once you have entered your message click the "Send Email" button.  You also have the option to change recipients by clicking the “Change Choice” button.
 										</p>
                                         </div>
                                     </div>
@@ -670,11 +727,11 @@ echo '
 										</p>
 										<h4>6.2 - Lookup Student Profile</h4>
 										<p>
-											This allows the administrator to look up any profile to gather basic information on a user. Similar to the “Edit a Profile” page, the administrator will select which role the user has, and from there, a list of all users defined to that role type will be displayed, along with their information. 
+											This allows you to look up any student profile of current students.  Choose a student from the drop down list and click "Select User".  Then you will see the following information: Student Email, Student First Name, Student Last Name, and Student Grade Level.  Below that you will see the students current GPA, Cummlative GPA, and a list of their current classes along with the corresponding grade.  You also have the option to change the student by clicking the "Change User" button.   
 										</p>
 										<h4>6.3 - Edit Student Profile</h4>
 										<p>
-											Add Content.
+											This allows you to change students profile information.  Choose a student from the drop down list and click "Select User". Then you have the option to update the following fields including Student Email, Student First Name, Student Last Name, and Student Grade Level.  After you have made your updates click "Edit Student" button to save your changes.  You also have the option to change the student by clicking the "Change User" button.
 										</p>
                                         </div>
                                     </div>
@@ -712,7 +769,10 @@ echo '
                                         <div class="panel-body">
 										<h4>1.1 - My Dashboard</h4>
 										<p>
-                                            The first thing the you will see is the announcements widget, which gives the information of the Date, Name, and Descriptions of all announcements.  
+                                            The first thing the you will see is the announcements widget, which gives you the Date, Name, and Descriptions of all announcements.  
+										</p>
+										<p>
+                                            Also shown are three panels that act as shortcuts to other parts of the application.  The function of these panels are explained later in the user manual. 
 										</p>										
                                         </div>
                                     </div>
@@ -735,7 +795,7 @@ echo '
 										</p>
 										<h4>2.3 - Edit Student Profile</h4>
 										<p>
-											Add Content.
+											This allows you to change students profile information.  Choose a student from the drop down list and click "Select User". Then you have the option to update the following fields including Student Email, Student First Name, Student Last Name, and Student Grade Level.  After you have made your updates click "Edit Student" button to save your changes.  You also have the option to change the student by clicking the "Change User" button.
 										</p>
                                         </div>
                                     </div>
@@ -750,7 +810,7 @@ echo '
                                         <div class="panel-body">
 										<h4>3.1 - Export Students Grades</h4>
 										<p>
-											Add Content.
+											This allows you to export your students grade by class in a CSV file.  First you will select the class from the drop down list and click "Select Class".  To download the file click "Export Student Grades".  The top of the file will include Class Name, Students Name, and Current Grade.  Below that will list out each assignment including: Assignment Name, Assignment Due Date, Assignment Type, Points Scored, Points Possible, and Assignment Grade. You also have the option to change the class by clicking the "Change Class" button.
 										</p>
                                         </div>
                                     </div>
@@ -823,19 +883,25 @@ echo '
                                         <div class="panel-body">
                                         <h4>6.1 - Add Assignment Type</h4>
 										<p>
-											Add Content.  
+											This section allows you to add all of your grading material types.  These could include Test, Exams, Quiz, Homework, etc.  This application uses a weighted scoring system.  To add a material type you will first select your class from the drop down menu and click "Select Class".  Then you will fill in the "Assignment Type Name" field and the "Assignment Type Weight" feild.  Once these have been filled in you can click the "Add Material Type" button.  You can change the class at anytime by clicking on the "Change Class" button.
 										</p>
 										<h4>6.2 - Modify assignment Type</h4>
 										<p>
-											Add Content.  
+											This section allows you to modify an assignment type previously created.  First you will select your class from the drop down list and click "Select Class".  You will then select the material type to modify from the drop down list and click "Select Assignment Type".  The next screen allows you to modify the "Assignment Type Name" and the "Assignment Type Weight".  Once these have been updated you click on the "Modify Material Type" button.  You also have the option to change your class by clicking on the "Change Class" button or assignment type by clicking on the "Change Assignment Type" button.
+										</p>
+										<p>
+											You also have the option to change your class by clicking on the "Change Class" button or assignment type by clicking on the "Change Assignment Type" button.
 										</p>
 										<h4>6.3 - Delete Assignment Type</h4>
 										<p>
-											Add Content.  
+											This section allows you to delete an assignment type. First you will choose your class from the drop down list and click "Select Class".  Then you will choose the assignment type from the drop down list.  To delete the assignmnet type click the "Delete Assignment Type" button.  You can change the class by clicking the "Change Class" button.
+										</p>
+										<p style="color:red;">
+											*This will be permanently deleted
 										</p>
 										<h4>6.4 - View All Assignment Types</h4>
 										<p>
-											Add Content.  
+											This section allows you to view all your assignment types for all of your classes.  Each table includes the class name along with assignment type and assignment weight.  
 										</p>
                                         </div>
                                     </div>
@@ -873,8 +939,12 @@ echo '
                                         <div class="panel-body">
                                             <h4>1.1 - My Dashboard</h4>
 										<p>
-                                            The first thing the parents will see is the announcements table, which gives the information of the Date, Name, and Descriptions of all announcements. 
+                                            The first thing you will see is the announcements widget, which gives you the Date, Name, and Descriptions of all announcements. 
 										</p>
+										<p>
+                                            Also shown are three panels that act as shortcuts to other parts of the application.  The function of these panels are explained later in the user manual.  
+										</p>
+										
                                         </div>
                                     </div>
                                 </div>
@@ -888,7 +958,7 @@ echo '
                                         <div class="panel-body">
                                         <h4>2.1 - My Profile</h4>
 										<p>
-                                            Add Content.
+                                            The “My Profile” page allows you to view your profile information. This information includes your First Name, Last Name, and Email.
 										</p>
                                         </div>
                                     </div>
@@ -903,15 +973,18 @@ echo '
                                         <div class="panel-body">
                                         <h4>3.1 - View All Class Grades</h4>
 										<p>
-                                            It will give you tables of all the students that you have the access to.  In the top of each table you will see the Student’s name next to it will provide the GPA.
+                                            This section shows you infomration about your childrens classes and grades.  For each child, you will see a table that include Student Name, Current GPA, Cumulative GPA, and a list ofIt will give you tables of all the students that you have the access to.  At the top of each table you will see the students current GPA, Cummlative GPA, and a list of their current classes along with the corresponding grade.
 										</p>
 										<h4>3.2 - View All Student Assignments</h4>
 										<p>
-                                            It will provide all the assignments in your children classes, provided with the dates.
+                                            This section allows you to view all assignments for each of your childs classes.  First you will select your child from the drop down list and click "Select Student".  For each of your childs classes you will see the following infomration: Assignment Name, Assignment Due Date, Assignment Type, Points Scored, Points Possible, and Assignment Grade.  To change children click the "Change Student" button at the bottom of the page. (This only applies to parents with more then one child enrolled)
 										</p>
 										<h4>3.3 - Contact Teacher/Principal</h4>
 										<p>
-                                            Add Content.
+											This allows you to send an email to the principal or one of your childs teachers.  For emailing a teacher you will select "Email Teacher" from the dropdown list and click "Choose Option" button.  Then you will select the appropriate teacher from the drop down list and click the "Choose Teacher" button.  For emailing the principal you will select "Email Principal" from the dropdown list.
+										</p>
+										<p>
+											Then you will put your message in the "Email Body" section.  Once you have entered your message click the "Send Email" button.  You also have the option to change recipients by clicking the “Change Choice” button.
 										</p>
                                         </div>
                                     </div>
@@ -949,10 +1022,13 @@ echo '
                                         <div class="panel-body">
                                             <h4>1.1 - My Dashboard</h4>
 										<p>
-                                            You will see your Current School Year GPA, your Cumulative GPA and these are updating automatically regarding to your grades.
+                                            The first thing you will see is the announcements widget, which gives you the Date, Name, and Descriptions of all announcements. 
 										</p>
 										<p>
-										You will see all the announcements that sent by the school administrator with the dates for each one. 
+                                            Below the announcements is your current class schedule including Class Name, Teacher, Start Time, and End Time.
+										</p>
+										<p>
+                                            Also shown are three panels that act as shortcuts to other parts of the application.  The function of these panels are explained later in the user manual.  
 										</p>
                                         </div>
                                     </div>
@@ -967,7 +1043,13 @@ echo '
                                         <div class="panel-body">
                                         <h4>2.1 - My Profile</h4>
 										<p>
-                                            You will find your basic information ( First Name, Last Name and your email address ).
+                                            The “My Profile” page allows you to view your profile information. This information includes your First Name, Last Name, Email, Student ID, Grade Level, DOB, and Gender.
+										</p>
+										<p>
+                                            Below your profile is your current class schedule including Class Name, Teacher, Start Time, and End Time. 
+										</p>
+										<p>
+                                            The last section shows your parent contact information including First Name, Last Name, Email, Address, and Phone Number. 
 										</p>
                                         </div>
                                     </div>
@@ -982,12 +1064,15 @@ echo '
                                         <div class="panel-body">
 										<h4>3.1 - View All Class Grades</h4>
 										<p>
-											You will see your Current GPA and Cumulative GPA.  Inside the table you will see all your classes and the grades for the current semester.
+											This screen will show you your Current GPA and Cumulative GPA in the top left corner of the table.  Inside the table you will see all your classes and the grades for the current semester.
 										</p>
 										<h4>3.2 - Conact Teacher/Principal</h4>
 										<p>
-											Add Content.
-										</p>										
+											This allows you to send an email to the principal or one of your teachers.  For emailing a teacher you will select "Email Teacher" from the dropdown list and click "Choose Option" button.  Then you will select the appropriate teacher from the drop down list and click the "Choose Teacher" button.  For emailing the principal you will select "Email Principal" from the dropdown list.
+										</p>
+										<p>
+											Then you will put your message in the "Email Body" section.  Once you have entered your message click the "Send Email" button.  You also have the option to change recipients by clicking the “Change Choice” button.
+										</p>									
                                         </div>
                                     </div>
                                 </div>
