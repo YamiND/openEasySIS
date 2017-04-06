@@ -303,6 +303,9 @@ echo '
                     <li>
                         <a href="teacherGradebook">Gradebook</a>
                     </li>
+                    <li>
+                        <a href="reportCardComment">Comment for Report Card</a>
+                    </li>
 			';
 					if (canModClassList($mysqli))
 					{

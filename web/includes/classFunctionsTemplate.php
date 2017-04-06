@@ -1,5 +1,23 @@
 <?php
 
+function getReportCardComment($studentID, $classID, $mysqli)
+{
+	if ($stmt = $mysqli->prepare("SELECT reportCardComment FROM reportCardComment WHERE studentID = ? AND classID = ?"))
+	{
+		$stmt->bind_param('ii', $studentID, $classID);
+
+		if ($stmt->execute())
+		{
+			$stmt->bind_result($reportCardComment);
+			$stmt->store_result();
+
+			$stmt->fetch();
+
+			return $reportCardComment;
+		}
+	}
+}
+
 function getGradeComment($studentID, $materialID, $classID, $mysqli)
 {
 	if ($stmt = $mysqli->prepare("SELECT gradeComment FROM grades WHERE gradeMaterialID = ? AND gradeStudentID = ? AND gradeClassID = ?"))
