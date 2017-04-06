@@ -30,6 +30,8 @@ CREATE  TABLE IF NOT EXISTS `openEasySIS`.`users` (
   `parentAddress` VARCHAR(200) NULL ,
   `parentPhone` VARCHAR(14) NULL ,
   `isPrincipal` TINYINT(1) NULL DEFAULT false ,
+  `studentBirthdate` DATE NULL ,
+  `studentGender` CHAR NULL ,
   PRIMARY KEY (`userID`) )
 ENGINE = InnoDB;
 
@@ -85,6 +87,8 @@ CREATE  TABLE IF NOT EXISTS `openEasySIS`.`classes` (
   `className` VARCHAR(512) NOT NULL ,
   `classTeacherID` INT NOT NULL ,
   `schoolYearID` INT NOT NULL ,
+  `classStartTime` TIME NULL ,
+  `classEndTime` TIME NULL ,
   PRIMARY KEY (`classID`) )
 ENGINE = InnoDB;
 
@@ -142,6 +146,7 @@ CREATE  TABLE IF NOT EXISTS `openEasySIS`.`grades` (
   `gradeMaterialID` INT NOT NULL ,
   `gradeMaterialPointsScored` INT NULL DEFAULT 0 ,
   `gradeRefID` INT NOT NULL AUTO_INCREMENT ,
+  `gradeComment` VARCHAR(1024) NULL ,
   INDEX `classID_idx` (`gradeClassID` ASC) ,
   PRIMARY KEY (`gradeRefID`) ,
   INDEX `gradeMaterialID_idx` (`gradeMaterialID` ASC) ,
@@ -179,6 +184,20 @@ CREATE  TABLE IF NOT EXISTS `openEasySIS`.`studentParentIDs` (
   `parentID` INT NOT NULL )
 ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `openEasySIS`.`reportCardComment`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `openEasySIS`.`reportCardComment` ;
+
+CREATE  TABLE IF NOT EXISTS `openEasySIS`.`reportCardComment` (
+  `rccID` INT NOT NULL ,
+  `studentID` VARCHAR(45) NOT NULL ,
+  `classID` VARCHAR(45) NOT NULL ,
+  `reportCardComment` VARCHAR(512) NULL ,
+  PRIMARY KEY (`rccID`) )
+ENGINE = InnoDB;
+
 USE `openEasySIS` ;
 
 SET SQL_MODE = '';
@@ -198,12 +217,12 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `openEasySIS`;
-INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `modClassList`, `viewAllGrades`, `userSalt`, `isParent`, `isStudent`, `isTeacher`, `isSchoolAdmin`, `isAdmin`, `studentGPA`, `studentGradeLevel`, `parentAddress`, `parentPhone`, `isPrincipal`) VALUES (1, 'admin@localhost.com', '506beb3bb6a2c033392158f6451e85d5862b9997c999a3438cd3c4e93d65e7bf5b205f5cd132724f1db7ef9bd94088a72f9b9417c829cf081fffc3c2c599496f', 'Admin', 'User', 1, 1, '46d5eb8476b910c3501188f91f4fedfd593d8a7b13c27e25c34fd683297f43fd79f4f79cd87c9eaccdee8ed636adef49a461f1591013c7face1081191f5deb38', false, false, false, false, true, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `modClassList`, `viewAllGrades`, `userSalt`, `isParent`, `isStudent`, `isTeacher`, `isSchoolAdmin`, `isAdmin`, `studentGPA`, `studentGradeLevel`, `parentAddress`, `parentPhone`, `isPrincipal`) VALUES (2, 'schoolAdmin@localhost.com', '19145a6a9e87e75ad550622552e088ec786b869e8b2c7a203a502171bba59b1cb9284af2f1b63bbf625e0597e85775ffb1f97b6a54f11fed408b8b45d5991a5b', 'SchoolAdmin', 'User', 0, 1, '8aab3f6290cc4a3d5ce6dce0f4a1ab75340424e58e645dc0c26c4815f82b17ff13d5cf599b225f9102f7f0db0903163f2ad7273863f26d916d2ea7381fbe1821', false, false, false, true, false, NULL, NULL, NULL, NULL, 1);
-INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `modClassList`, `viewAllGrades`, `userSalt`, `isParent`, `isStudent`, `isTeacher`, `isSchoolAdmin`, `isAdmin`, `studentGPA`, `studentGradeLevel`, `parentAddress`, `parentPhone`, `isPrincipal`) VALUES (3, 'teacher@localhost.com', '0cbb9145e706c497d95aebcea57c6e8763a9596623ec749c3ca0015028db6b24681a4f1c38254c57674ee161a9c4ccf14dd1024129590d656809eb5df9408935', 'Teacher', 'User', 1, 0, '49e907b72ecf7469a56eb1daa6e1ed55a4a936eb4780ecc3fab0f6e7510fcc7f652fc4e23cbc5b4bb42e237833e99f4fd9209853644921c470bfaaa0d847a1fe', false, false, true, false, false, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `modClassList`, `viewAllGrades`, `userSalt`, `isParent`, `isStudent`, `isTeacher`, `isSchoolAdmin`, `isAdmin`, `studentGPA`, `studentGradeLevel`, `parentAddress`, `parentPhone`, `isPrincipal`) VALUES (4, 'parent@localhost.com', '477347c3a479ec04220f375ce4d6ba2c86f6132d7292688d11d36ac28fdc7300d7c4584f298463fc08d5461cb9262144bff2e48d63a8eec8277fb26c7a0125f4', 'Parent', 'User', 0, 0, '780f4ac261a1243a693dcf7ad9142b42d745e2ce36d102284b0b9e12b13b03e96e36b347620fad9b9fa4a019919653532b2e1c3e1dd9cc524f99080a34efa119', true, false, false, false, false, NULL, NULL, '11574 Test Road, Sault Ste Marie, MI, 49783', '906-635-6677', 0);
-INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `modClassList`, `viewAllGrades`, `userSalt`, `isParent`, `isStudent`, `isTeacher`, `isSchoolAdmin`, `isAdmin`, `studentGPA`, `studentGradeLevel`, `parentAddress`, `parentPhone`, `isPrincipal`) VALUES (5, 'student@localhost.com', '3a3115a8cf336b5906667636ecf5d712b4575b55807efdb036b168735255bb1b49b5066c1813c74bbb7685aa5aec20b3f293fa4078267e40e7b92a6bb928c62c', 'Student', 'User', 0, 0, 'b56067c035fc029daf6b13734df79666d418f35c4e94d8e112a65b1ae07161d30514a1457d17c9a5dbecf346479f31ab13bbdc04b42b88057de2c41050f1e574', false, true, false, false, false, 3.58, 11, NULL, NULL, 0);
-INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `modClassList`, `viewAllGrades`, `userSalt`, `isParent`, `isStudent`, `isTeacher`, `isSchoolAdmin`, `isAdmin`, `studentGPA`, `studentGradeLevel`, `parentAddress`, `parentPhone`, `isPrincipal`) VALUES (6, 'student2@localhost.com', '3a3115a8cf336b5906667636ecf5d712b4575b55807efdb036b168735255bb1b49b5066c1813c74bbb7685aa5aec20b3f293fa4078267e40e7b92a6bb928c62c', 'Student2', 'User', 0, 0, 'b56067c035fc029daf6b13734df79666d418f35c4e94d8e112a65b1ae07161d30514a1457d17c9a5dbecf346479f31ab13bbdc04b42b88057de2c41050f1e574', false, true, false, false, false, 4.00, 12, NULL, NULL, 0);
+INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `modClassList`, `viewAllGrades`, `userSalt`, `isParent`, `isStudent`, `isTeacher`, `isSchoolAdmin`, `isAdmin`, `studentGPA`, `studentGradeLevel`, `parentAddress`, `parentPhone`, `isPrincipal`, `studentBirthdate`, `studentGender`) VALUES (1, 'admin@localhost.com', '506beb3bb6a2c033392158f6451e85d5862b9997c999a3438cd3c4e93d65e7bf5b205f5cd132724f1db7ef9bd94088a72f9b9417c829cf081fffc3c2c599496f', 'Admin', 'User', 1, 1, '46d5eb8476b910c3501188f91f4fedfd593d8a7b13c27e25c34fd683297f43fd79f4f79cd87c9eaccdee8ed636adef49a461f1591013c7face1081191f5deb38', false, false, false, false, true, NULL, NULL, NULL, NULL, 0, NULL, NULL);
+INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `modClassList`, `viewAllGrades`, `userSalt`, `isParent`, `isStudent`, `isTeacher`, `isSchoolAdmin`, `isAdmin`, `studentGPA`, `studentGradeLevel`, `parentAddress`, `parentPhone`, `isPrincipal`, `studentBirthdate`, `studentGender`) VALUES (2, 'schoolAdmin@localhost.com', '19145a6a9e87e75ad550622552e088ec786b869e8b2c7a203a502171bba59b1cb9284af2f1b63bbf625e0597e85775ffb1f97b6a54f11fed408b8b45d5991a5b', 'SchoolAdmin', 'User', 0, 1, '8aab3f6290cc4a3d5ce6dce0f4a1ab75340424e58e645dc0c26c4815f82b17ff13d5cf599b225f9102f7f0db0903163f2ad7273863f26d916d2ea7381fbe1821', false, false, false, true, false, NULL, NULL, NULL, NULL, 1, NULL, NULL);
+INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `modClassList`, `viewAllGrades`, `userSalt`, `isParent`, `isStudent`, `isTeacher`, `isSchoolAdmin`, `isAdmin`, `studentGPA`, `studentGradeLevel`, `parentAddress`, `parentPhone`, `isPrincipal`, `studentBirthdate`, `studentGender`) VALUES (3, 'teacher@localhost.com', '0cbb9145e706c497d95aebcea57c6e8763a9596623ec749c3ca0015028db6b24681a4f1c38254c57674ee161a9c4ccf14dd1024129590d656809eb5df9408935', 'Teacher', 'User', 1, 0, '49e907b72ecf7469a56eb1daa6e1ed55a4a936eb4780ecc3fab0f6e7510fcc7f652fc4e23cbc5b4bb42e237833e99f4fd9209853644921c470bfaaa0d847a1fe', false, false, true, false, false, NULL, NULL, NULL, NULL, 0, NULL, NULL);
+INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `modClassList`, `viewAllGrades`, `userSalt`, `isParent`, `isStudent`, `isTeacher`, `isSchoolAdmin`, `isAdmin`, `studentGPA`, `studentGradeLevel`, `parentAddress`, `parentPhone`, `isPrincipal`, `studentBirthdate`, `studentGender`) VALUES (4, 'parent@localhost.com', '477347c3a479ec04220f375ce4d6ba2c86f6132d7292688d11d36ac28fdc7300d7c4584f298463fc08d5461cb9262144bff2e48d63a8eec8277fb26c7a0125f4', 'Parent', 'User', 0, 0, '780f4ac261a1243a693dcf7ad9142b42d745e2ce36d102284b0b9e12b13b03e96e36b347620fad9b9fa4a019919653532b2e1c3e1dd9cc524f99080a34efa119', true, false, false, false, false, NULL, NULL, '11574 Test Road, Sault Ste Marie, MI, 49783', '906-635-6677', 0, NULL, NULL);
+INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `modClassList`, `viewAllGrades`, `userSalt`, `isParent`, `isStudent`, `isTeacher`, `isSchoolAdmin`, `isAdmin`, `studentGPA`, `studentGradeLevel`, `parentAddress`, `parentPhone`, `isPrincipal`, `studentBirthdate`, `studentGender`) VALUES (5, 'student@localhost.com', '3a3115a8cf336b5906667636ecf5d712b4575b55807efdb036b168735255bb1b49b5066c1813c74bbb7685aa5aec20b3f293fa4078267e40e7b92a6bb928c62c', 'Student', 'User', 0, 0, 'b56067c035fc029daf6b13734df79666d418f35c4e94d8e112a65b1ae07161d30514a1457d17c9a5dbecf346479f31ab13bbdc04b42b88057de2c41050f1e574', false, true, false, false, false, 3.58, 11, NULL, NULL, 0, '1995-01-02', 'M');
+INSERT INTO `openEasySIS`.`users` (`userID`, `userEmail`, `userPassword`, `userFirstName`, `userLastName`, `modClassList`, `viewAllGrades`, `userSalt`, `isParent`, `isStudent`, `isTeacher`, `isSchoolAdmin`, `isAdmin`, `studentGPA`, `studentGradeLevel`, `parentAddress`, `parentPhone`, `isPrincipal`, `studentBirthdate`, `studentGender`) VALUES (6, 'student2@localhost.com', '3a3115a8cf336b5906667636ecf5d712b4575b55807efdb036b168735255bb1b49b5066c1813c74bbb7685aa5aec20b3f293fa4078267e40e7b92a6bb928c62c', 'Student2', 'User', 0, 0, 'b56067c035fc029daf6b13734df79666d418f35c4e94d8e112a65b1ae07161d30514a1457d17c9a5dbecf346479f31ab13bbdc04b42b88057de2c41050f1e574', false, true, false, false, false, 4.00, 12, NULL, NULL, 0, '2006-04-02', 'F');
 
 COMMIT;
 
@@ -233,14 +252,14 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `openEasySIS`;
-INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`) VALUES (1, 11, 'Intro to Business', 3, 2);
-INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`) VALUES (2, 11, 'Intro to Mathmatics', 3, 2);
-INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`) VALUES (3, 11, 'CSCI 103', 3, 2);
-INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`) VALUES (4, 12, 'CSCI 9001', 3, 2);
-INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`) VALUES (5, 11, 'Math 2015', 3, 1);
-INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`) VALUES (6, 11, 'English 2015', 3, 1);
-INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`) VALUES (7, 11, 'Science 2015', 3, 1);
-INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`) VALUES (8, 11, 'History 2015', 3, 1);
+INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`, `classStartTime`, `classEndTime`) VALUES (1, 11, 'Intro to Business', 3, 2, '08:00:00', '09:00:00');
+INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`, `classStartTime`, `classEndTime`) VALUES (2, 11, 'Intro to Mathmatics', 3, 2, '09:00:00', '10:00:00');
+INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`, `classStartTime`, `classEndTime`) VALUES (3, 11, 'CSCI 103', 3, 2, '10:00:00', '11:00:00');
+INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`, `classStartTime`, `classEndTime`) VALUES (4, 12, 'CSCI 9001', 3, 2, '08:00:00', '09:00:00');
+INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`, `classStartTime`, `classEndTime`) VALUES (5, 11, 'Math 2015', 3, 1, NULL, NULL);
+INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`, `classStartTime`, `classEndTime`) VALUES (6, 11, 'English 2015', 3, 1, NULL, NULL);
+INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`, `classStartTime`, `classEndTime`) VALUES (7, 11, 'Science 2015', 3, 1, NULL, NULL);
+INSERT INTO `openEasySIS`.`classes` (`classID`, `classGrade`, `className`, `classTeacherID`, `schoolYearID`, `classStartTime`, `classEndTime`) VALUES (8, 11, 'History 2015', 3, 1, NULL, NULL);
 
 COMMIT;
 
@@ -286,17 +305,17 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `openEasySIS`;
-INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`) VALUES (5, 1, 1, 400, 1);
-INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`) VALUES (5, 1, 2, 50, 2);
-INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`) VALUES (5, 1, 3, 300, 3);
-INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`) VALUES (5, 5, 5, 800, 4);
-INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`) VALUES (5, 5, 6, 500, 5);
-INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`) VALUES (5, 5, 7, 99, 6);
-INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`) VALUES (5, 1, 8, 300, 7);
-INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`) VALUES (5, 1, 9, 250, 8);
-INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`) VALUES (5, 2, 10, 10, 9);
-INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`) VALUES (5, 2, 11, 40, 10);
-INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`) VALUES (5, 2, 12, 60, 11);
+INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`, `gradeComment`) VALUES (5, 1, 1, 400, 1, 'Excellent job!');
+INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`, `gradeComment`) VALUES (5, 1, 2, 50, 2, NULL);
+INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`, `gradeComment`) VALUES (5, 1, 3, 300, 3, NULL);
+INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`, `gradeComment`) VALUES (5, 5, 5, 800, 4, NULL);
+INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`, `gradeComment`) VALUES (5, 5, 6, 500, 5, NULL);
+INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`, `gradeComment`) VALUES (5, 5, 7, 99, 6, NULL);
+INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`, `gradeComment`) VALUES (5, 1, 8, 300, 7, NULL);
+INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`, `gradeComment`) VALUES (5, 1, 9, 250, 8, NULL);
+INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`, `gradeComment`) VALUES (5, 2, 10, 10, 9, NULL);
+INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`, `gradeComment`) VALUES (5, 2, 11, 40, 10, NULL);
+INSERT INTO `openEasySIS`.`grades` (`gradeStudentID`, `gradeClassID`, `gradeMaterialID`, `gradeMaterialPointsScored`, `gradeRefID`, `gradeComment`) VALUES (5, 2, 12, 60, 11, NULL);
 
 COMMIT;
 
@@ -323,5 +342,14 @@ START TRANSACTION;
 USE `openEasySIS`;
 INSERT INTO `openEasySIS`.`studentParentIDs` (`studentID`, `parentID`) VALUES (5, 4);
 INSERT INTO `openEasySIS`.`studentParentIDs` (`studentID`, `parentID`) VALUES (6, 4);
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `openEasySIS`.`reportCardComment`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `openEasySIS`;
+INSERT INTO `openEasySIS`.`reportCardComment` (`rccID`, `studentID`, `classID`, `reportCardComment`) VALUES (1, '5', '1', 'A good student');
 
 COMMIT;
