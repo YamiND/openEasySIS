@@ -28,7 +28,7 @@ function createUserAccount($mysqli)
 		$parentAddress = NULL; // See above 
 		$parentPhone = NULL; // Ditto
 		$studentBirthdate = NULL; // Ditto
-		$studentGender = NULL
+		$studentGender = NULL;
 
 		if (isset($_POST['modClassList']))
 		{	
