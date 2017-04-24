@@ -190,20 +190,24 @@ function getMaterialPointsScored($materialID, $classID, $studentID, $mysqli)
 	if ($stmt = $mysqli->prepare("SELECT gradeMaterialPointsScored FROM grades WHERE gradeMaterialID = ? AND gradeClassID = ? AND gradeStudentID = ?"))
 	{
 		$stmt->bind_param('iii', $materialID, $classID, $studentID);
-        $stmt->execute();
-        $stmt->bind_result($gradeMaterialPointsScored);
-        $stmt->store_result();
-
-		if ($stmt->num_rows > 0)
+        if ($stmt->execute())
 		{
-			while ($stmt->fetch())
+			$stmt->bind_result($gradeMaterialPointsScored);
+			$stmt->store_result();
+
+			if ($stmt->num_rows > 0)
 			{
+				$stmt->fetch();
 				return $gradeMaterialPointsScored;
+			}
+			else
+			{
+				return "0";
 			}
 		}
 		else
 		{
-			return "0";
+			return "-1";
 		}
 	}
 }

@@ -428,9 +428,9 @@ $pdf->writeHTML($teacherComment, true, false, false, false, '');
 		shell_exec("mkdir ../../../reportCardOutputs/Grade\ $studentGradeLevel");
 	}
 
-	$outputFile = realpath("../../../reportCardOutputs/Grade $studentGradeLevel");
-	//$pdf->Output("/var/www/html/openEasySIS/reportCardOutputs/Grade $studentGradeLevel/$studentName.pdf", 'F');
-	$pdf->Output("$outputFile/$studentName.pdf", 'F');
+//	$outputFile = realpath("../../../reportCardOutputs/Grade\ $studentGradeLevel");
+	$pdf->Output("/var/www/html/openEasySIS/reportCardOutputs/Grade $studentGradeLevel/$studentName.pdf", 'F');
+//	$pdf->Output("$outputFile/$studentName.pdf", 'F');
 	
 //============================================================+
 // END OF FILE

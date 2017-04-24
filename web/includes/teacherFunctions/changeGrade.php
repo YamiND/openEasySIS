@@ -21,7 +21,8 @@ function changeGrade($mysqli)
 	if (isset($_POST['studentID'], $_POST['classID'], $_POST['materialID'], $_POST['materialPointsScored'])) 
   {
       $studentID = $_POST['studentID'];
-      $classID = $_POST['classID'];
+//      $classID = $_POST['classID'];
+	  $classID = $_SESSION['classID'];
       $materialID = $_POST['materialID'];
       $materialPointsScored = $_POST['materialPointsScored'];
 	  $gradeComment = NULL;

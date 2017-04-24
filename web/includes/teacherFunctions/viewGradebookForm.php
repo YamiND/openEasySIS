@@ -203,6 +203,7 @@ function getStudentInfo($classID, $studentID, $materialID, $mysqli)
                         generateFormHiddenInput("classID", $classID);
                         generateFormHiddenInput("studentID", $studentID);
                         generateFormHiddenInput("materialID", $materialID);         
+						$materialPointsPossible = getMaterialPointsPossible($materialID, $mysqli);
             echo '
                         <td>' . $studentFirstName . '</td>
                         <td>' . $studentLastName . '</td>
