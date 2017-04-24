@@ -54,7 +54,7 @@ function modifyClass($mysqli)
 
     	    if ($stmt = $mysqli->prepare("UPDATE classes SET className = ?, classGrade = ?, classTeacherID = ?, classStartTime = ?, classEndTime = ? WHERE classID = ?"))
 		    {
-    		    $stmt->bind_param('siiiss', $className, $classGradeLevel, $classTeacherID, $classID, $classStartTime, $classEndTime); 
+    		    $stmt->bind_param('siissi', $className, $classGradeLevel, $classTeacherID, $classStartTime, $classEndTime, $classID); 
 
 	    	    if ($stmt->execute())    // Execute the prepared query.
 				{
