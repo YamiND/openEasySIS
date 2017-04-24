@@ -170,7 +170,7 @@ function generateAll($mysqli)
 
 function generateReportCard($studentID, $mysqli)
 {
-	$teacherComments = "";
+	$teacherComment = "";
 	$tblBody = "";
 	// Get grades that occur for each quarter
 	// Calculate grade for Quarter
