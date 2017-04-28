@@ -124,9 +124,9 @@ echo '
 
 function assignStudentForm($classID, $gradeID, $mysqli)
 {
-    if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userID IN (SELECT userID from users WHERE studentGradeLevel = ?) AND userID NOT IN (SELECT studentID FROM studentClassIDs WHERE classID LIKE ?)"))
+    if ($stmt = $mysqli->prepare("SELECT userID FROM users WHERE userID NOT IN (SELECT studentID FROM studentClassIDs WHERE classID LIKE ?)"))
     {
-        $stmt->bind_param('ii', $gradeID, $classID);
+        $stmt->bind_param('i', $classID);
         $stmt->execute();
         $stmt->bind_result($studentID);
         $stmt->store_result();
